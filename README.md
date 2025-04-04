@@ -8,15 +8,19 @@ Each Space has one or more **Members**, allowing people to identify themselves a
 ## Features
 
 - ⚡️ **No signup or login required**
+- 🔑 **Multiple Access Link types**
+  - **Admin** – full control
+  - **Edit** – can add/edit notes
+  - **View** – read-only access
+- 📨 **Recover lost Access Links via email**
 - 👥 **Named Members for each Space**
   - Visitors select their identity from the Member list
   - Their choice is remembered on the device
   - Notes show who created or last updated them
   - View-only links skip Member selection
-- 🔑 **Multiple Access Link types**:
-  - **Admin** – full control
-  - **Edit** – can add/edit notes
-  - **View** – read-only access
-- 📨 **Recover lost Access Links via email**
+- 📚 **Activity history for each Space**
+  - Tracks who did what and when
+  - Create, edit, and delete actions are recorded per Member
 - 📝 **Plain text notes in Markdown**
-- 📱 **Mobile-friendly**, minimal JavaScript, works on all devices
+- 📱 **Mobile-friendly**
+  - Minimal JavaScript, works on all devices
