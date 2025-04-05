@@ -24,3 +24,16 @@ Each Space has one or more **Members**, allowing people to identify themselves a
 - 📝 **Plain text notes in Markdown**
 - 📱 **Mobile-friendly**
   - Minimal JavaScript, works on all devices
+
+## Tech stack
+
+- [Go](https://go.dev/): Programming language
+- [Chi](https://go-chi.io): Router
+- [Templ](https://templ.guide): HTML templates
+- [SQLite](https://www.sqlite.org/): Database
+- [sqlc](https://github.com/sqlc-dev/sqlc): Generate code from SQL
+- [Dbmate](https://github.com/amacneil/dbmate): Database migrations
+- [Tailwind](https://tailwindcss.com/) and [daisyUI](https://daisyui.com/): CSS
+- [htmx](https://htmx.org/): Client-side interactions
+- [Vite](https://vite.dev/): Assets tooling
+- [Fly.io](https://fly.io/): Deployment
