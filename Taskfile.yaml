@@ -1,0 +1,33 @@
+version: '3'
+
+tasks:
+  build:
+    desc: Build project
+    sources:
+      - "**/*.go"
+    cmds:
+      - go mod tidy
+      - go build -o bin/app .
+    deps:
+      - templ
+
+  run:
+    desc: Build and run project
+    cmds:
+      - go run .
+    deps:
+      - templ
+
+  live:
+    desc: Run project with live reload (port 8080)
+    env:
+      PORT: 3001
+    cmds:
+      - templ generate --watch --proxyport="3000" --proxy="http://localhost:3001" --cmd="go run ." --open-browser=false
+
+  templ:
+    desc: Build templ files
+    sources:
+      - "views/**/*.templ"
+    cmds:
+      - templ generate

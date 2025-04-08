@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
+	"strconv"
 
 	"github.com/nicolashery/simply-shared-notes/server"
 )
@@ -18,6 +19,13 @@ func run(ctx context.Context) error {
 	logger := slog.New(h)
 
 	port := 3000
+	if portStr := os.Getenv("PORT"); portStr != "" {
+		var err error
+		port, err = strconv.Atoi(portStr)
+		if err != nil {
+			return fmt.Errorf("invalid PORT environment variable: %w", err)
+		}
+	}
 
 	s := server.NewServer(logger)
 

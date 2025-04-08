@@ -37,3 +37,26 @@ Each Space has one or more **Members**, allowing people to identify themselves a
 - [htmx](https://htmx.org/): Client-side interactions
 - [Vite](https://vite.dev/): Assets tooling
 - [Fly.io](https://fly.io/): Deployment
+
+## Development
+
+Install Go, for example using [mise](https://mise.jdx.dev/lang/go.html):
+
+```bash
+mise use -g go@latest
+```
+
+Install tools:
+
+```bash
+brew install go-task/tap/go-task
+go install github.com/a-h/templ/cmd/templ@latest
+```
+
+Run the application:
+
+```bash
+task run
+```
+
+For a full list of tasks run `task -a`.
