@@ -42,3 +42,21 @@ tasks:
     desc: Run migrations (create database if does not exists)
     cmds:
       - dbmate migrate
+
+  seed:
+    desc: Load seed data for local development
+    cmds:
+      - sqlite3 data/app.sqlite < ./sql/seed.sql
+
+  drop:
+    desc: Delete database
+    prompt: This will delete the database. Are you sure?
+    cmds:
+      - dbmate drop
+  
+  reset:
+    desc: Resets database and seeds data
+    cmds:
+      - task: drop
+      - task: migrate
+      - task: seed
