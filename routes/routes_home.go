@@ -9,7 +9,8 @@ import (
 
 func handleHome(logger *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		logger.Info("rendering home")
+		logger.Info("handling home")
+
 		views.PageHome().Render(r.Context(), w)
 	}
 }

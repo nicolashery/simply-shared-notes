@@ -16,6 +16,7 @@ tasks:
       - go build -o bin/app .
     deps:
       - templ
+      - sqlc
 
   run:
     desc: Build and run project
@@ -23,6 +24,7 @@ tasks:
       - go run .
     deps:
       - templ
+      - sqlc
 
   live:
     desc: Run project with live reload
@@ -30,6 +32,8 @@ tasks:
       PORT: 3001
     cmds:
       - templ generate --watch --proxyport="3000" --proxy="http://localhost:3001" --cmd="go run ." --open-browser=false
+    deps:
+      - sqlc
 
   templ:
     desc: Build templ files
@@ -37,6 +41,14 @@ tasks:
       - "views/**/*.templ"
     cmds:
       - templ generate
+ 
+  sqlc:
+    desc: Generate code from SQL files
+    sources:
+      - "sql/schema.sql"
+      - "sql/queries/**/*.sql"
+    cmds:
+      - sqlc generate
 
   migrate:
     desc: Run migrations (create database if does not exists)

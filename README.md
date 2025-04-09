@@ -80,4 +80,4 @@ For a full list of tasks run `task -a`.
 
 ## Documentation
 
-Additional documentation can be found in the [docs/](docs/) directory.
+Additional documentation can be found in the [docs](docs) directory.

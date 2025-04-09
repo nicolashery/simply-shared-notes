@@ -2,14 +2,19 @@ package main
 
 import (
 	"context"
+	_ "embed"
 	"fmt"
 	"log/slog"
 	"os"
 	"os/signal"
 	"strconv"
 
+	"github.com/nicolashery/simply-shared-notes/db"
 	"github.com/nicolashery/simply-shared-notes/server"
 )
+
+//go:embed sql/pragmas.sql
+var pragmasSQL string
 
 func run(ctx context.Context) error {
 	ctx, stop := signal.NotifyContext(ctx, os.Interrupt)
@@ -27,7 +32,14 @@ func run(ctx context.Context) error {
 		}
 	}
 
-	s := server.NewServer(logger)
+	dbPath := "data/app.sqlite"
+	dbConn, err := db.InitDB(ctx, dbPath, pragmasSQL)
+	if err != nil {
+		return fmt.Errorf("failed to initialize database: %w", err)
+	}
+	queries := db.New(dbConn)
+
+	s := server.NewServer(logger, queries)
 
 	return server.RunServer(ctx, s, logger, port)
 }

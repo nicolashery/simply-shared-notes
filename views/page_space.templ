@@ -1,0 +1,14 @@
+package views
+
+import "github.com/nicolashery/simply-shared-notes/db"
+
+templ PageSpace(space *db.Space) {
+	@Layout(space.Name) {
+		<div>
+			<h1>Simply Shared Notes</h1>
+			<p>
+				{ space.Name }
+			</p>
+		</div>
+	}
+}

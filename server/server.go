@@ -8,15 +8,16 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/nicolashery/simply-shared-notes/db"
 	"github.com/nicolashery/simply-shared-notes/routes"
 )
 
-func NewServer(logger *slog.Logger) http.Handler {
+func NewServer(logger *slog.Logger, queries *db.Queries) http.Handler {
 	router := chi.NewRouter()
 
 	router.Use(middleware.Logger, middleware.Recoverer)
 
-	routes.RegisterRoutes(router, logger)
+	routes.RegisterRoutes(router, logger, queries)
 
 	return router
 }
