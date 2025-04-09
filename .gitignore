@@ -1,2 +1,5 @@
 *_templ.txt
 .task/
+.env
+bin/
+data/

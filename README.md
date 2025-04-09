@@ -30,7 +30,7 @@ Each Space has one or more **Members**, allowing people to identify themselves a
 - [Go](https://go.dev/): Programming language
 - [Chi](https://go-chi.io): Router
 - [Templ](https://templ.guide): HTML templates
-- [SQLite](https://www.sqlite.org/): Database
+- [SQLite](https://www.sqlite.org/) with [modernc.org/sqlite](https://pkg.go.dev/modernc.org/sqlite): Database
 - [sqlc](https://github.com/sqlc-dev/sqlc): Generate code from SQL
 - [Dbmate](https://github.com/amacneil/dbmate): Database migrations
 - [Tailwind](https://tailwindcss.com/) and [daisyUI](https://daisyui.com/): CSS
@@ -48,9 +48,26 @@ mise use -g go@latest
 
 Install tools:
 
+- [Task](https://taskfile.dev/): `brew install go-task/tap/go-task`
+- [Templ](https://templ.guide/): `go install github.com/a-h/templ/cmd/templ@latest`
+- [sqlc](https://docs.sqlc.dev/): `brew install sqlc`
+- [Dbmate](https://github.com/amacneil/dbmate): `brew install dbmate`
+
+Run project setup:
+
 ```bash
-brew install go-task/tap/go-task
-go install github.com/a-h/templ/cmd/templ@latest
+task setup
+```
+
+This only needs to be done one time, and will:
+
+- Create an `.env` file
+- Create the `data` directory
+
+Run SQL migrations:
+
+```bash
+task migrate
 ```
 
 Run the application:

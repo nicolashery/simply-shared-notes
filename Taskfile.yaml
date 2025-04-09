@@ -1,6 +1,12 @@
 version: '3'
 
 tasks:
+  setup:
+    desc: First time project setup
+    cmds:
+      - cp .env.sample .env
+      - mkdir -p data
+
   build:
     desc: Build project
     sources:
@@ -19,7 +25,7 @@ tasks:
       - templ
 
   live:
-    desc: Run project with live reload (port 8080)
+    desc: Run project with live reload
     env:
       PORT: 3001
     cmds:
@@ -31,3 +37,8 @@ tasks:
       - "views/**/*.templ"
     cmds:
       - templ generate
+
+  migrate:
+    desc: Run migrations (create database if does not exists)
+    cmds:
+      - dbmate migrate
