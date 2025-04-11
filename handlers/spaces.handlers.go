@@ -1,4 +1,4 @@
-package routes
+package handlers
 
 import (
 	"log/slog"
@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/nicolashery/simply-shared-notes/db"
-	"github.com/nicolashery/simply-shared-notes/views"
+	"github.com/nicolashery/simply-shared-notes/views/pages"
 )
 
 func handleGetSpace(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
@@ -20,6 +20,6 @@ func handleGetSpace(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
 			return
 		}
 
-		views.PageSpace(&space).Render(r.Context(), w)
+		pages.SpacesShow(&space).Render(r.Context(), w)
 	}
 }

@@ -1,9 +1,10 @@
-package views
+package pages
 
 import "github.com/nicolashery/simply-shared-notes/db"
+import "github.com/nicolashery/simply-shared-notes/views/layouts"
 
-templ PageSpace(space *db.Space) {
-	@Layout(space.Name) {
+templ SpacesShow(space *db.Space) {
+	@layouts.Base(space.Name) {
 		<div>
 			<h1>Simply Shared Notes</h1>
 			<p>
