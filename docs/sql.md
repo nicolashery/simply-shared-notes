@@ -82,3 +82,9 @@ For source SQL files (migrations, queries):
 - The values used are located in `sql/pragmas.sql`
 - PRAGMA statements are set by the application when opening the SQLite connection
   - They are not set by a migration (since some if not most PRAGMA statements are valid for the scope of a connection only)
+
+## Code generation
+
+- [sqlc](https://sqlc.dev/) is used to generate Go code from SQL
+- SQL queries are located in `sql/queries/`
+- sqlc uses the `sql/schema.sql` that is automatically dumped by Dbmate on every migration run
