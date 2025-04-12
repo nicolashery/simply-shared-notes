@@ -53,6 +53,13 @@ Install tools:
 - [sqlc](https://docs.sqlc.dev/): `brew install sqlc`
 - [Dbmate](https://github.com/amacneil/dbmate): `brew install dbmate`
 
+Install Node and upgrade npm, for example with [mise](https://mise.jdx.dev/lang/node.html):
+
+```bash
+mise use -g node@lts
+npm install -g npm@latest
+```
+
 Run project setup:
 
 ```bash
@@ -70,7 +77,13 @@ Run SQL migrations:
 task migrate
 ```
 
-Run the application:
+In one terminal, run the Vite development server:
+
+```bash
+task vite
+```
+
+In another terminal, run the application:
 
 ```bash
 task run

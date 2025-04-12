@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"io/fs"
 	"log/slog"
 	"net/http"
 
@@ -10,14 +11,30 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/nicolashery/simply-shared-notes/db"
 	"github.com/nicolashery/simply-shared-notes/handlers"
+	"github.com/nicolashery/simply-shared-notes/middlewares"
+	"github.com/olivere/vite"
 )
 
-func NewServer(logger *slog.Logger, queries *db.Queries) http.Handler {
+type AssetsConfig struct {
+	AssetsFS     fs.FS
+	AssetsPath   string
+	PublicFS     fs.FS
+	ViteFragment *vite.Fragment
+}
+
+func NewServer(logger *slog.Logger, queries *db.Queries, assetsConfig AssetsConfig) http.Handler {
 	router := chi.NewRouter()
 
-	router.Use(middleware.Logger, middleware.Recoverer)
+	router.Use(
+		middleware.Logger,
+		middleware.Recoverer,
+		middlewares.ViteCtx(assetsConfig.ViteFragment),
+	)
 
 	handlers.RegisterRoutes(router, logger, queries)
+
+	StaticDir(router, assetsConfig.AssetsPath, assetsConfig.AssetsFS)
+	StaticFile(router, "/robots.txt", assetsConfig.PublicFS)
 
 	return router
 }
