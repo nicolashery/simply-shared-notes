@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"fmt"
-	"io/fs"
 	"log/slog"
 	"net/http"
 
@@ -12,15 +11,7 @@ import (
 	"github.com/nicolashery/simply-shared-notes/db"
 	"github.com/nicolashery/simply-shared-notes/handlers"
 	"github.com/nicolashery/simply-shared-notes/middlewares"
-	"github.com/olivere/vite"
 )
-
-type AssetsConfig struct {
-	AssetsFS     fs.FS
-	AssetsPath   string
-	PublicFS     fs.FS
-	ViteFragment *vite.Fragment
-}
 
 func NewServer(logger *slog.Logger, queries *db.Queries, assetsConfig AssetsConfig) http.Handler {
 	router := chi.NewRouter()
@@ -33,7 +24,7 @@ func NewServer(logger *slog.Logger, queries *db.Queries, assetsConfig AssetsConf
 
 	handlers.RegisterRoutes(router, logger, queries)
 
-	StaticDir(router, assetsConfig.AssetsPath, assetsConfig.AssetsFS)
+	StaticDir(router, "/assets", assetsConfig.AssetsFS)
 	StaticFile(router, "/robots.txt", assetsConfig.PublicFS)
 
 	return router

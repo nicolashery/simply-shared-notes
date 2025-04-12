@@ -4,7 +4,6 @@ import (
 	"context"
 	"embed"
 	"fmt"
-	"io/fs"
 	"log/slog"
 	"os"
 	"os/signal"
@@ -12,7 +11,6 @@ import (
 
 	"github.com/nicolashery/simply-shared-notes/db"
 	"github.com/nicolashery/simply-shared-notes/server"
-	"github.com/olivere/vite"
 )
 
 //go:embed sql/pragmas.sql
@@ -37,49 +35,23 @@ func run(ctx context.Context) error {
 		}
 	}
 
-	isDevAssets := false
+	isDev := false
 	if isDevStr := os.Getenv("DEV"); isDevStr == "true" {
-		isDevAssets = true
-	}
-	var viteFS fs.FS
-	var viteAssetsFS fs.FS
-	if !isDevAssets {
-		var err error
-		viteFS, err = fs.Sub(distFS, "dist")
-		if err != nil {
-			return fmt.Errorf("failed to create sub-filesystem for 'dist' directory: %w", err)
-		}
-		viteAssetsFS, err = fs.Sub(viteFS, "assets")
-		if err != nil {
-			return fmt.Errorf("failed to create sub-filesystem for 'dist/assets' directory: %w", err)
-		}
-
-	}
-	viteFragment, err := vite.HTMLFragment(vite.Config{
-		FS:           viteFS,
-		IsDev:        isDevAssets,
-		ViteTemplate: vite.None,
-		ViteEntry:    "assets/app.js",
-	})
-	if err != nil {
-		return fmt.Errorf("failed to instantiate Vite fragment: %w", err)
+		isDev = true
 	}
 
 	var assetsConfig server.AssetsConfig
-	if isDevAssets {
-		assetsConfig = server.AssetsConfig{
-			AssetsFS:     os.DirFS("./assets"),
-			AssetsPath:   "/assets",
-			PublicFS:     os.DirFS("./public"),
-			ViteFragment: viteFragment,
+	var err error
+	if isDev {
+		assetsConfig, err = server.DevAssets()
+		if err != nil {
+			return err
 		}
 		logger.Info("using dev assets, make sure Vite is running")
 	} else {
-		assetsConfig = server.AssetsConfig{
-			AssetsFS:     viteAssetsFS,
-			AssetsPath:   "/assets",
-			PublicFS:     viteFS,
-			ViteFragment: viteFragment,
+		assetsConfig, err = server.ProdAssets(distFS)
+		if err != nil {
+			return err
 		}
 		logger.Info("using prod assets")
 	}
