@@ -1,3 +1,2 @@
-body {
-  color: #999;
-}
+@import "tailwindcss";
+@plugin "daisyui";

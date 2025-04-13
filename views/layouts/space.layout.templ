@@ -1,0 +1,28 @@
+package layouts
+
+import "github.com/nicolashery/simply-shared-notes/db"
+
+templ Space(space *db.Space) {
+	@Base(space.Name) {
+		<div>
+			@spaceNav(space)
+			<div class="px-4">
+				{ children... }
+			</div>
+		</div>
+	}
+}
+
+templ spaceNav(space *db.Space) {
+	<div class="navbar bg-base-100 px-4 border-b-2 border-base-300 mb-6">
+		<div class="navbar-start">
+			Menu
+		</div>
+		<div class="navbar-center">
+			Simply Shared Notes
+		</div>
+		<div class="navbar-end">
+			Member
+		</div>
+	</div>
+}
