@@ -19,12 +19,23 @@ jobs:
 
       - name: Install Task
         uses: arduino/setup-task@v2
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Templ
-        run: go install github.com/a-h/templ/cmd/templ@latest
+        uses: jcwillox/install-tool-action@v1
+        with:
+          repo: a-h/templ
+          download_url: "/releases/download/v{{version}}/templ_{{os}}_{{arch}}.{{archive}}"
+          version: 0.3.857
 
       - name: Install sqlc
-        run: go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+        uses: jcwillox/install-tool-action@v1
+        with:
+          repo: sqlc-dev/sqlc
+          download_url: "/releases/download/v{{version}}/sqlc_{{os}}_{{arch}}.{{archive}}"
+          version: 1.28.0
 
       - name: Build
         run: task build 
