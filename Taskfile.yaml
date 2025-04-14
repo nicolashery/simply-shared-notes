@@ -16,7 +16,6 @@ tasks:
       - go build -o bin/app .
     deps:
       - templ
-      - assets
       - sqlc
 
   run:
