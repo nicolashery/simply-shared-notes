@@ -7,7 +7,6 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
-	"strconv"
 
 	"github.com/nicolashery/simply-shared-notes/db"
 	"github.com/nicolashery/simply-shared-notes/server"
@@ -23,26 +22,21 @@ func run(ctx context.Context) error {
 	ctx, stop := signal.NotifyContext(ctx, os.Interrupt)
 	defer stop()
 
-	h := slog.NewTextHandler(os.Stdout, nil)
+	config, err := server.NewConfig()
+	if err != nil {
+		return err
+	}
+
+	var h slog.Handler
+	if config.IsDev {
+		h = slog.NewTextHandler(os.Stdout, nil)
+	} else {
+		h = slog.NewJSONHandler(os.Stdout, nil)
+	}
 	logger := slog.New(h)
 
-	port := 3000
-	if portStr := os.Getenv("PORT"); portStr != "" {
-		var err error
-		port, err = strconv.Atoi(portStr)
-		if err != nil {
-			return fmt.Errorf("invalid PORT environment variable: %w", err)
-		}
-	}
-
-	isDev := false
-	if isDevStr := os.Getenv("DEV"); isDevStr == "true" {
-		isDev = true
-	}
-
 	var assetsConfig server.AssetsConfig
-	var err error
-	if isDev {
+	if config.IsDev {
 		assetsConfig, err = server.DevAssets()
 		if err != nil {
 			return err
@@ -56,8 +50,7 @@ func run(ctx context.Context) error {
 		logger.Info("using prod assets")
 	}
 
-	dbPath := "data/app.sqlite"
-	dbConn, err := db.InitDB(ctx, dbPath, pragmasSQL)
+	dbConn, err := db.InitDB(ctx, config.DatabasePath(), pragmasSQL)
 	if err != nil {
 		return fmt.Errorf("failed to initialize database: %w", err)
 	}
@@ -65,7 +58,7 @@ func run(ctx context.Context) error {
 
 	s := server.NewServer(logger, queries, assetsConfig)
 
-	return server.RunServer(ctx, s, logger, port)
+	return server.RunServer(ctx, s, logger, config.Port)
 }
 
 func main() {
