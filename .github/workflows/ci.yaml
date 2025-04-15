@@ -40,3 +40,6 @@ jobs:
       - name: Build
         run: task build 
 
+      - name: Check codegen committed
+        run: git diff --exit-code
+
