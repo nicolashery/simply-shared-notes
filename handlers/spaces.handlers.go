@@ -9,7 +9,13 @@ import (
 	"github.com/nicolashery/simply-shared-notes/views/pages"
 )
 
-func handleGetSpace(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
+func handleSpacesNew() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		pages.SpacesNew().Render(r.Context(), w)
+	}
+}
+
+func handleSpacesShow(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		logger.Info("handling get space")
 

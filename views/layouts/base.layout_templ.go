@@ -52,7 +52,7 @@ func Base(title string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</head><body><main class=\"min-h-screen bg-base-200\"><div class=\"min-h-screen max-w-2xl mx-auto bg-base-100\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</head><body><main class=\"min-h-screen bg-base-200\"><div class=\"min-h-screen max-w-(--breakpoint-md) mx-auto bg-base-100 md:border-x-2 border-base-300\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

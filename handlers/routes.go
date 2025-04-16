@@ -9,5 +9,6 @@ import (
 
 func RegisterRoutes(r chi.Router, logger *slog.Logger, queries *db.Queries) {
 	r.Get("/", handleHome(logger))
-	r.Get("/s/{token}", handleGetSpace(logger, queries))
+	r.Get("/new", handleSpacesNew())
+	r.Get("/s/{token}", handleSpacesShow(logger, queries))
 }
