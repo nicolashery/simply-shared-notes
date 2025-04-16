@@ -1,9 +1,10 @@
-name: CI
+name: Validate
 
 on:
   push:
     branches:
       - main
+  pull_request: {}
 
 jobs:
   build:
