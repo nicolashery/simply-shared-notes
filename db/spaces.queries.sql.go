@@ -7,16 +7,72 @@ package db
 
 import (
 	"context"
+	"time"
 )
 
+const createSpace = `-- name: CreateSpace :one
+INSERT INTO spaces (
+  created_at,
+  updated_at,
+  name,
+  email,
+  admin_token,
+  edit_token,
+  view_token
+) VALUES ( ?, ?, ?, ?, ?, ?, ? ) RETURNING id, created_at, updated_at, name, email, admin_token, edit_token, view_token
+`
+
+type CreateSpaceParams struct {
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+	Name       string
+	Email      string
+	AdminToken string
+	EditToken  string
+	ViewToken  string
+}
+
+func (q *Queries) CreateSpace(ctx context.Context, arg CreateSpaceParams) (Space, error) {
+	row := q.db.QueryRowContext(ctx, createSpace,
+		arg.CreatedAt,
+		arg.UpdatedAt,
+		arg.Name,
+		arg.Email,
+		arg.AdminToken,
+		arg.EditToken,
+		arg.ViewToken,
+	)
+	var i Space
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Name,
+		&i.Email,
+		&i.AdminToken,
+		&i.EditToken,
+		&i.ViewToken,
+	)
+	return i, err
+}
+
 const getSpaceByAccessToken = `-- name: GetSpaceByAccessToken :one
-SELECT id, name, admin_token FROM spaces
+SELECT id, created_at, updated_at, name, email, admin_token, edit_token, view_token FROM spaces
 WHERE admin_token = ? LIMIT 1
 `
 
 func (q *Queries) GetSpaceByAccessToken(ctx context.Context, adminToken string) (Space, error) {
 	row := q.db.QueryRowContext(ctx, getSpaceByAccessToken, adminToken)
 	var i Space
-	err := row.Scan(&i.ID, &i.Name, &i.AdminToken)
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Name,
+		&i.Email,
+		&i.AdminToken,
+		&i.EditToken,
+		&i.ViewToken,
+	)
 	return i, err
 }

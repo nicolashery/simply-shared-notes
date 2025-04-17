@@ -4,12 +4,21 @@
 
 package db
 
+import (
+	"time"
+)
+
 type SchemaMigration struct {
 	Version string
 }
 
 type Space struct {
 	ID         int64
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
 	Name       string
+	Email      string
 	AdminToken string
+	EditToken  string
+	ViewToken  string
 }

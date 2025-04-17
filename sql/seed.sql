@@ -1,5 +1,5 @@
 BEGIN TRANSACTION;
 
-INSERT INTO spaces (id, name, admin_token) VALUES (1, 'Demo Workspace', 'g6Nc0EGKuAFXYUCu0mXk');
+INSERT INTO spaces VALUES(1,'2025-04-17 16:07:18.153842 +0000 UTC','2025-04-17 16:07:18.153842 +0000 UTC','Demo space','hi@example.com','CEy28Nn0tDUmXyXJ2vRK','pX93JUGrZ5FC2gQlEfuX','cBCaxJ2qF3J6TIfAg6EX');
 
 COMMIT;
