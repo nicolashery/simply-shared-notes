@@ -1,6 +1,12 @@
 package helpers
 
-import gonanoid "github.com/matoous/go-nanoid/v2"
+import (
+	"fmt"
+	"regexp"
+
+	gonanoid "github.com/matoous/go-nanoid/v2"
+	"github.com/nicolashery/simply-shared-notes/db"
+)
 
 const (
 	AccessTokenAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -38,4 +44,38 @@ func GenerateAccessTokens() (AccessTokens, error) {
 		EditToken:  editToken,
 		ViewToken:  viewToken,
 	}, nil
+}
+
+var accessTokenPattern = regexp.MustCompile(fmt.Sprintf("^[A-Za-z0-9]{%d}$",
+	AccessTokenLength))
+
+func IsValidAccessToken(token string) bool {
+	return accessTokenPattern.MatchString(token)
+}
+
+type Role string
+
+const (
+	Role_Admin = "admin"
+	Role_Edit  = "edit"
+	Role_View  = "view"
+)
+
+func GetTokenRole(space *db.Space, token string) (Role, bool) {
+	switch token {
+	case space.AdminToken:
+		return Role_Admin, true
+	case space.EditToken:
+		return Role_Edit, true
+	case space.ViewToken:
+		return Role_View, true
+	}
+
+	return "", false
+}
+
+type SpaceAccess struct {
+	Space *db.Space
+	Token string
+	Role  Role
 }

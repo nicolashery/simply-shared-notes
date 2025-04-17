@@ -7,8 +7,19 @@ INSERT INTO spaces (
   admin_token,
   edit_token,
   view_token
-) VALUES ( ?, ?, ?, ?, ?, ?, ? ) RETURNING *;
+) VALUES (
+  @created_at,
+  @updated_at,
+  @name,
+  @email,
+  @admin_token,
+  @edit_token,
+  @view_token
+) RETURNING *;
 
 -- name: GetSpaceByAccessToken :one
 SELECT * FROM spaces
-WHERE admin_token = ? LIMIT 1;
+WHERE admin_token = @token
+  OR edit_token = @token
+  OR view_token = @token
+LIMIT 1;

@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-chi/chi/v5"
 	"github.com/nicolashery/simply-shared-notes/db"
 	"github.com/nicolashery/simply-shared-notes/helpers"
 	"github.com/nicolashery/simply-shared-notes/views/pages"
@@ -75,13 +74,6 @@ func handleSpacesCreate(logger *slog.Logger, queries *db.Queries) http.HandlerFu
 
 func handleSpacesShow(queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		accessToken := chi.URLParam(r, "token")
-		space, err := queries.GetSpaceByAccessToken(r.Context(), accessToken)
-		if err != nil {
-			http.Error(w, "space not found", http.StatusNotFound)
-			return
-		}
-
-		pages.SpacesShow(&space).Render(r.Context(), w)
+		pages.SpacesShow().Render(r.Context(), w)
 	}
 }

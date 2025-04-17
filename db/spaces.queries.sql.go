@@ -19,7 +19,15 @@ INSERT INTO spaces (
   admin_token,
   edit_token,
   view_token
-) VALUES ( ?, ?, ?, ?, ?, ?, ? ) RETURNING id, created_at, updated_at, name, email, admin_token, edit_token, view_token
+) VALUES (
+  ?1,
+  ?2,
+  ?3,
+  ?4,
+  ?5,
+  ?6,
+  ?7
+) RETURNING id, created_at, updated_at, name, email, admin_token, edit_token, view_token
 `
 
 type CreateSpaceParams struct {
@@ -58,11 +66,14 @@ func (q *Queries) CreateSpace(ctx context.Context, arg CreateSpaceParams) (Space
 
 const getSpaceByAccessToken = `-- name: GetSpaceByAccessToken :one
 SELECT id, created_at, updated_at, name, email, admin_token, edit_token, view_token FROM spaces
-WHERE admin_token = ? LIMIT 1
+WHERE admin_token = ?1
+  OR edit_token = ?1
+  OR view_token = ?1
+LIMIT 1
 `
 
-func (q *Queries) GetSpaceByAccessToken(ctx context.Context, adminToken string) (Space, error) {
-	row := q.db.QueryRowContext(ctx, getSpaceByAccessToken, adminToken)
+func (q *Queries) GetSpaceByAccessToken(ctx context.Context, token string) (Space, error) {
+	row := q.db.QueryRowContext(ctx, getSpaceByAccessToken, token)
 	var i Space
 	err := row.Scan(
 		&i.ID,

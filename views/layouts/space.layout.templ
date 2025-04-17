@@ -1,11 +1,13 @@
 package layouts
 
-import "github.com/nicolashery/simply-shared-notes/db"
+import "github.com/nicolashery/simply-shared-notes/middlewares"
+import "github.com/nicolashery/simply-shared-notes/helpers"
 
-templ Space(space *db.Space) {
-	@Base(space.Name) {
+templ Space() {
+	{{ spaceAccess, _ := middlewares.GetSpaceAccess(ctx) }}
+	@Base(spaceAccess.Space.Name) {
 		<div>
-			@spaceNav(space)
+			@spaceNav(spaceAccess)
 			<div class="px-4">
 				{ children... }
 			</div>
@@ -13,7 +15,7 @@ templ Space(space *db.Space) {
 	}
 }
 
-templ spaceNav(space *db.Space) {
+templ spaceNav(spaceAccess *helpers.SpaceAccess) {
 	<div class="navbar bg-base-100 px-4 border-b-2 border-base-300 mb-6">
 		<div class="navbar-start">
 			Menu
@@ -22,7 +24,7 @@ templ spaceNav(space *db.Space) {
 			Simply Shared Notes
 		</div>
 		<div class="navbar-end">
-			Member
+			{ string(spaceAccess.Role) }
 		</div>
 	</div>
 }

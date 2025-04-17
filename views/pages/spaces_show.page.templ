@@ -1,12 +1,11 @@
 package pages
 
-import "github.com/nicolashery/simply-shared-notes/db"
 import "github.com/nicolashery/simply-shared-notes/views/layouts"
 
-templ SpacesShow(space *db.Space) {
-	@layouts.Space(space) {
+templ SpacesShow() {
+	@layouts.Space() {
 		<div>
-			Welcome to your notes!
+			Welcome to your space!
 		</div>
 	}
 }
