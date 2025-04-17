@@ -20,3 +20,8 @@
   --color-accent: oklch(86.133% 0.141 139.549);
   --color-accent-content: oklch(17.226% 0.028 139.549);
 }
+
+@utility input {
+  /* Font size 16px (vs 14px default) to prevent zoom on iOS when focusing input  */
+  font-size: 1rem;
+}

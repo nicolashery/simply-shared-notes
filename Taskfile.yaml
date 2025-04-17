@@ -31,7 +31,7 @@ tasks:
     env:
       PORT: 3001
     cmds:
-      - templ generate --watch --proxyport="3000" --proxy="http://localhost:3001" --cmd="go run ." --open-browser=false
+      - templ generate --watch --proxybind="0.0.0.0" --proxyport="3000" --proxy="http://localhost:3001" --cmd="go run ." --open-browser=false
     deps:
       - sqlc
 
@@ -45,6 +45,7 @@ tasks:
   assets:
     desc: Build frontend assets
     sources:
+      - "views/**/*.templ"
       - "assets/**/*.css"
       - "assets/**/*.js"
     cmds:
