@@ -31,6 +31,7 @@ COPY sql/pragmas.sql ./sql/
 # Go source files
 COPY db ./db/
 COPY handlers ./handlers/
+COPY helpers ./helpers/
 COPY middlewares ./middlewares/
 COPY server ./server/
 COPY views ./views/
