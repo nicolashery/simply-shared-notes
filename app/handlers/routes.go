@@ -16,6 +16,6 @@ func RegisterRoutes(r chi.Router, logger *slog.Logger, queries *db.Queries) {
 	r.Route("/s/{token}", func(r chi.Router) {
 		r.Use(middlewares.SpaceAccessCtx(logger, queries))
 
-		r.Get("/", handleSpacesShow(queries))
+		r.Get("/", handleSpacesShow())
 	})
 }

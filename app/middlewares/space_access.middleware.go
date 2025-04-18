@@ -47,7 +47,11 @@ func SpaceAccessCtx(logger *slog.Logger, queries *db.Queries) func(http.Handler)
 	}
 }
 
-func GetSpaceAccess(ctx context.Context) (*helpers.SpaceAccess, bool) {
+func GetSpaceAccess(ctx context.Context) *helpers.SpaceAccess {
 	spaceAccess, ok := ctx.Value(spaceAccessContextKey).(*helpers.SpaceAccess)
-	return spaceAccess, ok
+	if !ok {
+		panic("SpaceAccess not found in context, make sure to use middleware")
+	}
+
+	return spaceAccess
 }

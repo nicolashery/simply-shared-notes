@@ -4,7 +4,7 @@ import "github.com/nicolashery/simply-shared-notes/app/middlewares"
 import "github.com/nicolashery/simply-shared-notes/app/helpers"
 
 templ Space() {
-	{{ spaceAccess, _ := middlewares.GetSpaceAccess(ctx) }}
+	{{ spaceAccess := middlewares.GetSpaceAccess(ctx) }}
 	@Base(spaceAccess.Space.Name) {
 		<div>
 			@spaceNav(spaceAccess)

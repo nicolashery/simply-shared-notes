@@ -72,7 +72,7 @@ func handleSpacesCreate(logger *slog.Logger, queries *db.Queries) http.HandlerFu
 	}
 }
 
-func handleSpacesShow(queries *db.Queries) http.HandlerFunc {
+func handleSpacesShow() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		pages.SpacesShow().Render(r.Context(), w)
 	}

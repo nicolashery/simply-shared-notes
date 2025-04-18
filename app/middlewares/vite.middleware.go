@@ -17,8 +17,10 @@ func ViteCtx(viteFragment *vite.Fragment) func(http.Handler) http.Handler {
 }
 
 func GetVite(ctx context.Context) *vite.Fragment {
-	if viteFragment, ok := ctx.Value(viteContextKey).(*vite.Fragment); ok {
-		return viteFragment
+	viteFragment, ok := ctx.Value(viteContextKey).(*vite.Fragment)
+	if !ok {
+		panic("vite.Fragment not found in context, make sure to use middleware")
 	}
-	return &vite.Fragment{}
+
+	return viteFragment
 }
