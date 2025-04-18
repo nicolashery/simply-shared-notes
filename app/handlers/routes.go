@@ -4,8 +4,8 @@ import (
 	"log/slog"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/nicolashery/simply-shared-notes/db"
-	"github.com/nicolashery/simply-shared-notes/middlewares"
+	"github.com/nicolashery/simply-shared-notes/app/db"
+	"github.com/nicolashery/simply-shared-notes/app/middlewares"
 )
 
 func RegisterRoutes(r chi.Router, logger *slog.Logger, queries *db.Queries) {

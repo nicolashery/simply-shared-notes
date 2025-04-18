@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/nicolashery/simply-shared-notes/views/pages"
+	"github.com/nicolashery/simply-shared-notes/app/views/pages"
 )
 
 func handleHome() http.HandlerFunc {

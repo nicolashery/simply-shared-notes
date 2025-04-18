@@ -8,7 +8,7 @@ RUN npm ci
 
 COPY assets/ ./assets/
 COPY public/ ./public/
-COPY views/ ./views/
+COPY app/views/ ./app/views/
 COPY vite.config.js ./
 RUN npm run build
 
@@ -29,12 +29,7 @@ RUN go mod download
 COPY --from=frontend-builder /app/dist ./dist
 COPY sql/pragmas.sql ./sql/
 # Go source files
-COPY db ./db/
-COPY handlers ./handlers/
-COPY helpers ./helpers/
-COPY middlewares ./middlewares/
-COPY server ./server/
-COPY views ./views/
+COPY app ./app/
 COPY main.go ./ 
 RUN CGO_ENABLED=0 GOOS=linux go build -o bin/app .
 

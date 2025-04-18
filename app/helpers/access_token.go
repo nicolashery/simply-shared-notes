@@ -5,7 +5,7 @@ import (
 	"regexp"
 
 	gonanoid "github.com/matoous/go-nanoid/v2"
-	"github.com/nicolashery/simply-shared-notes/db"
+	"github.com/nicolashery/simply-shared-notes/app/db"
 )
 
 const (

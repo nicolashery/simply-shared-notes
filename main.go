@@ -8,8 +8,8 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/nicolashery/simply-shared-notes/db"
-	"github.com/nicolashery/simply-shared-notes/server"
+	"github.com/nicolashery/simply-shared-notes/app"
+	"github.com/nicolashery/simply-shared-notes/app/db"
 )
 
 //go:embed sql/pragmas.sql
@@ -22,7 +22,7 @@ func run(ctx context.Context) error {
 	ctx, stop := signal.NotifyContext(ctx, os.Interrupt)
 	defer stop()
 
-	config, err := server.NewConfig()
+	config, err := app.NewConfig()
 	if err != nil {
 		return err
 	}
@@ -35,15 +35,15 @@ func run(ctx context.Context) error {
 	}
 	logger := slog.New(h)
 
-	var assetsConfig server.AssetsConfig
+	var assetsConfig app.AssetsConfig
 	if config.IsDev {
-		assetsConfig, err = server.DevAssets()
+		assetsConfig, err = app.DevAssets()
 		if err != nil {
 			return err
 		}
 		logger.Info("using dev assets, make sure Vite is running")
 	} else {
-		assetsConfig, err = server.ProdAssets(distFS)
+		assetsConfig, err = app.ProdAssets(distFS)
 		if err != nil {
 			return err
 		}
@@ -56,9 +56,9 @@ func run(ctx context.Context) error {
 	}
 	queries := db.New(dbConn)
 
-	s := server.NewServer(logger, queries, assetsConfig)
+	s := app.NewServer(logger, queries, assetsConfig)
 
-	return server.RunServer(ctx, s, logger, config.Port)
+	return app.RunServer(ctx, s, logger, config.Port)
 }
 
 func main() {

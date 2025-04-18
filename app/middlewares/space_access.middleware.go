@@ -6,8 +6,8 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/nicolashery/simply-shared-notes/db"
-	"github.com/nicolashery/simply-shared-notes/helpers"
+	"github.com/nicolashery/simply-shared-notes/app/db"
+	"github.com/nicolashery/simply-shared-notes/app/helpers"
 )
 
 func SpaceAccessCtx(logger *slog.Logger, queries *db.Queries) func(http.Handler) http.Handler {

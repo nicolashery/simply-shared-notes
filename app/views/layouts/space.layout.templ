@@ -1,7 +1,7 @@
 package layouts
 
-import "github.com/nicolashery/simply-shared-notes/middlewares"
-import "github.com/nicolashery/simply-shared-notes/helpers"
+import "github.com/nicolashery/simply-shared-notes/app/middlewares"
+import "github.com/nicolashery/simply-shared-notes/app/helpers"
 
 templ Space() {
 	{{ spaceAccess, _ := middlewares.GetSpaceAccess(ctx) }}

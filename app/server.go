@@ -1,4 +1,4 @@
-package server
+package app
 
 import (
 	"context"
@@ -8,9 +8,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/nicolashery/simply-shared-notes/db"
-	"github.com/nicolashery/simply-shared-notes/handlers"
-	"github.com/nicolashery/simply-shared-notes/middlewares"
+	"github.com/nicolashery/simply-shared-notes/app/db"
+	"github.com/nicolashery/simply-shared-notes/app/handlers"
+	"github.com/nicolashery/simply-shared-notes/app/middlewares"
 )
 
 func NewServer(logger *slog.Logger, queries *db.Queries, assetsConfig AssetsConfig) http.Handler {

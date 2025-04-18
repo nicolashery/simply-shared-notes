@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nicolashery/simply-shared-notes/db"
-	"github.com/nicolashery/simply-shared-notes/helpers"
-	"github.com/nicolashery/simply-shared-notes/views/pages"
+	"github.com/nicolashery/simply-shared-notes/app/db"
+	"github.com/nicolashery/simply-shared-notes/app/helpers"
+	"github.com/nicolashery/simply-shared-notes/app/views/pages"
 )
 
 func handleSpacesNew() http.HandlerFunc {
