@@ -10,7 +10,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/handlers"
-	"github.com/nicolashery/simply-shared-notes/app/middlewares"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
 )
 
 func NewServer(logger *slog.Logger, queries *db.Queries, assetsConfig AssetsConfig) http.Handler {
@@ -19,7 +19,7 @@ func NewServer(logger *slog.Logger, queries *db.Queries, assetsConfig AssetsConf
 	router.Use(
 		middleware.Logger,
 		middleware.Recoverer,
-		middlewares.ViteCtx(assetsConfig.ViteFragment),
+		rctx.ViteCtxMiddleware(assetsConfig.ViteFragment),
 	)
 
 	handlers.RegisterRoutes(router, logger, queries)

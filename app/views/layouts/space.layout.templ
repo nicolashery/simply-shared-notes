@@ -1,13 +1,14 @@
 package layouts
 
-import "github.com/nicolashery/simply-shared-notes/app/middlewares"
 import "github.com/nicolashery/simply-shared-notes/app/helpers"
+import "github.com/nicolashery/simply-shared-notes/app/rctx"
 
 templ Space() {
-	{{ spaceAccess := middlewares.GetSpaceAccess(ctx) }}
-	@Base(spaceAccess.Space.Name) {
+	{{ space := rctx.GetSpace(ctx) }}
+	{{ access := rctx.GetAccess(ctx) }}
+	@Base(space.Name) {
 		<div>
-			@spaceNav(spaceAccess)
+			@spaceNav(access)
 			<div class="px-4">
 				{ children... }
 			</div>
@@ -15,7 +16,7 @@ templ Space() {
 	}
 }
 
-templ spaceNav(spaceAccess *helpers.SpaceAccess) {
+templ spaceNav(access *helpers.Access) {
 	<div class="navbar bg-base-100 px-4 border-b-2 border-base-300 mb-6">
 		<div class="navbar-start">
 			Menu
@@ -24,7 +25,7 @@ templ spaceNav(spaceAccess *helpers.SpaceAccess) {
 			Simply Shared Notes
 		</div>
 		<div class="navbar-end">
-			{ string(spaceAccess.Role) }
+			{ string(access.Role) }
 		</div>
 	</div>
 }

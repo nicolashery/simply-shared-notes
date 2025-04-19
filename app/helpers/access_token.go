@@ -74,8 +74,7 @@ func GetTokenRole(space *db.Space, token string) (Role, bool) {
 	return "", false
 }
 
-type SpaceAccess struct {
-	Space *db.Space
+type Access struct {
 	Token string
 	Role  Role
 }

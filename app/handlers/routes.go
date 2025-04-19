@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/nicolashery/simply-shared-notes/app/db"
-	"github.com/nicolashery/simply-shared-notes/app/middlewares"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
 )
 
 func RegisterRoutes(r chi.Router, logger *slog.Logger, queries *db.Queries) {
@@ -14,7 +14,8 @@ func RegisterRoutes(r chi.Router, logger *slog.Logger, queries *db.Queries) {
 	r.Post("/new", handleSpacesCreate(logger, queries))
 
 	r.Route("/s/{token}", func(r chi.Router) {
-		r.Use(middlewares.SpaceAccessCtx(logger, queries))
+		r.Use(rctx.SpaceCtxMiddleware(queries))
+		r.Use(rctx.AccessCtxMiddleware(logger))
 
 		r.Get("/", handleSpacesShow())
 	})
