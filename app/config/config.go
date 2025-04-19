@@ -1,4 +1,4 @@
-package app
+package config
 
 import (
 	"fmt"
@@ -15,7 +15,7 @@ type Config struct {
 	DatabaseURL string `env:"DATABASE_URL" envDefault:"sqlite:data/app.sqlite"`
 }
 
-func NewConfig() (Config, error) {
+func New() (Config, error) {
 	err := godotenv.Load()
 	if err != nil && !os.IsNotExist(err) {
 		return Config{}, fmt.Errorf("failed to load .env file: %w", err)

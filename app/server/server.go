@@ -1,4 +1,4 @@
-package app
+package server
 
 import (
 	"context"
@@ -8,12 +8,13 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/nicolashery/simply-shared-notes/app/assets"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/handlers"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 )
 
-func NewServer(logger *slog.Logger, queries *db.Queries, assetsConfig AssetsConfig) http.Handler {
+func New(logger *slog.Logger, queries *db.Queries, assetsConfig assets.AssetsConfig) http.Handler {
 	router := chi.NewRouter()
 
 	router.Use(
@@ -30,7 +31,7 @@ func NewServer(logger *slog.Logger, queries *db.Queries, assetsConfig AssetsConf
 	return router
 }
 
-func RunServer(ctx context.Context, handler http.Handler, logger *slog.Logger, port int) error {
+func Run(ctx context.Context, handler http.Handler, logger *slog.Logger, port int) error {
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%d", port),
 		Handler: handler,
