@@ -78,3 +78,15 @@ type Access struct {
 	Token string
 	Role  Role
 }
+
+func (a *Access) IsAdmin() bool {
+	return a.Role == Role_Admin
+}
+
+func (a *Access) IsEdit() bool {
+	return a.Role == Role_Edit
+}
+
+func (a *Access) IsView() bool {
+	return a.Role == Role_View
+}
