@@ -6,21 +6,21 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/nicolashery/simply-shared-notes/app/helpers"
+	"github.com/nicolashery/simply-shared-notes/app/access"
 )
 
 func AccessCtxMiddleware(logger *slog.Logger) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			token := chi.URLParam(r, "token")
-			if !helpers.IsValidAccessToken(token) {
+			if !access.IsValidAccessToken(token) {
 				http.Error(w, "space not found", http.StatusNotFound)
 				return
 			}
 
 			space := GetSpace(r.Context())
 
-			role, ok := helpers.GetTokenRole(space, token)
+			role, ok := access.GetTokenRole(space, token)
 			if !ok {
 				logger.Error(
 					"failed to get role for token",
@@ -30,7 +30,7 @@ func AccessCtxMiddleware(logger *slog.Logger) func(http.Handler) http.Handler {
 				http.Error(w, "internal server error", http.StatusInternalServerError)
 			}
 
-			access := helpers.Access{
+			access := access.Access{
 				Token: token,
 				Role:  role,
 			}
@@ -41,8 +41,8 @@ func AccessCtxMiddleware(logger *slog.Logger) func(http.Handler) http.Handler {
 	}
 }
 
-func GetAccess(ctx context.Context) *helpers.Access {
-	access, ok := ctx.Value(accessContextKey).(*helpers.Access)
+func GetAccess(ctx context.Context) *access.Access {
+	access, ok := ctx.Value(accessContextKey).(*access.Access)
 	if !ok {
 		panic("access not found in context, make sure to use middleware")
 	}

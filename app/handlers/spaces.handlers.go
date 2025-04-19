@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/nicolashery/simply-shared-notes/app/access"
 	"github.com/nicolashery/simply-shared-notes/app/db"
-	"github.com/nicolashery/simply-shared-notes/app/helpers"
 	"github.com/nicolashery/simply-shared-notes/app/views/pages"
 )
 
@@ -44,7 +44,7 @@ func handleSpacesCreate(logger *slog.Logger, queries *db.Queries) http.HandlerFu
 			return
 		}
 
-		tokens, err := helpers.GenerateAccessTokens()
+		tokens, err := access.GenerateAccessTokens()
 		if err != nil {
 			logger.Error("error generating access tokens", slog.Any("error", err))
 			http.Error(w, "error creating space", http.StatusInternalServerError)

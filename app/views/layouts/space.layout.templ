@@ -1,7 +1,9 @@
 package layouts
 
-import "github.com/nicolashery/simply-shared-notes/app/helpers"
-import "github.com/nicolashery/simply-shared-notes/app/rctx"
+import (
+	"github.com/nicolashery/simply-shared-notes/app/access"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
+)
 
 templ Space() {
 	{{ space := rctx.GetSpace(ctx) }}
@@ -16,7 +18,7 @@ templ Space() {
 	}
 }
 
-templ spaceNav(access *helpers.Access) {
+templ spaceNav(access *access.Access) {
 	<div class="navbar bg-base-100 px-4 border-b-2 border-base-300 mb-6">
 		<div class="navbar-start">
 			Menu

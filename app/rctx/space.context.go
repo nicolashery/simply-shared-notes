@@ -5,15 +5,15 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/nicolashery/simply-shared-notes/app/access"
 	"github.com/nicolashery/simply-shared-notes/app/db"
-	"github.com/nicolashery/simply-shared-notes/app/helpers"
 )
 
 func SpaceCtxMiddleware(queries *db.Queries) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			token := chi.URLParam(r, "token")
-			if !helpers.IsValidAccessToken(token) {
+			if !access.IsValidAccessToken(token) {
 				http.Error(w, "space not found", http.StatusNotFound)
 				return
 			}
