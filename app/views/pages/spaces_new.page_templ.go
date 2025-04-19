@@ -10,7 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import "github.com/nicolashery/simply-shared-notes/app/views/layouts"
 
-func SpacesNew() templ.Component {
+func SpacesNew(code string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -43,7 +43,20 @@ func SpacesNew() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"max-w-md mx-auto py-4\"><h1 class=\"text-2xl font-bold mb-1.5\">Create a new space</h1><p class=\"mb-4 text-sm opacity-60\">Each space has a unique access link and can contain any number of notes.</p><form method=\"POST\" action=\"/new\" class=\"flex flex-col gap-4\"><fieldset class=\"flex flex-col gap-1.5\"><label for=\"name\" class=\"text-sm font-semibold\">Space name</label> <input type=\"text\" name=\"name\" id=\"name\" class=\"input w-full\"><p class=\"text-sm opacity-60\">You can always change the name later in the space settings.</p></fieldset><fieldset class=\"flex flex-col gap-1.5\"><label for=\"identity\" class=\"text-sm font-semibold\">Your name</label> <input type=\"text\" name=\"identity\" id=\"identity\" class=\"input w-full\"><p class=\"text-sm opacity-60\">We'll use this to create the first member of your new space. You can add more later from the members page.</p></fieldset><fieldset class=\"flex flex-col gap-1.5\"><label for=\"email\" class=\"text-sm font-semibold\">Your email</label> <input type=\"email\" name=\"email\" id=\"email\" class=\"input w-full\"><p class=\"text-sm opacity-60\">Your email is only used to send you the secure access link to your space. We will never spam or share your email with a third party.</p></fieldset><fieldset class=\"flex flex-col gap-1.5\"><label for=\"code\" class=\"text-sm font-semibold\">Invitation code</label> <input type=\"text\" name=\"code\" id=\"code\" class=\"input w-full\"><p class=\"text-sm opacity-60\">Creating spaces is only possible with an invitation code.</p></fieldset><button type=\"submit\" class=\"btn btn-primary mt-4\">Create space</button></form></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"max-w-md mx-auto py-4\"><h1 class=\"text-2xl font-bold mb-1.5\">Create a new space</h1><p class=\"mb-4 text-sm opacity-60\">Each space has a unique access link and can contain any number of notes.</p><form method=\"POST\" action=\"/new\" class=\"flex flex-col gap-4\"><fieldset class=\"flex flex-col gap-1.5\"><label for=\"name\" class=\"text-sm font-semibold\">Space name</label> <input type=\"text\" name=\"name\" id=\"name\" class=\"input w-full\"><p class=\"text-sm opacity-60\">You can always change the name later in the space settings.</p></fieldset><fieldset class=\"flex flex-col gap-1.5\"><label for=\"identity\" class=\"text-sm font-semibold\">Your name</label> <input type=\"text\" name=\"identity\" id=\"identity\" class=\"input w-full\"><p class=\"text-sm opacity-60\">We'll use this to create the first member of your new space. You can add more later from the members page.</p></fieldset><fieldset class=\"flex flex-col gap-1.5\"><label for=\"email\" class=\"text-sm font-semibold\">Your email</label> <input type=\"email\" name=\"email\" id=\"email\" class=\"input w-full\"><p class=\"text-sm opacity-60\">Your email is only used to send you the secure access link to your space. We will never spam or share your email with a third party.</p></fieldset><fieldset class=\"flex flex-col gap-1.5\"><label for=\"code\" class=\"text-sm font-semibold\">Invitation code</label> <input type=\"text\" name=\"code\" id=\"code\" value=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var3 string
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(code)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/spaces_new.page.templ`, Line: 30, Col: 58}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"input w-full\"><p class=\"text-sm opacity-60\">Creating spaces is only possible with an invitation code.</p></fieldset><button type=\"submit\" class=\"btn btn-primary mt-4\">Create space</button></form></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

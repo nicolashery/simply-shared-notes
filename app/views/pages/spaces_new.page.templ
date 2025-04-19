@@ -2,7 +2,7 @@ package pages
 
 import "github.com/nicolashery/simply-shared-notes/app/views/layouts"
 
-templ SpacesNew() {
+templ SpacesNew(code string) {
 	@layouts.Landing("Create space") {
 		<div class="max-w-md mx-auto py-4">
 			<h1 class="text-2xl font-bold mb-1.5">Create a new space</h1>
@@ -27,7 +27,7 @@ templ SpacesNew() {
 				</fieldset>
 				<fieldset class="flex flex-col gap-1.5">
 					<label for="code" class="text-sm font-semibold">Invitation code</label>
-					<input type="text" name="code" id="code" class="input w-full"/>
+					<input type="text" name="code" id="code" value={ code } class="input w-full"/>
 					<p class="text-sm opacity-60">Creating spaces is only possible with an invitation code.</p>
 				</fieldset>
 				<button type="submit" class="btn btn-primary mt-4">Create space</button>

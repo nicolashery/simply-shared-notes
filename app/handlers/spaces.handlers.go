@@ -8,19 +8,26 @@ import (
 	"time"
 
 	"github.com/nicolashery/simply-shared-notes/app/access"
+	"github.com/nicolashery/simply-shared-notes/app/config"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/views/pages"
 )
 
-func handleSpacesNew() http.HandlerFunc {
+func handleSpacesNew(cfg *config.Config) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		pages.SpacesNew().Render(r.Context(), w)
+		var code string
+		if cfg.RequiresInvitationCode() {
+			code = r.URL.Query().Get("code")
+		}
+
+		pages.SpacesNew(code).Render(r.Context(), w)
 	}
 }
 
 type CreateSpaceForm struct {
 	Name  string
 	Email string
+	Code  string
 }
 
 func parseCreateSpaceForm(r *http.Request, f *CreateSpaceForm) error {
@@ -31,16 +38,22 @@ func parseCreateSpaceForm(r *http.Request, f *CreateSpaceForm) error {
 
 	f.Name = strings.Trim(r.Form.Get("name"), " ")
 	f.Email = strings.Trim(r.Form.Get("email"), " ")
+	f.Code = strings.Trim(r.Form.Get("code"), " ")
 
 	return nil
 }
 
-func handleSpacesCreate(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
+func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var form CreateSpaceForm
 		err := parseCreateSpaceForm(r, &form)
 		if err != nil {
 			http.Error(w, "failed to parse form", http.StatusBadRequest)
+			return
+		}
+
+		if cfg.RequiresInvitationCode() && form.Code != cfg.InvitationCode {
+			http.Error(w, "invitation code required", http.StatusBadRequest)
 			return
 		}
 

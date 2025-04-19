@@ -9,12 +9,13 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/nicolashery/simply-shared-notes/app/assets"
+	"github.com/nicolashery/simply-shared-notes/app/config"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/handlers"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 )
 
-func New(logger *slog.Logger, queries *db.Queries, assetsConfig assets.AssetsConfig) http.Handler {
+func New(cfg *config.Config, logger *slog.Logger, queries *db.Queries, assetsConfig assets.AssetsConfig) http.Handler {
 	router := chi.NewRouter()
 
 	router.Use(
@@ -23,7 +24,7 @@ func New(logger *slog.Logger, queries *db.Queries, assetsConfig assets.AssetsCon
 		rctx.ViteCtxMiddleware(assetsConfig.ViteFragment),
 	)
 
-	handlers.RegisterRoutes(router, logger, queries)
+	handlers.RegisterRoutes(router, cfg, logger, queries)
 
 	StaticDir(router, "/assets", assetsConfig.AssetsFS)
 	StaticFile(router, "/robots.txt", assetsConfig.PublicFS)
