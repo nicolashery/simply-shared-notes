@@ -14,8 +14,10 @@ Common columns:
   - UTC datetime
   - Set by application code (not SQL schema or triggers)
 - `created_by`/`updated_by`
-  - Foreign key to `members` table
-  - Not set for `spaces` since members are not "users" in the traditional sense, but a concept local to a space (this would create a cycle when creating the space and the member that created it)
+  - Foreign key to `members` table, nullable
+  - Initially NULL for a new entry in `spaces` and the first entry in `members` for that space
+  - After creating both the space and first member in a transaction, the application updates these fields to reference the first member
+  - For subsequent operations, these fields reference the member who performed the action
 
 ## Public IDs and Access Tokens
 
@@ -42,6 +44,13 @@ Public IDs:
 - Column: `public_id`
 - Unique constraint on `(space_id, public_id)`, composite index
 - Used in URLs, in combination with a Space's Access Token
+
+## Deleting members
+
+- Members can be deleted from a Space
+- When a Member is deleted, their references in other tables (`created_by` and `updated_by`) are set to `NULL`
+- Foreign keys that reference members use `ON DELETE SET NULL`
+- Application handles `NULL` values for these references and the UI displays "deleted member" instead of the member name (which is no longer available)
 
 ## Conventions
 
