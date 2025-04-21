@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -15,7 +16,7 @@ import (
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 )
 
-func New(cfg *config.Config, logger *slog.Logger, queries *db.Queries, assetsConfig assets.AssetsConfig) http.Handler {
+func New(cfg *config.Config, logger *slog.Logger, conn *sql.DB, queries *db.Queries, assetsConfig assets.AssetsConfig) http.Handler {
 	router := chi.NewRouter()
 
 	router.Use(
@@ -24,7 +25,7 @@ func New(cfg *config.Config, logger *slog.Logger, queries *db.Queries, assetsCon
 		rctx.ViteCtxMiddleware(assetsConfig.ViteFragment),
 	)
 
-	handlers.RegisterRoutes(router, cfg, logger, queries)
+	handlers.RegisterRoutes(router, cfg, logger, conn, queries)
 
 	StaticDir(router, "/assets", assetsConfig.AssetsFS)
 	StaticFile(router, "/robots.txt", assetsConfig.PublicFS)

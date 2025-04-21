@@ -7,6 +7,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"time"
 )
 
@@ -27,7 +28,7 @@ INSERT INTO spaces (
   ?5,
   ?6,
   ?7
-) RETURNING id, created_at, updated_at, name, email, admin_token, edit_token, view_token
+) RETURNING id, created_at, updated_at, name, email, admin_token, edit_token, view_token, created_by, updated_by
 `
 
 type CreateSpaceParams struct {
@@ -60,12 +61,14 @@ func (q *Queries) CreateSpace(ctx context.Context, arg CreateSpaceParams) (Space
 		&i.AdminToken,
 		&i.EditToken,
 		&i.ViewToken,
+		&i.CreatedBy,
+		&i.UpdatedBy,
 	)
 	return i, err
 }
 
 const getSpaceByAccessToken = `-- name: GetSpaceByAccessToken :one
-SELECT id, created_at, updated_at, name, email, admin_token, edit_token, view_token FROM spaces
+SELECT id, created_at, updated_at, name, email, admin_token, edit_token, view_token, created_by, updated_by FROM spaces
 WHERE admin_token = ?1
   OR edit_token = ?1
   OR view_token = ?1
@@ -84,6 +87,25 @@ func (q *Queries) GetSpaceByAccessToken(ctx context.Context, token string) (Spac
 		&i.AdminToken,
 		&i.EditToken,
 		&i.ViewToken,
+		&i.CreatedBy,
+		&i.UpdatedBy,
 	)
 	return i, err
+}
+
+const updateSpaceCreatedBy = `-- name: UpdateSpaceCreatedBy :exec
+UPDATE spaces
+SET created_by = ?1,
+  updated_by = ?1
+WHERE id = ?2
+`
+
+type UpdateSpaceCreatedByParams struct {
+	CreatedBy sql.NullInt64
+	SpaceID   int64
+}
+
+func (q *Queries) UpdateSpaceCreatedBy(ctx context.Context, arg UpdateSpaceCreatedByParams) error {
+	_, err := q.db.ExecContext(ctx, updateSpaceCreatedBy, arg.CreatedBy, arg.SpaceID)
+	return err
 }

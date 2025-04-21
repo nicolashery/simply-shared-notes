@@ -5,8 +5,20 @@
 package db
 
 import (
+	"database/sql"
 	"time"
 )
+
+type Member struct {
+	ID        int64
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	CreatedBy sql.NullInt64
+	UpdatedBy sql.NullInt64
+	SpaceID   int64
+	PublicID  string
+	Name      string
+}
 
 type SchemaMigration struct {
 	Version string
@@ -21,4 +33,6 @@ type Space struct {
 	AdminToken string
 	EditToken  string
 	ViewToken  string
+	CreatedBy  sql.NullInt64
+	UpdatedBy  sql.NullInt64
 }

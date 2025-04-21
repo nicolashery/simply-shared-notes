@@ -52,7 +52,7 @@ func Run(ctx context.Context, distFS embed.FS, pragmasSQL string) error {
 	}
 	queries := db.New(dbConn)
 
-	s := server.New(cfg, logger, queries, assetsConfig)
+	s := server.New(cfg, logger, dbConn, queries, assetsConfig)
 
 	return server.Run(ctx, s, logger, cfg.Port)
 }

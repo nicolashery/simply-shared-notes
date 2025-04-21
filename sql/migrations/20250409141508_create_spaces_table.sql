@@ -1,6 +1,6 @@
 -- migrate:up
 CREATE TABLE spaces (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id INTEGER PRIMARY KEY,
   created_at DATETIME NOT NULL,
   updated_at DATETIME NOT NULL,
   name TEXT NOT NULL,
@@ -15,4 +15,3 @@ CREATE INDEX idx_spaces_edit_token ON spaces(edit_token);
 CREATE INDEX idx_spaces_view_token ON spaces(view_token);
 
 -- migrate:down
-

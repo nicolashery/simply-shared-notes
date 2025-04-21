@@ -23,3 +23,9 @@ WHERE admin_token = @token
   OR edit_token = @token
   OR view_token = @token
 LIMIT 1;
+
+-- name: UpdateSpaceCreatedBy :exec
+UPDATE spaces
+SET created_by = @created_by,
+  updated_by = @created_by
+WHERE id = @space_id;
