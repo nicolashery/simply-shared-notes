@@ -9,14 +9,14 @@ import (
 )
 
 func InitDB(ctx context.Context, dbPath string, pragmasSQL string) (*sql.DB, error) {
-	conn, err := sql.Open("sqlite", dbPath)
+	sqlDB, err := sql.Open("sqlite", dbPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open database: %w", err)
 	}
 
-	if _, err := conn.ExecContext(ctx, pragmasSQL); err != nil {
+	if _, err := sqlDB.ExecContext(ctx, pragmasSQL); err != nil {
 		return nil, fmt.Errorf("failed to execute pragmas: %w", err)
 	}
 
-	return conn, nil
+	return sqlDB, nil
 }

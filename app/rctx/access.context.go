@@ -28,6 +28,7 @@ func AccessCtxMiddleware(logger *slog.Logger) func(http.Handler) http.Handler {
 					slog.String("token", token),
 				)
 				http.Error(w, "internal server error", http.StatusInternalServerError)
+				return
 			}
 
 			access := access.Access{

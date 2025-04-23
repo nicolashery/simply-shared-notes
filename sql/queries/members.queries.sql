@@ -22,3 +22,19 @@ UPDATE members
 SET created_by = @created_by,
   updated_by = @created_by
 WHERE id = @member_id;
+
+-- name: GetMemberByID :one
+SELECT * FROM members
+WHERE id = @id
+LIMIT 1;
+
+-- name: GetMemberByPublicID :one
+SELECT * FROM members
+WHERE space_id = @space_id
+  AND public_id = @public_id
+LIMIT 1;
+
+-- name: ListMembers :many
+SELECT * FROM members
+WHERE space_id = @space_id
+ORDER BY name;

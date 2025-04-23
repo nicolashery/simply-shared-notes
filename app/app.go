@@ -12,6 +12,7 @@ import (
 	"github.com/nicolashery/simply-shared-notes/app/config"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/server"
+	"github.com/nicolashery/simply-shared-notes/app/session"
 )
 
 func Run(ctx context.Context, distFS embed.FS, pragmasSQL string) error {
@@ -46,13 +47,15 @@ func Run(ctx context.Context, distFS embed.FS, pragmasSQL string) error {
 		logger.Info("using prod assets")
 	}
 
-	dbConn, err := db.InitDB(ctx, cfg.DatabasePath(), pragmasSQL)
+	sqlDB, err := db.InitDB(ctx, cfg.DatabasePath(), pragmasSQL)
 	if err != nil {
 		return fmt.Errorf("failed to initialize database: %w", err)
 	}
-	queries := db.New(dbConn)
+	queries := db.New(sqlDB)
 
-	s := server.New(cfg, logger, dbConn, queries, assetsConfig)
+	sessionStore := session.InitStore(cfg.CookieSecret, cfg.IsDev)
+
+	s := server.New(cfg, logger, sqlDB, queries, assetsConfig, sessionStore)
 
 	return server.Run(ctx, s, logger, cfg.Port)
 }

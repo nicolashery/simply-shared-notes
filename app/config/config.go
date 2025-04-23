@@ -14,6 +14,7 @@ type Config struct {
 	IsDev          bool   `env:"DEV" envDefault:"false"`
 	DatabaseURL    string `env:"DATABASE_URL" envDefault:"sqlite:data/app.sqlite"`
 	InvitationCode string `env:"INVITATION_CODE"`
+	CookieSecret   string `env:"COOKIE_SECRET,required"`
 }
 
 func New() (*Config, error) {

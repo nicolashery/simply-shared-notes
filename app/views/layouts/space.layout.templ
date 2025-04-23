@@ -1,8 +1,10 @@
 package layouts
 
 import (
+	"fmt"
 	"github.com/nicolashery/simply-shared-notes/app/access"
 	"github.com/nicolashery/simply-shared-notes/app/db"
+	"github.com/nicolashery/simply-shared-notes/app/identity"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/views/helpers"
 )
@@ -10,9 +12,10 @@ import (
 templ Space() {
 	{{ space := rctx.GetSpace(ctx) }}
 	{{ access := rctx.GetAccess(ctx) }}
+	{{ identity := rctx.GetIdentity(ctx) }}
 	@Base(space.Name) {
 		<div>
-			@navBar(access, space)
+			@navBar(access, space, identity)
 			<div class="px-4">
 				{ children... }
 			</div>
@@ -20,7 +23,7 @@ templ Space() {
 	}
 }
 
-templ navBar(access *access.Access, space *db.Space) {
+templ navBar(access *access.Access, space *db.Space, identity *identity.Identity) {
 	<div class="navbar bg-base-100 px-4 border-b-2 border-base-300 mb-6">
 		<div class="navbar-start">
 			<div>
@@ -32,7 +35,7 @@ templ navBar(access *access.Access, space *db.Space) {
 		</div>
 		<div class="navbar-end">
 			<div>
-				@userMenu(access)
+				@userMenu(access, identity)
 			</div>
 		</div>
 	</div>
@@ -161,7 +164,7 @@ templ navMenu(space *db.Space) {
 	</div>
 }
 
-templ userMenu(access *access.Access) {
+templ userMenu(access *access.Access, identity *identity.Identity) {
 	<div class="drawer drawer-end">
 		<input id="user-drawer" type="checkbox" class="drawer-toggle"/>
 		<div class="drawer-content">
@@ -184,87 +187,93 @@ templ userMenu(access *access.Access) {
 		</div>
 		<div class="drawer-side">
 			<label for="user-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-			<ul class="menu gap-2 bg-base-200 text-base-content min-h-full w-80 p-4">
-				<li class="menu-title">
-					<div>John</div>
-					<div class="text-xs font-normal">{ helpers.RoleLabel(access.Role) }</div>
-				</li>
-				<li>
-					<a class="flex">
-						<svg
-							class="w-5 h-5"
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						>
-							<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-							<circle cx="12" cy="7" r="4"></circle>
-						</svg>
-						Profile
-					</a>
-				</li>
-				<li>
-					<a class="flex">
-						<svg
-							class="w-5 h-5"
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						>
-							<circle cx="12" cy="12" r="10"></circle>
-							<path d="M8 12h8"></path>
-							<path d="M12 8v8"></path>
-						</svg>
-						New space
-					</a>
-				</li>
-				<li>
-					<a class="flex">
-						<svg
-							class="w-5 h-5"
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						>
-							<circle cx="12" cy="12" r="10"></circle>
-							<path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
-							<path d="M2 12h20"></path>
-						</svg>
-						English (EN)
-					</a>
-				</li>
-				<li>
-					<a class="flex">
-						<svg
-							class="w-5 h-5"
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						>
-							<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-							<polyline points="16 17 21 12 16 7"></polyline>
-							<line x1="21" x2="9" y1="12" y2="12"></line>
-						</svg>
-						Switch member
-					</a>
-				</li>
-			</ul>
+			<div class="bg-base-200 text-base-content min-h-full  p-2">
+				<ul class="menu gap-2 w-80">
+					<li class="menu-title">
+						<div>{ helpers.IdentityName(identity) }</div>
+						<div class="text-xs font-normal">{ helpers.RoleLabel(access) }</div>
+					</li>
+					<li>
+						<a class="flex">
+							<svg
+								class="w-5 h-5"
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+								<circle cx="12" cy="7" r="4"></circle>
+							</svg>
+							Profile
+						</a>
+					</li>
+					<li>
+						<a class="flex">
+							<svg
+								class="w-5 h-5"
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<circle cx="12" cy="12" r="10"></circle>
+								<path d="M8 12h8"></path>
+								<path d="M12 8v8"></path>
+							</svg>
+							New space
+						</a>
+					</li>
+					<li>
+						<a class="flex">
+							<svg
+								class="w-5 h-5"
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<circle cx="12" cy="12" r="10"></circle>
+								<path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+								<path d="M2 12h20"></path>
+							</svg>
+							English (EN)
+						</a>
+					</li>
+				</ul>
+				<form method="POST" action={ templ.URL(fmt.Sprintf("/s/%s/identity/delete", access.Token)) }>
+					<ul class="menu w-80 pt-0">
+						<li>
+							<button type="submit" class="flex">
+								<svg
+									class="w-5 h-5"
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								>
+									<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+									<polyline points="16 17 21 12 16 7"></polyline>
+									<line x1="21" x2="9" y1="12" y2="12"></line>
+								</svg>
+								Switch member
+							</button>
+						</li>
+					</ul>
+				</form>
+			</div>
 		</div>
 	</div>
 }

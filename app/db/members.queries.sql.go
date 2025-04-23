@@ -65,6 +65,94 @@ func (q *Queries) CreateMember(ctx context.Context, arg CreateMemberParams) (Mem
 	return i, err
 }
 
+const getMemberByID = `-- name: GetMemberByID :one
+SELECT id, created_at, updated_at, created_by, updated_by, space_id, public_id, name FROM members
+WHERE id = ?1
+LIMIT 1
+`
+
+func (q *Queries) GetMemberByID(ctx context.Context, id int64) (Member, error) {
+	row := q.db.QueryRowContext(ctx, getMemberByID, id)
+	var i Member
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.SpaceID,
+		&i.PublicID,
+		&i.Name,
+	)
+	return i, err
+}
+
+const getMemberByPublicID = `-- name: GetMemberByPublicID :one
+SELECT id, created_at, updated_at, created_by, updated_by, space_id, public_id, name FROM members
+WHERE space_id = ?1
+  AND public_id = ?2
+LIMIT 1
+`
+
+type GetMemberByPublicIDParams struct {
+	SpaceID  int64
+	PublicID string
+}
+
+func (q *Queries) GetMemberByPublicID(ctx context.Context, arg GetMemberByPublicIDParams) (Member, error) {
+	row := q.db.QueryRowContext(ctx, getMemberByPublicID, arg.SpaceID, arg.PublicID)
+	var i Member
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.SpaceID,
+		&i.PublicID,
+		&i.Name,
+	)
+	return i, err
+}
+
+const listMembers = `-- name: ListMembers :many
+SELECT id, created_at, updated_at, created_by, updated_by, space_id, public_id, name FROM members
+WHERE space_id = ?1
+ORDER BY name
+`
+
+func (q *Queries) ListMembers(ctx context.Context, spaceID int64) ([]Member, error) {
+	rows, err := q.db.QueryContext(ctx, listMembers, spaceID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Member
+	for rows.Next() {
+		var i Member
+		if err := rows.Scan(
+			&i.ID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.CreatedBy,
+			&i.UpdatedBy,
+			&i.SpaceID,
+			&i.PublicID,
+			&i.Name,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updateMemberCreatedBy = `-- name: UpdateMemberCreatedBy :exec
 UPDATE members
 SET created_by = ?1,

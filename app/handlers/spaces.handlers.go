@@ -9,21 +9,25 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gorilla/sessions"
 	"github.com/nicolashery/simply-shared-notes/app/access"
 	"github.com/nicolashery/simply-shared-notes/app/config"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/publicid"
+	"github.com/nicolashery/simply-shared-notes/app/session"
 	"github.com/nicolashery/simply-shared-notes/app/views/pages"
 )
 
 func handleSpacesNew(cfg *config.Config) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		requiresCode := cfg.RequiresInvitationCode()
+
 		var code string
-		if cfg.RequiresInvitationCode() {
+		if requiresCode {
 			code = r.URL.Query().Get("code")
 		}
 
-		pages.SpacesNew(code).Render(r.Context(), w)
+		pages.SpacesNew(requiresCode, code).Render(r.Context(), w)
 	}
 }
 
@@ -48,7 +52,7 @@ func parseCreateSpaceForm(r *http.Request, f *CreateSpaceForm) error {
 	return nil
 }
 
-func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, conn *sql.DB, queries *db.Queries) http.HandlerFunc {
+func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries, sessionStore *sessions.CookieStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var form CreateSpaceForm
 		err := parseCreateSpaceForm(r, &form)
@@ -78,9 +82,9 @@ func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, conn *sql.DB, q
 
 		now := time.Now().UTC()
 
-		space, _, err := createSpaceAndFirstMember(
+		space, member, err := createSpaceAndFirstMember(
 			r.Context(),
-			conn,
+			sqlDB,
 			queries,
 			form,
 			now,
@@ -93,21 +97,35 @@ func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, conn *sql.DB, q
 			return
 		}
 
-		spaceUrl := fmt.Sprintf("/s/%s", space.AdminToken)
-		http.Redirect(w, r, spaceUrl, http.StatusSeeOther)
+		sess, err := sessionStore.Get(r, session.CookieName)
+		if err != nil {
+			logger.Error("failed to get session")
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+			return
+		}
+
+		sess.Values[session.IdentityKey] = member.ID
+		err = sess.Save(r, w)
+		if err != nil {
+			logger.Error("failed to save session")
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+			return
+		}
+
+		http.Redirect(w, r, fmt.Sprintf("/s/%s", space.AdminToken), http.StatusSeeOther)
 	}
 }
 
 func createSpaceAndFirstMember(
 	ctx context.Context,
-	conn *sql.DB,
+	sqlDB *sql.DB,
 	queries *db.Queries,
 	form CreateSpaceForm,
 	now time.Time,
 	tokens access.AccessTokens,
 	memberPublicId string,
 ) (*db.Space, *db.Member, error) {
-	tx, err := conn.Begin()
+	tx, err := sqlDB.Begin()
 	if err != nil {
 		return nil, nil, err
 	}
