@@ -1,8 +1,11 @@
 package pages
 
-import "github.com/nicolashery/simply-shared-notes/app/views/layouts"
+import (
+	"github.com/nicolashery/simply-shared-notes/app/forms"
+	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
+)
 
-templ SpacesNew(requiresCode bool, code string) {
+templ SpacesNew(requiresCode bool, form *forms.CreateSpace, errors forms.Errors) {
 	@layouts.Landing("Create space") {
 		<div class="max-w-md mx-auto py-4">
 			<h1 class="text-2xl font-bold mb-1.5">Create a new space</h1>
@@ -12,23 +15,67 @@ templ SpacesNew(requiresCode bool, code string) {
 			<form method="POST" action="/new" class="flex flex-col gap-4">
 				<fieldset class="flex flex-col gap-1.5">
 					<label for="name" class="text-sm font-semibold">Space name</label>
-					<input type="text" name="name" id="name" class="input w-full"/>
+					<input
+						type="text"
+						name="name"
+						id="name"
+						value={ form.Name }
+						class={ "input w-full", templ.KV("input-error", forms.HasError(errors, "name")) }
+					/>
+					for _, e := range forms.GetErrors(errors, "name") {
+						<p class="text-sm text-error">
+							{ e }
+						</p>
+					}
 					<p class="text-sm opacity-60">You can always change the name later in the space settings.</p>
 				</fieldset>
 				<fieldset class="flex flex-col gap-1.5">
 					<label for="identity" class="text-sm font-semibold">Your name</label>
-					<input type="text" name="identity" id="identity" class="input w-full"/>
+					<input
+						type="text"
+						name="identity"
+						id="identity"
+						value={ form.Identity }
+						class={ "input w-full", templ.KV("input-error", forms.HasError(errors, "identity")) }
+					/>
+					for _, e := range forms.GetErrors(errors, "identity") {
+						<p class="text-sm text-error">
+							{ e }
+						</p>
+					}
 					<p class="text-sm opacity-60">We'll use this to create the first member of your new space. You can add more later from the members page.</p>
 				</fieldset>
 				<fieldset class="flex flex-col gap-1.5">
 					<label for="email" class="text-sm font-semibold">Your email</label>
-					<input type="email" name="email" id="email" class="input w-full"/>
+					<input
+						type="email"
+						name="email"
+						id="email"
+						value={ form.Email }
+						class={ "input w-full", templ.KV("input-error", forms.HasError(errors, "email")) }
+					/>
+					for _, e := range forms.GetErrors(errors, "email") {
+						<p class="text-sm text-error">
+							{ e }
+						</p>
+					}
 					<p class="text-sm opacity-60">Your email is only used to send you the secure access link to your space. We will never spam or share your email with a third party.</p>
 				</fieldset>
 				if requiresCode {
 					<fieldset class="flex flex-col gap-1.5">
 						<label for="code" class="text-sm font-semibold">Invitation code</label>
-						<input type="text" name="code" id="code" value={ code } class="input w-full"/>
+						<input
+							type="text"
+							name="code"
+							id="code"
+							value={ form.Code }
+							class={ "input w-full", templ.KV("input-error", forms.HasError(errors, "code")) }
+						/>
+						for _, e := range forms.GetErrors(errors, "code") {
+							<p class="text-sm text-error">
+								{ e }
+							</p>
+						}
 						<p class="text-sm opacity-60">Creating spaces is only possible with an invitation code.</p>
 					</fieldset>
 				}

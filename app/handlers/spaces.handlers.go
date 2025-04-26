@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/gorilla/sessions"
 	"github.com/nicolashery/simply-shared-notes/app/access"
 	"github.com/nicolashery/simply-shared-notes/app/config"
 	"github.com/nicolashery/simply-shared-notes/app/db"
+	"github.com/nicolashery/simply-shared-notes/app/forms"
 	"github.com/nicolashery/simply-shared-notes/app/publicid"
 	"github.com/nicolashery/simply-shared-notes/app/session"
 	"github.com/nicolashery/simply-shared-notes/app/views/pages"
@@ -22,42 +22,23 @@ func handleSpacesNew(cfg *config.Config) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		requiresCode := cfg.RequiresInvitationCode()
 
-		var code string
+		var form forms.CreateSpace
 		if requiresCode {
-			code = r.URL.Query().Get("code")
+			form.Code = r.URL.Query().Get("code")
 		}
 
-		pages.SpacesNew(requiresCode, code).Render(r.Context(), w)
+		pages.SpacesNew(requiresCode, &form, forms.EmptyErrors()).Render(r.Context(), w)
 	}
-}
-
-type CreateSpaceForm struct {
-	Name     string
-	Identity string
-	Email    string
-	Code     string
-}
-
-func parseCreateSpaceForm(r *http.Request, f *CreateSpaceForm) error {
-	err := r.ParseForm()
-	if err != nil {
-		return err
-	}
-
-	f.Name = strings.Trim(r.Form.Get("name"), " ")
-	f.Identity = strings.Trim(r.Form.Get("identity"), " ")
-	f.Email = strings.Trim(r.Form.Get("email"), " ")
-	f.Code = strings.Trim(r.Form.Get("code"), " ")
-
-	return nil
 }
 
 func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries, sessionStore *sessions.CookieStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var form CreateSpaceForm
-		err := parseCreateSpaceForm(r, &form)
-		if err != nil {
-			http.Error(w, "failed to parse form", http.StatusBadRequest)
+		requiresCode := cfg.RequiresInvitationCode()
+
+		form, errors := forms.ParseCreateSpace(r, requiresCode)
+		if errors != nil {
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			pages.SpacesNew(requiresCode, &form, errors).Render(r.Context(), w)
 			return
 		}
 
@@ -120,7 +101,7 @@ func createSpaceAndFirstMember(
 	ctx context.Context,
 	sqlDB *sql.DB,
 	queries *db.Queries,
-	form CreateSpaceForm,
+	form forms.CreateSpace,
 	now time.Time,
 	tokens access.AccessTokens,
 	memberPublicId string,
