@@ -9,9 +9,9 @@
   - `s` is short for "space"
   - `{token}` is a valid **Access Token** for that Space
 - Each Space has three Access Tokens, one for each **Role** granting different permissions
-  - **Admin**: Can do anything the Edit and View roles can do, as well as add/remove Members, rename the Space, regenerate the Access Tokens, delete the Space
+  - **Admin**: Can do anything the Edit and View roles can do, as well as add/remove Members, rename the Space, view/regenerate Access Tokens, delete the Space
   - **Edit**: Can do anything the View role can do, as well as create/edit/delete Notes, edit Members
-  - **View**: Can view the Space name, view Notes, view Members
+  - **View**: Can view the Space name, view Notes, view Members, view Activity
 - Spaces are created with an **Email** address
   - Allows for recovery of Access Links if they are lost or forgotten
   - Protects against spam or bots as creating a Space sends an email with the Access Links and does _not_ redirect to the created Space
