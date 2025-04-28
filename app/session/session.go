@@ -1,6 +1,8 @@
 package session
 
 import (
+	"encoding/gob"
+
 	"github.com/gorilla/sessions"
 )
 
@@ -17,5 +19,8 @@ func InitStore(secret string, isDev bool) *sessions.CookieStore {
 		HttpOnly: true,
 		Secure:   !isDev,
 	}
+
+	gob.Register(&FlashMessage{})
+
 	return store
 }

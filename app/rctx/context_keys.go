@@ -7,4 +7,5 @@ const (
 	spaceContextKey    contextKey = "space"
 	accessContextKey   contextKey = "access"
 	identityContextKey contextKey = "identity"
+	flashContextKey    contextKey = "flash"
 )

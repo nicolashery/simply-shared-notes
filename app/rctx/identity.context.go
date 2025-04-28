@@ -25,7 +25,7 @@ func IdentityCtxMiddleware(logger *slog.Logger, sessionStore *sessions.CookieSto
 
 			sess, err := sessionStore.Get(r, session.CookieName)
 			if err != nil {
-				logger.Error("failed to get session")
+				logger.Error("failed to get session", slog.Any("error", err))
 				http.Error(w, "internal server error", http.StatusInternalServerError)
 				return
 			}
@@ -35,7 +35,7 @@ func IdentityCtxMiddleware(logger *slog.Logger, sessionStore *sessions.CookieSto
 				delete(sess.Values, session.IdentityKey)
 				err := sess.Save(r, w)
 				if err != nil {
-					logger.Error("failed to save session")
+					logger.Error("failed to save session", slog.Any("error", err))
 					http.Error(w, "internal server error", http.StatusInternalServerError)
 					return
 				}
@@ -51,7 +51,7 @@ func IdentityCtxMiddleware(logger *slog.Logger, sessionStore *sessions.CookieSto
 				delete(sess.Values, session.IdentityKey)
 				err := sess.Save(r, w)
 				if err != nil {
-					logger.Error("failed to save session")
+					logger.Error("failed to save session", slog.Any("error", err))
 					http.Error(w, "internal server error", http.StatusInternalServerError)
 					return
 				}

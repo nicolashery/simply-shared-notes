@@ -6,6 +6,7 @@ import (
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/identity"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
+	"github.com/nicolashery/simply-shared-notes/app/views/components"
 	"github.com/nicolashery/simply-shared-notes/app/views/helpers"
 )
 
@@ -17,6 +18,9 @@ templ Space() {
 		<div>
 			@navBar(space, access, identity)
 			<div class="px-4">
+				for _, message := range rctx.GetFlashMessages(ctx) {
+					@components.FlashMessage(&message)
+				}
 				{ children... }
 			</div>
 		</div>
@@ -47,7 +51,7 @@ templ navMenu(space *db.Space, access *access.Access) {
 		<div class="drawer-content">
 			<label for="nav-drawer" class="btn btn-square btn-ghost drawer-button">
 				<svg
-					class="inline-block w-5 h-5"
+					class="inline-block size-5"
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 24 24"
 					fill="none"
@@ -69,7 +73,7 @@ templ navMenu(space *db.Space, access *access.Access) {
 				<li>
 					<a class="flex">
 						<svg
-							class="w-5 h-5"
+							class="size-5"
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 24 24"
 							fill="none"
@@ -105,7 +109,7 @@ templ navMenu(space *db.Space, access *access.Access) {
 				<li>
 					<a class="flex">
 						<svg
-							class="w-5 h-5"
+							class="size-5"
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 24 24"
 							fill="none"
@@ -124,7 +128,7 @@ templ navMenu(space *db.Space, access *access.Access) {
 					<li>
 						<a class="flex">
 							<svg
-								class="w-5 h-5"
+								class="size-5"
 								xmlns="http://www.w3.org/2000/svg"
 								viewBox="0 0 24 24"
 								fill="none"
@@ -143,7 +147,7 @@ templ navMenu(space *db.Space, access *access.Access) {
 					<li>
 						<a class="flex">
 							<svg
-								class="w-5 h-5"
+								class="size-5"
 								xmlns="http://www.w3.org/2000/svg"
 								viewBox="0 0 24 24"
 								fill="none"
@@ -172,7 +176,7 @@ templ userMenu(access *access.Access, identity *identity.Identity) {
 		<div class="drawer-content">
 			<label for="user-drawer" class="btn btn-square btn-ghost drawer-button">
 				<svg
-					class="inline-block w-5 h-5"
+					class="inline-block size-5"
 					xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 24 24"
 					fill="none"
@@ -199,7 +203,7 @@ templ userMenu(access *access.Access, identity *identity.Identity) {
 						<li>
 							<a class="flex">
 								<svg
-									class="w-5 h-5"
+									class="size-5"
 									xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 24 24"
 									fill="none"
@@ -221,7 +225,7 @@ templ userMenu(access *access.Access, identity *identity.Identity) {
 							class="flex"
 						>
 							<svg
-								class="w-5 h-5"
+								class="size-5"
 								xmlns="http://www.w3.org/2000/svg"
 								viewBox="0 0 24 24"
 								fill="none"
@@ -240,7 +244,7 @@ templ userMenu(access *access.Access, identity *identity.Identity) {
 					<li>
 						<a class="flex">
 							<svg
-								class="w-5 h-5"
+								class="size-5"
 								xmlns="http://www.w3.org/2000/svg"
 								viewBox="0 0 24 24"
 								fill="none"
@@ -263,7 +267,7 @@ templ userMenu(access *access.Access, identity *identity.Identity) {
 							<li>
 								<button type="submit" class="flex">
 									<svg
-										class="w-5 h-5"
+										class="size-5"
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 24 24"
 										fill="none"
