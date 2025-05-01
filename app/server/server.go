@@ -10,26 +10,26 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/gorilla/sessions"
-	"github.com/nicolashery/simply-shared-notes/app/assets"
 	"github.com/nicolashery/simply-shared-notes/app/config"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/handlers"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
+	"github.com/nicolashery/simply-shared-notes/app/vite"
 )
 
-func New(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries, assetsConfig assets.AssetsConfig, sessionStore *sessions.CookieStore) http.Handler {
+func New(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries, vite *vite.Vite, sessionStore *sessions.CookieStore) http.Handler {
 	router := chi.NewRouter()
 
 	router.Use(
 		middleware.Logger,
 		middleware.Recoverer,
-		rctx.ViteCtxMiddleware(assetsConfig.ViteFragment),
+		rctx.ViteCtxMiddleware(vite),
 	)
 
 	handlers.RegisterRoutes(router, cfg, logger, sqlDB, queries, sessionStore)
 
-	StaticDir(router, "/assets", assetsConfig.AssetsFS)
-	StaticFile(router, "/robots.txt", assetsConfig.PublicFS)
+	StaticDir(router, "/assets", vite.AssetsFS)
+	StaticFile(router, "/robots.txt", vite.PublicFS)
 
 	return router
 }

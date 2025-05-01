@@ -9,7 +9,7 @@ export default defineConfig({
     manifest: true,
     emptyOutDir: false,
     rollupOptions: {
-      input: "assets/app.js",
+      input: ["assets/app.css", "assets/app.js"],
     },
   }
 });

@@ -3,13 +3,14 @@ package layouts
 import "github.com/nicolashery/simply-shared-notes/app/rctx"
 
 templ Base(title string) {
+	{{ vite := rctx.GetVite(ctx) }}
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
 			<meta charset="utf-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>
 			<title>{ title } - Simply Shared Notes</title>
-			@templ.Raw(rctx.GetVite(ctx).Tags)
+			@templ.Raw(vite.Fragment([]string{"assets/app.css", "assets/app.js"}))
 		</head>
 		<body>
 			<main class="min-h-screen bg-base-200">
