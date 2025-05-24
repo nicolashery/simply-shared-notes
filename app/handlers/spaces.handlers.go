@@ -173,3 +173,21 @@ func handleSpacesShow() http.HandlerFunc {
 		pages.SpacesShow().Render(r.Context(), w)
 	}
 }
+
+func handleSpacesEdit() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		pages.SpacesEdit().Render(r.Context(), w)
+	}
+}
+
+func handleTokensShow() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		pages.TokensShow().Render(r.Context(), w)
+	}
+}
+
+func handleActivityList() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		pages.ActivityList().Render(r.Context(), w)
+	}
+}
