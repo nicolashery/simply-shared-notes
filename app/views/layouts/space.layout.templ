@@ -2,21 +2,24 @@ package layouts
 
 import (
 	"fmt"
+	"github.com/go-chi/chi/v5"
 	"github.com/nicolashery/simply-shared-notes/app/access"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/identity"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/views/components"
 	"github.com/nicolashery/simply-shared-notes/app/views/helpers"
+	"strings"
 )
 
 templ Space() {
+	{{ route := chi.RouteContext(ctx).RoutePattern() }}
 	{{ space := rctx.GetSpace(ctx) }}
 	{{ access := rctx.GetAccess(ctx) }}
 	{{ identity := rctx.GetIdentity(ctx) }}
 	@Base(space.Name) {
 		<div>
-			@navBar(space, access, identity)
+			@navBar(route, space, access, identity)
 			<div class="px-4">
 				for _, message := range rctx.GetFlashMessages(ctx) {
 					@components.FlashMessage(&message)
@@ -27,11 +30,11 @@ templ Space() {
 	}
 }
 
-templ navBar(space *db.Space, access *access.Access, identity *identity.Identity) {
+templ navBar(route string, space *db.Space, access *access.Access, identity *identity.Identity) {
 	<div class="navbar bg-base-100 px-4 border-b-2 border-base-300 mb-6">
 		<div class="navbar-start">
 			<div>
-				@navMenu(space, access)
+				@navMenu(route, space, access)
 			</div>
 		</div>
 		<div class="navbar-center">
@@ -45,7 +48,7 @@ templ navBar(space *db.Space, access *access.Access, identity *identity.Identity
 	</div>
 }
 
-templ navMenu(space *db.Space, access *access.Access) {
+templ navMenu(route string, space *db.Space, access *access.Access) {
 	<div class="drawer">
 		<input id="nav-drawer" type="checkbox" class="drawer-toggle"/>
 		<div class="drawer-content">
@@ -73,7 +76,7 @@ templ navMenu(space *db.Space, access *access.Access) {
 				<li>
 					<a
 						href={ templ.URL(fmt.Sprintf("/s/%s", access.Token)) }
-						class="flex"
+						class={ "flex", templ.KV("menu-active", route == "/s/{token}" ) }
 					>
 						<svg
 							class="size-5"
@@ -96,7 +99,7 @@ templ navMenu(space *db.Space, access *access.Access) {
 				<li>
 					<a
 						href={ templ.URL(fmt.Sprintf("/s/%s/notes", access.Token)) }
-						class="flex"
+						class={ "flex", templ.KV("menu-active", strings.HasPrefix(route, "/s/{token}/notes") ) }
 					>
 						<svg
 							class="size-5"
@@ -117,7 +120,7 @@ templ navMenu(space *db.Space, access *access.Access) {
 				<li>
 					<a
 						href={ templ.URL(fmt.Sprintf("/s/%s/members", access.Token)) }
-						class="flex"
+						class={ "flex", templ.KV("menu-active", strings.HasPrefix(route, "/s/{token}/members") ) }
 					>
 						<svg
 							class="w-5 h-5"
@@ -138,7 +141,7 @@ templ navMenu(space *db.Space, access *access.Access) {
 				<li>
 					<a
 						href={ templ.URL(fmt.Sprintf("/s/%s/activity", access.Token)) }
-						class="flex"
+						class={ "flex", templ.KV("menu-active", strings.HasPrefix(route, "/s/{token}/activity") ) }
 					>
 						<svg
 							class="size-5"
@@ -160,7 +163,7 @@ templ navMenu(space *db.Space, access *access.Access) {
 					<li>
 						<a
 							href={ templ.URL(fmt.Sprintf("/s/%s/share", access.Token)) }
-							class="flex"
+							class={ "flex", templ.KV("menu-active", strings.HasPrefix(route, "/s/{token}/share") ) }
 						>
 							<svg
 								class="size-5"
@@ -182,7 +185,7 @@ templ navMenu(space *db.Space, access *access.Access) {
 					<li>
 						<a
 							href={ templ.URL(fmt.Sprintf("/s/%s/settings", access.Token)) }
-							class="flex"
+							class={ "flex", templ.KV("menu-active", strings.HasPrefix(route, "/s/{token}/settings") ) }
 						>
 							<svg
 								class="size-5"
