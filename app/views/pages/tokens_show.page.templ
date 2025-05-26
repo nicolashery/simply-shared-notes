@@ -1,9 +1,93 @@
 package pages
 
-import "github.com/nicolashery/simply-shared-notes/app/views/layouts"
+import (
+	"fmt"
+	"github.com/nicolashery/simply-shared-notes/app/access"
+	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
+)
 
-templ TokensShow() {
+templ TokensShow(baseURL string, tokens access.AccessTokens) {
 	@layouts.Space() {
-		<div>Share</div>
+		<div>
+			<h1 class="text-2xl font-bold mb-1.5">Share space</h1>
+			<p class="mb-4 text-sm opacity-60">
+				Share these links to give friends and collaborators access to this space and all its notes.
+				Each access link grants different permissions to this space.
+			</p>
+			<div class="flex flex-col gap-4">
+				<fieldset class="flex flex-col gap-1.5">
+					<label for="admin" class="text-sm font-semibold">Admin</label>
+					<label class="input w-full">
+						<svg
+							class="h-[1em] opacity-50"
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+						</svg>
+						<input
+							type="text"
+							id="admin"
+							value={ fmt.Sprintf("%s/s/%s", baseURL, tokens.AdminToken) }
+							readonly
+						/>
+					</label>
+					<p class="text-sm opacity-60">Everyone with this link can do anything in this space.</p>
+				</fieldset>
+				<fieldset class="flex flex-col gap-1.5">
+					<label for="edit" class="text-sm font-semibold">Editor</label>
+					<label class="input w-full">
+						<svg
+							class="h-[1em] opacity-50"
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+						</svg>
+						<input
+							type="text"
+							id="edit"
+							value={ fmt.Sprintf("%s/s/%s", baseURL, tokens.EditToken) }
+							readonly
+						/>
+					</label>
+					<p class="text-sm opacity-60">Everyone with this link can create and edit notes, as well as add or rename members.</p>
+				</fieldset>
+				<fieldset class="flex flex-col gap-1.5">
+					<label for="view" class="text-sm font-semibold">View-only</label>
+					<label class="input w-full">
+						<svg
+							class="h-[1em] opacity-50"
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+						</svg>
+						<input
+							type="text"
+							id="view"
+							value={ fmt.Sprintf("%s/s/%s", baseURL, tokens.ViewToken) }
+							readonly
+						/>
+					</label>
+					<p class="text-sm opacity-60">Everyone with this link can only view notes and members.</p>
+				</fieldset>
+			</div>
+		</div>
 	}
 }

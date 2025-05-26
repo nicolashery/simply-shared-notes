@@ -14,6 +14,7 @@ import (
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/forms"
 	"github.com/nicolashery/simply-shared-notes/app/publicid"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/session"
 	"github.com/nicolashery/simply-shared-notes/app/views/pages"
 )
@@ -182,7 +183,20 @@ func handleSpacesEdit() http.HandlerFunc {
 
 func handleTokensShow() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		pages.TokensShow().Render(r.Context(), w)
+		space := rctx.GetSpace(r.Context())
+		tokens := access.AccessTokens{
+			AdminToken: space.AdminToken,
+			EditToken:  space.EditToken,
+			ViewToken:  space.ViewToken,
+		}
+
+		scheme := "http"
+		if r.TLS != nil || r.Header.Get("X-Forwarded-Proto") == "https" {
+			scheme = "https"
+		}
+		baseURL := scheme + "://" + r.Host
+
+		pages.TokensShow(baseURL, tokens).Render(r.Context(), w)
 	}
 }
 
