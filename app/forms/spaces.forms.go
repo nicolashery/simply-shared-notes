@@ -20,7 +20,7 @@ func createSpaceSchema(requiresCode bool) *z.StructSchema {
 		codeSchema = codeSchema.Required()
 	}
 
-	return z.Struct(z.Schema{
+	return z.Struct(z.Shape{
 		"name":     z.String().Trim().Required().Max(255),
 		"identity": z.String().Trim().Required().Max(255),
 		"email":    z.String().Trim().Required().Email().Max(255),

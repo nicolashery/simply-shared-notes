@@ -59,8 +59,13 @@ tasks:
   clean:
     desc: Clean build artifacts
     cmds:
+      - rm -f bin/app
       - rm -rf dist/.vite dist/assets
- 
+      - find app/views -type f -name "*_templ.go" -delete
+      - rm -f app/db/db.go
+      - rm -f app/db/models.go
+      - find app/db -type f -name "*.queries.sql.go" -delete
+
   sqlc:
     desc: Generate code from SQL files
     sources:
@@ -84,7 +89,7 @@ tasks:
     prompt: This will delete the database. Are you sure?
     cmds:
       - dbmate drop
-  
+
   reset:
     desc: Resets database and seeds data
     cmds:
