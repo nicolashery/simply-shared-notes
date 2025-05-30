@@ -33,7 +33,15 @@ func handleIdentitySelect(logger *slog.Logger, queries *db.Queries) http.Handler
 			return
 		}
 
-		pages.IdentitySelect(members).Render(r.Context(), w)
+		err = pages.IdentitySelect(members).Render(r.Context(), w)
+		if err != nil {
+			logger.Error(
+				"failed to render template",
+				slog.Any("error", err),
+				slog.String("template", "IdentitySelect"),
+			)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+		}
 	}
 }
 
@@ -41,7 +49,7 @@ type SelectIdentityForm struct {
 	MemberPublicId string
 }
 
-func parseSelectIdendityForm(r *http.Request, f *SelectIdentityForm) error {
+func parseSelectIdentityForm(r *http.Request, f *SelectIdentityForm) error {
 	err := r.ParseForm()
 	if err != nil {
 		return err
@@ -61,7 +69,7 @@ func handleIdentitySet(logger *slog.Logger, queries *db.Queries, sessionStore *s
 		}
 
 		var form SelectIdentityForm
-		err := parseSelectIdendityForm(r, &form)
+		err := parseSelectIdentityForm(r, &form)
 		if err != nil {
 			http.Error(w, "failed to parse form", http.StatusBadRequest)
 			return

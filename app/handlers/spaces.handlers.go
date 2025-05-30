@@ -19,7 +19,7 @@ import (
 	"github.com/nicolashery/simply-shared-notes/app/views/pages"
 )
 
-func handleSpacesNew(cfg *config.Config) http.HandlerFunc {
+func handleSpacesNew(cfg *config.Config, logger *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		requiresCode := cfg.RequiresInvitationCode()
 
@@ -28,7 +28,15 @@ func handleSpacesNew(cfg *config.Config) http.HandlerFunc {
 			form.Code = r.URL.Query().Get("code")
 		}
 
-		pages.SpacesNew(requiresCode, &form, forms.EmptyErrors()).Render(r.Context(), w)
+		err := pages.SpacesNew(requiresCode, &form, forms.EmptyErrors()).Render(r.Context(), w)
+		if err != nil {
+			logger.Error(
+				"failed to render template",
+				slog.Any("error", err),
+				slog.String("template", "SpacesNew"),
+			)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+		}
 	}
 }
 
@@ -39,7 +47,15 @@ func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, 
 		form, errors := forms.ParseCreateSpace(r, requiresCode)
 		if errors != nil {
 			w.WriteHeader(http.StatusUnprocessableEntity)
-			pages.SpacesNew(requiresCode, &form, errors).Render(r.Context(), w)
+			err := pages.SpacesNew(requiresCode, &form, errors).Render(r.Context(), w)
+			if err != nil {
+				logger.Error(
+					"failed to render template",
+					slog.Any("error", err),
+					slog.String("template", "SpacesNew"),
+				)
+				http.Error(w, "internal server error", http.StatusInternalServerError)
+			}
 			return
 		}
 
@@ -116,7 +132,12 @@ func createSpaceAndFirstMember(
 	if err != nil {
 		return nil, nil, err
 	}
-	defer tx.Rollback()
+	defer func() {
+		if rbErr := tx.Rollback(); rbErr != nil && err == nil {
+			// Only overwrite main err if it's nil and rollback failed
+			err = fmt.Errorf("tx rollback error: %w", rbErr)
+		}
+	}()
 	qtx := queries.WithTx(tx)
 
 	space, err := qtx.CreateSpace(ctx, db.CreateSpaceParams{
@@ -169,19 +190,35 @@ func createSpaceAndFirstMember(
 	return &space, &member, nil
 }
 
-func handleSpacesShow() http.HandlerFunc {
+func handleSpacesShow(logger *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		pages.SpacesShow().Render(r.Context(), w)
+		err := pages.SpacesShow().Render(r.Context(), w)
+		if err != nil {
+			logger.Error(
+				"failed to render template",
+				slog.Any("error", err),
+				slog.String("template", "SpacesShow"),
+			)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+		}
 	}
 }
 
-func handleSpacesEdit() http.HandlerFunc {
+func handleSpacesEdit(logger *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		pages.SpacesEdit().Render(r.Context(), w)
+		err := pages.SpacesEdit().Render(r.Context(), w)
+		if err != nil {
+			logger.Error(
+				"failed to render template",
+				slog.Any("error", err),
+				slog.String("template", "SpacesEdit"),
+			)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+		}
 	}
 }
 
-func handleTokensShow() http.HandlerFunc {
+func handleTokensShow(logger *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		space := rctx.GetSpace(r.Context())
 		tokens := access.AccessTokens{
@@ -196,12 +233,28 @@ func handleTokensShow() http.HandlerFunc {
 		}
 		baseURL := scheme + "://" + r.Host
 
-		pages.TokensShow(baseURL, tokens).Render(r.Context(), w)
+		err := pages.TokensShow(baseURL, tokens).Render(r.Context(), w)
+		if err != nil {
+			logger.Error(
+				"failed to render template",
+				slog.Any("error", err),
+				slog.String("template", "TokensShow"),
+			)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+		}
 	}
 }
 
-func handleActivityList() http.HandlerFunc {
+func handleActivityList(logger *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		pages.ActivityList().Render(r.Context(), w)
+		err := pages.ActivityList().Render(r.Context(), w)
+		if err != nil {
+			logger.Error(
+				"failed to render template",
+				slog.Any("error", err),
+				slog.String("template", "ActivityList"),
+			)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+		}
 	}
 }

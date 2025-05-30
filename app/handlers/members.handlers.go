@@ -1,19 +1,36 @@
 package handlers
 
 import (
+	"log/slog"
 	"net/http"
 
 	"github.com/nicolashery/simply-shared-notes/app/views/pages"
 )
 
-func handleMembersList() http.HandlerFunc {
+func handleMembersList(logger *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		pages.MembersList().Render(r.Context(), w)
+		err := pages.MembersList().Render(r.Context(), w)
+		if err != nil {
+			logger.Error(
+				"failed to render template",
+				slog.Any("error", err),
+				slog.String("template", "MembersList"),
+			)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+		}
 	}
 }
 
-func handleMembersEdit() http.HandlerFunc {
+func handleMembersEdit(logger *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		pages.MembersEdit().Render(r.Context(), w)
+		err := pages.MembersEdit().Render(r.Context(), w)
+		if err != nil {
+			logger.Error(
+				"failed to render template",
+				slog.Any("error", err),
+				slog.String("template", "MembersEdit"),
+			)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+		}
 	}
 }

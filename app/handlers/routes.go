@@ -12,12 +12,12 @@ import (
 )
 
 func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries, sessionStore *sessions.CookieStore) {
-	r.Get("/", handleHome())
+	r.Get("/", handleHome(logger))
 
-	r.Get("/new", handleSpacesNew(cfg))
+	r.Get("/new", handleSpacesNew(cfg, logger))
 	r.Post("/new", handleSpacesCreate(cfg, logger, sqlDB, queries, sessionStore))
 
-	r.Get("/language", handleLanguageSelect())
+	r.Get("/language", handleLanguageSelect(logger))
 
 	r.Route("/s/{token}", func(r chi.Router) {
 		r.Use(rctx.SpaceCtxMiddleware(queries))
@@ -31,17 +31,17 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 			r.Use(rctx.IdentityCtxMiddleware(logger, sessionStore, queries))
 			r.Use(rctx.FlashCtxMiddleware(logger, sessionStore))
 
-			r.Get("/", handleSpacesShow())
-			r.Get("/settings", handleSpacesEdit())
+			r.Get("/", handleSpacesShow(logger))
+			r.Get("/settings", handleSpacesEdit(logger))
 
-			r.Get("/share", handleTokensShow())
+			r.Get("/share", handleTokensShow(logger))
 
-			r.Get("/notes", handleNotesList())
+			r.Get("/notes", handleNotesList(logger))
 
-			r.Get("/members", handleMembersList())
-			r.Get("/members/{memberId}/edit", handleMembersEdit())
+			r.Get("/members", handleMembersList(logger))
+			r.Get("/members/{memberId}/edit", handleMembersEdit(logger))
 
-			r.Get("/activity", handleActivityList())
+			r.Get("/activity", handleActivityList(logger))
 		})
 	})
 }
