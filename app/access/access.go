@@ -56,9 +56,9 @@ func IsValidAccessToken(token string) bool {
 type Role string
 
 const (
-	Role_Admin = "admin"
-	Role_Edit  = "edit"
-	Role_View  = "view"
+	Role_Admin Role = "admin"
+	Role_Edit  Role = "edit"
+	Role_View  Role = "view"
 )
 
 func GetTokenRole(space *db.Space, token string) (Role, bool) {

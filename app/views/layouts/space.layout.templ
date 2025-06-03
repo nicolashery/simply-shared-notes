@@ -3,7 +3,7 @@ package layouts
 import (
 	"fmt"
 	"github.com/go-chi/chi/v5"
-	"github.com/nicolashery/simply-shared-notes/app/access"
+	acc "github.com/nicolashery/simply-shared-notes/app/access"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/identity"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
@@ -30,7 +30,7 @@ templ Space() {
 	}
 }
 
-templ navBar(route string, space *db.Space, access *access.Access, identity *identity.Identity) {
+templ navBar(route string, space *db.Space, access *acc.Access, identity *identity.Identity) {
 	<div class="navbar bg-base-100 px-4 border-b-2 border-base-300 mb-6">
 		<div class="navbar-start">
 			<div>
@@ -48,7 +48,7 @@ templ navBar(route string, space *db.Space, access *access.Access, identity *ide
 	</div>
 }
 
-templ navMenu(route string, space *db.Space, access *access.Access) {
+templ navMenu(route string, space *db.Space, access *acc.Access) {
 	<div class="drawer">
 		<input id="nav-drawer" type="checkbox" class="drawer-toggle"/>
 		<div class="drawer-content">
@@ -159,7 +159,7 @@ templ navMenu(route string, space *db.Space, access *access.Access) {
 						Activity
 					</a>
 				</li>
-				if access.IsAdmin() {
+				if access.Can(acc.Action_ViewTokens) {
 					<li>
 						<a
 							href={ templ.URL(fmt.Sprintf("/s/%s/share", access.Token)) }
@@ -182,6 +182,8 @@ templ navMenu(route string, space *db.Space, access *access.Access) {
 							Share
 						</a>
 					</li>
+				}
+				if access.Can(acc.Action_UpdateSpace) {
 					<li>
 						<a
 							href={ templ.URL(fmt.Sprintf("/s/%s/settings", access.Token)) }
@@ -211,7 +213,7 @@ templ navMenu(route string, space *db.Space, access *access.Access) {
 	</div>
 }
 
-templ userMenu(access *access.Access, identity *identity.Identity) {
+templ userMenu(access *acc.Access, identity *identity.Identity) {
 	<div class="drawer drawer-end">
 		<input id="user-drawer" type="checkbox" class="drawer-toggle"/>
 		<div class="drawer-content">
@@ -240,7 +242,7 @@ templ userMenu(access *access.Access, identity *identity.Identity) {
 						<div>{ helpers.IdentityName(identity) }</div>
 						<div class="text-xs font-normal">{ helpers.RoleLabel(access) }</div>
 					</li>
-					if !access.IsView() {
+					if access.Can(acc.Action_UpdateMember) {
 						<li>
 							<a
 								href={ templ.URL(fmt.Sprintf("/s/%s/members/%s/edit", access.Token, identity.Member.PublicID)) }
