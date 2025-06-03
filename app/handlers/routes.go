@@ -33,6 +33,7 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 
 			r.Get("/", handleSpacesShow(logger))
 			r.Get("/settings", handleSpacesEdit(logger))
+			r.Post("/settings", handleSpacesUpdate(logger, queries, sessionStore))
 
 			r.Get("/share", handleTokensShow(logger))
 

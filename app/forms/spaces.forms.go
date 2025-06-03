@@ -14,6 +14,8 @@ type CreateSpace struct {
 	Code     string `zog:"code"`
 }
 
+var spaceNameSchema = z.String().Trim().Required().Max(255)
+
 func createSpaceSchema(requiresCode bool) *z.StructSchema {
 	codeSchema := z.String().Trim()
 	if requiresCode {
@@ -21,7 +23,7 @@ func createSpaceSchema(requiresCode bool) *z.StructSchema {
 	}
 
 	return z.Struct(z.Shape{
-		"name":     z.String().Trim().Required().Max(255),
+		"name":     spaceNameSchema,
 		"identity": z.String().Trim().Required().Max(255),
 		"email":    z.String().Trim().Required().Email().Max(255),
 		"code":     codeSchema,
@@ -35,6 +37,24 @@ func ParseCreateSpace(r *http.Request, requiresCode bool) (CreateSpace, map[stri
 	}
 
 	errs := createSpaceSchema(requiresCode).Parse(zhttp.Request(r), &form)
+	if errs == nil {
+		return form, nil
+	}
+
+	return form, z.Issues.SanitizeMap(errs)
+}
+
+type UpdateSpace struct {
+	Name string `zog:"name"`
+}
+
+var updateSpaceSchema = z.Struct(z.Shape{
+	"name": spaceNameSchema,
+})
+
+func ParseUpdateSpace(r *http.Request) (UpdateSpace, map[string][]string) {
+	var form UpdateSpace
+	errs := updateSpaceSchema.Parse(zhttp.Request(r), &form)
 	if errs == nil {
 		return form, nil
 	}

@@ -101,13 +101,11 @@ func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, 
 			http.Error(w, "internal server error", http.StatusInternalServerError)
 			return
 		}
-
 		sess.Values[session.IdentityKey] = member.ID
 		sess.AddFlash(session.FlashMessage{
 			Type:    session.FlashType_Info,
 			Content: fmt.Sprintf("%s, welcome to the space %s!", member.Name, space.Name),
 		})
-
 		err = sess.Save(r, w)
 		if err != nil {
 			logger.Error("failed to save session", slog.Any("error", err))
@@ -206,7 +204,12 @@ func handleSpacesShow(logger *slog.Logger) http.HandlerFunc {
 
 func handleSpacesEdit(logger *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := pages.SpacesEdit().Render(r.Context(), w)
+		space := rctx.GetSpace(r.Context())
+		form := forms.UpdateSpace{
+			Name: space.Name,
+		}
+
+		err := pages.SpacesEdit(&form, forms.EmptyErrors()).Render(r.Context(), w)
 		if err != nil {
 			logger.Error(
 				"failed to render template",
@@ -215,6 +218,63 @@ func handleSpacesEdit(logger *slog.Logger) http.HandlerFunc {
 			)
 			http.Error(w, "internal server error", http.StatusInternalServerError)
 		}
+	}
+}
+
+func handleSpacesUpdate(logger *slog.Logger, queries *db.Queries, sessionStore *sessions.CookieStore) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		form, errors := forms.ParseUpdateSpace(r)
+		if errors != nil {
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			err := pages.SpacesEdit(&form, errors).Render(r.Context(), w)
+			if err != nil {
+				logger.Error(
+					"failed to render template",
+					slog.Any("error", err),
+					slog.String("template", "SpacesEdit"),
+				)
+				http.Error(w, "internal server error", http.StatusInternalServerError)
+			}
+			return
+		}
+
+		now := time.Now().UTC()
+		identity := rctx.GetIdentity(r.Context())
+		space := rctx.GetSpace(r.Context())
+		err := queries.UpdateSpace(
+			r.Context(),
+			db.UpdateSpaceParams{
+				UpdatedAt: now,
+				UpdatedBy: sql.NullInt64{Int64: identity.Member.ID, Valid: true},
+				Name:      form.Name,
+				SpaceID:   space.ID,
+			},
+		)
+		if err != nil {
+			logger.Error("error creating space and first member in database", slog.Any("error", err))
+			http.Error(w, "error creating space", http.StatusInternalServerError)
+			return
+		}
+
+		sess, err := sessionStore.Get(r, session.CookieName)
+		if err != nil {
+			logger.Error("failed to get session", slog.Any("error", err))
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+			return
+		}
+		sess.AddFlash(session.FlashMessage{
+			Type:    session.FlashType_Success,
+			Content: fmt.Sprintf("%s updated successfully.", space.Name),
+		})
+		err = sess.Save(r, w)
+		if err != nil {
+			logger.Error("failed to save session", slog.Any("error", err))
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+			return
+		}
+
+		access := rctx.GetAccess(r.Context())
+		http.Redirect(w, r, fmt.Sprintf("/s/%s/settings", access.Token), http.StatusSeeOther)
 	}
 }
 

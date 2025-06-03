@@ -93,6 +93,31 @@ func (q *Queries) GetSpaceByAccessToken(ctx context.Context, token string) (Spac
 	return i, err
 }
 
+const updateSpace = `-- name: UpdateSpace :exec
+UPDATE spaces
+SET updated_at = ?1,
+  updated_by = ?2,
+  name = ?3
+WHERE id = ?4
+`
+
+type UpdateSpaceParams struct {
+	UpdatedAt time.Time
+	UpdatedBy sql.NullInt64
+	Name      string
+	SpaceID   int64
+}
+
+func (q *Queries) UpdateSpace(ctx context.Context, arg UpdateSpaceParams) error {
+	_, err := q.db.ExecContext(ctx, updateSpace,
+		arg.UpdatedAt,
+		arg.UpdatedBy,
+		arg.Name,
+		arg.SpaceID,
+	)
+	return err
+}
+
 const updateSpaceCreatedBy = `-- name: UpdateSpaceCreatedBy :exec
 UPDATE spaces
 SET created_by = ?1,

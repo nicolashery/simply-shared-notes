@@ -29,3 +29,10 @@ UPDATE spaces
 SET created_by = @created_by,
   updated_by = @created_by
 WHERE id = @space_id;
+
+-- name: UpdateSpace :exec
+UPDATE spaces
+SET updated_at = @updated_at,
+  updated_by = @updated_by,
+  name = @name
+WHERE id = @space_id;

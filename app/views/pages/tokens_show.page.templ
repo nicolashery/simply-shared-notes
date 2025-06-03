@@ -9,11 +9,13 @@ import (
 templ TokensShow(baseURL string, tokens access.AccessTokens) {
 	@layouts.Space() {
 		<div>
-			<h1 class="text-2xl font-bold mb-1.5">Share space</h1>
-			<p class="mb-4 text-sm opacity-60">
-				Share these links to give friends and collaborators access to this space and all its notes.
-				Each access link grants different permissions to this space.
-			</p>
+			<div class="mb-4">
+				<h1 class="text-2xl font-bold mb-1.5">Share space</h1>
+				<p class="text-sm opacity-60">
+					Share these links to give friends and collaborators access to this space and all its notes.
+					Each access link grants different permissions to this space.
+				</p>
+			</div>
 			<div class="flex flex-col gap-4">
 				<fieldset class="flex flex-col gap-1.5">
 					<label for="admin" class="text-sm font-semibold">Admin</label>
