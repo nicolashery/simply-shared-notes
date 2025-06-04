@@ -44,7 +44,7 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 
 			r.Get("/notes", handleNotesList(logger))
 
-			r.Get("/members", handleMembersList(logger))
+			r.Get("/members", handleMembersList(logger, queries))
 			r.With(Authorize(access.Action_UpdateMember)).
 				Get("/members/{memberId}/edit", handleMembersEdit(logger))
 
