@@ -95,12 +95,7 @@ func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, 
 			return
 		}
 
-		sess, err := sessionStore.Get(r, session.CookieName)
-		if err != nil {
-			logger.Error("failed to get session", slog.Any("error", err))
-			http.Error(w, "internal server error", http.StatusInternalServerError)
-			return
-		}
+		sess := rctx.GetSession(r.Context())
 		sess.Values[session.IdentityKey] = member.ID
 		sess.AddFlash(session.FlashMessage{
 			Type:    session.FlashType_Info,
@@ -256,12 +251,7 @@ func handleSpacesUpdate(logger *slog.Logger, queries *db.Queries, sessionStore *
 			return
 		}
 
-		sess, err := sessionStore.Get(r, session.CookieName)
-		if err != nil {
-			logger.Error("failed to get session", slog.Any("error", err))
-			http.Error(w, "internal server error", http.StatusInternalServerError)
-			return
-		}
+		sess := rctx.GetSession(r.Context())
 		sess.AddFlash(session.FlashMessage{
 			Type:    session.FlashType_Success,
 			Content: fmt.Sprintf("%s updated successfully.", space.Name),

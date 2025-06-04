@@ -23,13 +23,7 @@ func IdentityCtxMiddleware(logger *slog.Logger, sessionStore *sessions.CookieSto
 				return
 			}
 
-			sess, err := sessionStore.Get(r, session.CookieName)
-			if err != nil {
-				logger.Error("failed to get session", slog.Any("error", err))
-				http.Error(w, "internal server error", http.StatusInternalServerError)
-				return
-			}
-
+			sess := GetSession(r.Context())
 			memberID, ok := sess.Values[session.IdentityKey].(int64)
 			if !ok {
 				delete(sess.Values, session.IdentityKey)

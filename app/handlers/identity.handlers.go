@@ -76,7 +76,6 @@ func handleIdentitySet(logger *slog.Logger, queries *db.Queries, sessionStore *s
 		}
 
 		space := rctx.GetSpace(r.Context())
-
 		member, err := queries.GetMemberByPublicID(r.Context(), db.GetMemberByPublicIDParams{
 			SpaceID:  space.ID,
 			PublicID: form.MemberPublicId,
@@ -86,19 +85,12 @@ func handleIdentitySet(logger *slog.Logger, queries *db.Queries, sessionStore *s
 			return
 		}
 
-		sess, err := sessionStore.Get(r, session.CookieName)
-		if err != nil {
-			logger.Error("failed to get session", slog.Any("error", err))
-			http.Error(w, "internal server error", http.StatusInternalServerError)
-			return
-		}
-
+		sess := rctx.GetSession(r.Context())
 		sess.Values[session.IdentityKey] = member.ID
 		sess.AddFlash(session.FlashMessage{
 			Type:    session.FlashType_Info,
 			Content: fmt.Sprintf("%s, welcome to the space %s!", member.Name, space.Name),
 		})
-
 		err = sess.Save(r, w)
 		if err != nil {
 			logger.Error("failed to save session", slog.Any("error", err))
@@ -112,15 +104,9 @@ func handleIdentitySet(logger *slog.Logger, queries *db.Queries, sessionStore *s
 
 func handleIdentityClear(logger *slog.Logger, sessionStore *sessions.CookieStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		sess, err := sessionStore.Get(r, session.CookieName)
-		if err != nil {
-			logger.Error("failed to get session", slog.Any("error", err))
-			http.Error(w, "internal server error", http.StatusInternalServerError)
-			return
-		}
-
+		sess := rctx.GetSession(r.Context())
 		delete(sess.Values, session.IdentityKey)
-		err = sess.Save(r, w)
+		err := sess.Save(r, w)
 		if err != nil {
 			logger.Error("failed to save session", slog.Any("error", err))
 			http.Error(w, "internal server error", http.StatusInternalServerError)

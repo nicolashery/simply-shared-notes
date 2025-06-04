@@ -12,13 +12,7 @@ import (
 func FlashCtxMiddleware(logger *slog.Logger, sessionStore *sessions.CookieStore) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			sess, err := sessionStore.Get(r, session.CookieName)
-			if err != nil {
-				logger.Error("failed to get session", slog.Any("error", err))
-				http.Error(w, "internal server error", http.StatusInternalServerError)
-				return
-			}
-
+			sess := GetSession(r.Context())
 			rawMessages := sess.Flashes()
 			messages := []session.FlashMessage{}
 			for _, rawMessage := range rawMessages {
@@ -31,7 +25,7 @@ func FlashCtxMiddleware(logger *slog.Logger, sessionStore *sessions.CookieStore)
 				messages = append(messages, *message)
 			}
 
-			err = sess.Save(r, w)
+			err := sess.Save(r, w)
 			if err != nil {
 				logger.Error("failed to save session", slog.Any("error", err))
 				http.Error(w, "internal server error", http.StatusInternalServerError)

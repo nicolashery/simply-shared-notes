@@ -12,6 +12,8 @@ import (
 )
 
 func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries, sessionStore *sessions.CookieStore) {
+	r.Use(rctx.SessionCtxMiddleware(logger, sessionStore))
+
 	r.Get("/", handleHome(logger))
 
 	r.Get("/new", handleSpacesNew(cfg, logger))
