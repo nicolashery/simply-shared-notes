@@ -1,11 +1,12 @@
 package handlers
 
 import (
+	"log/slog"
+	"net/http"
+
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/views/pages"
-	"log/slog"
-	"net/http"
 )
 
 func handleMembersList(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
