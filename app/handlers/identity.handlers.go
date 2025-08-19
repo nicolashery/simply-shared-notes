@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gorilla/sessions"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/session"
@@ -60,7 +59,7 @@ func parseSelectIdentityForm(r *http.Request, f *SelectIdentityForm) error {
 	return nil
 }
 
-func handleIdentitySet(logger *slog.Logger, queries *db.Queries, sessionStore *sessions.CookieStore) http.HandlerFunc {
+func handleIdentitySet(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		access := rctx.GetAccess(r.Context())
 		if access.IsView() {
@@ -102,7 +101,7 @@ func handleIdentitySet(logger *slog.Logger, queries *db.Queries, sessionStore *s
 	}
 }
 
-func handleIdentityClear(logger *slog.Logger, sessionStore *sessions.CookieStore) http.HandlerFunc {
+func handleIdentityClear(logger *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		sess := rctx.GetSession(r.Context())
 		delete(sess.Values, session.IdentityKey)

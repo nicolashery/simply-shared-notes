@@ -5,11 +5,10 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/gorilla/sessions"
 	"github.com/nicolashery/simply-shared-notes/app/session"
 )
 
-func FlashCtxMiddleware(logger *slog.Logger, sessionStore *sessions.CookieStore) func(http.Handler) http.Handler {
+func FlashCtxMiddleware(logger *slog.Logger) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			sess := GetSession(r.Context())

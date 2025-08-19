@@ -6,13 +6,12 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/gorilla/sessions"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/identity"
 	"github.com/nicolashery/simply-shared-notes/app/session"
 )
 
-func IdentityCtxMiddleware(logger *slog.Logger, sessionStore *sessions.CookieStore, queries *db.Queries) func(http.Handler) http.Handler {
+func IdentityCtxMiddleware(logger *slog.Logger, queries *db.Queries) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			access := GetAccess(r.Context())

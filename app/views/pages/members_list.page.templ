@@ -11,7 +11,29 @@ templ MembersList(members []db.Member) {
 	{{ access := rctx.GetAccess(ctx) }}
 	@layouts.Space() {
 		<div>
-			<h1 class="text-2xl font-bold mb-4">Members</h1>
+			<h1 class="text-2xl font-bold mb-2">Members</h1>
+			<div class="flex justify-end">
+				<a
+					href={ templ.URL(fmt.Sprintf("/s/%s/members/new", access.Token)) }
+					class="btn btn-ghost"
+				>
+					<svg
+						class="size-5"
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<circle cx="12" cy="12" r="10"></circle>
+						<path d="M8 12h8"></path>
+						<path d="M12 8v8"></path>
+					</svg>
+					Add member
+				</a>
+			</div>
 			<ul class="list text-base">
 				for _, m := range members {
 					<li class="list-row items-center">

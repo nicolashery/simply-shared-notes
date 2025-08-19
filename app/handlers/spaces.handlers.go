@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gorilla/sessions"
 	"github.com/nicolashery/simply-shared-notes/app/access"
 	"github.com/nicolashery/simply-shared-notes/app/config"
 	"github.com/nicolashery/simply-shared-notes/app/db"
@@ -40,7 +39,7 @@ func handleSpacesNew(cfg *config.Config, logger *slog.Logger) http.HandlerFunc {
 	}
 }
 
-func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries, sessionStore *sessions.CookieStore) http.HandlerFunc {
+func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		requiresCode := cfg.RequiresInvitationCode()
 
@@ -216,7 +215,7 @@ func handleSpacesEdit(logger *slog.Logger) http.HandlerFunc {
 	}
 }
 
-func handleSpacesUpdate(logger *slog.Logger, queries *db.Queries, sessionStore *sessions.CookieStore) http.HandlerFunc {
+func handleSpacesUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		form, errors := forms.ParseUpdateSpace(r)
 		if errors != nil {

@@ -49,56 +49,69 @@ func MembersList(members []db.Member) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div><h1 class=\"text-2xl font-bold mb-4\">Members</h1><ul class=\"list text-base\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div><h1 class=\"text-2xl font-bold mb-2\">Members</h1><div class=\"flex justify-end\"><a href=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var3 templ.SafeURL
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s/members/new", access.Token)))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/members_list.page.templ`, Line: 17, Col: 69}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"btn btn-ghost\"><svg class=\"size-5\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"></circle> <path d=\"M8 12h8\"></path> <path d=\"M12 8v8\"></path></svg> Add member</a></div><ul class=\"list text-base\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			for _, m := range members {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<li class=\"list-row items-center\"><div class=\"avatar avatar-placeholder\"><div class=\"bg-neutral text-neutral-content w-8 rounded-full\"><span class=\"text-sm\">")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				var templ_7745c5c3_Var3 string
-				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(string([]rune(m.Name)[:2]))
-				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/members_list.page.templ`, Line: 20, Col: 58}
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</span></div></div><div class=\"font-semibold text-neutral\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<li class=\"list-row items-center\"><div class=\"avatar avatar-placeholder\"><div class=\"bg-neutral text-neutral-content w-8 rounded-full\"><span class=\"text-sm\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				var templ_7745c5c3_Var4 string
-				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(m.Name)
+				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(string([]rune(m.Name)[:2]))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/members_list.page.templ`, Line: 23, Col: 54}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/members_list.page.templ`, Line: 42, Col: 58}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</div><div class=\"tooltip\" data-tip=\"Edit\"><a class=\"btn btn-square btn-ghost\" href=\"")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</span></div></div><div class=\"font-semibold text-neutral\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var5 templ.SafeURL
-				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s/members/%s/edit", access.Token, m.PublicID)))
+				var templ_7745c5c3_Var5 string
+				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(m.Name)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/members_list.page.templ`, Line: 27, Col: 88}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/members_list.page.templ`, Line: 45, Col: 54}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\"><svg class=\"size-5\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\"></path> <path d=\"M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z\"></path></svg></a></div><div class=\"tooltip\" data-tip=\"Remove\"><a class=\"btn btn-square btn-ghost\" href=\"#\"><svg class=\"size-5\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 6h18\"></path> <path d=\"M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6\"></path> <path d=\"M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2\"></path> <line x1=\"10\" x2=\"10\" y1=\"11\" y2=\"17\"></line> <line x1=\"14\" x2=\"14\" y1=\"11\" y2=\"17\"></line></svg></a></div></li>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</div><div class=\"tooltip\" data-tip=\"Edit\"><a class=\"btn btn-square btn-ghost\" href=\"")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var6 templ.SafeURL
+				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s/members/%s/edit", access.Token, m.PublicID)))
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/members_list.page.templ`, Line: 49, Col: 88}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\"><svg class=\"size-5\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7\"></path> <path d=\"M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z\"></path></svg></a></div><div class=\"tooltip\" data-tip=\"Remove\"><a class=\"btn btn-square btn-ghost\" href=\"#\"><svg class=\"size-5\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 6h18\"></path> <path d=\"M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6\"></path> <path d=\"M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2\"></path> <line x1=\"10\" x2=\"10\" y1=\"11\" y2=\"17\"></line> <line x1=\"14\" x2=\"14\" y1=\"11\" y2=\"17\"></line></svg></a></div></li>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</ul></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</ul></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
