@@ -46,3 +46,6 @@ SET updated_at = @updated_at,
   name = @name
 WHERE id = @member_id
 RETURNING *;
+
+-- name: DeleteMember :exec
+DELETE FROM members WHERE id = ?;

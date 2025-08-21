@@ -47,10 +47,6 @@ Public IDs:
 
 ## Deleting members
 
-- Members can be deleted from a Space
-- A Space must contain at least one Member
-  - The last Member of the Space cannot be deleted
-  - When a Space is created, a first Member is created in the same SQL transaction
 - When a Member is deleted, their references in other tables (`created_by` and `updated_by`) are set to `NULL`
 - Foreign keys that reference members use `ON DELETE SET NULL`
 - Application handles `NULL` values for these references and the UI displays "deleted member" instead of the member name (which is no longer available)

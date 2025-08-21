@@ -57,6 +57,11 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 					r.Get("/edit", handleMembersEdit(logger))
 					r.Post("/edit", handleMembersUpdate(logger, queries))
 				})
+
+				r.With(Authorize(access.Action_DeleteMember)).Group(func(r chi.Router) {
+					r.Get("/delete", handleMembersDeleteConfirm(logger))
+					r.Post("/delete", handleMembersDelete(logger, queries))
+				})
 			})
 
 			r.Get("/activity", handleActivityList(logger))

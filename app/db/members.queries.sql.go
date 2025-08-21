@@ -65,6 +65,15 @@ func (q *Queries) CreateMember(ctx context.Context, arg CreateMemberParams) (Mem
 	return i, err
 }
 
+const deleteMember = `-- name: DeleteMember :exec
+DELETE FROM members WHERE id = ?
+`
+
+func (q *Queries) DeleteMember(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteMember, id)
+	return err
+}
+
 const getMemberByID = `-- name: GetMemberByID :one
 SELECT id, created_at, updated_at, created_by, updated_by, space_id, public_id, name FROM members
 WHERE id = ?1

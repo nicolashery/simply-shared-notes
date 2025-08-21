@@ -103,7 +103,6 @@ func handleMembersCreate(logger *slog.Logger, queries *db.Queries) http.HandlerF
 		}
 
 		sess := rctx.GetSession(r.Context())
-		sess.Values[session.IdentityKey] = member.ID
 		sess.AddFlash(session.FlashMessage{
 			Type:    session.FlashType_Info,
 			Content: fmt.Sprintf("Added new member: %s", member.Name),
@@ -179,6 +178,54 @@ func handleMembersUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerF
 		sess.AddFlash(session.FlashMessage{
 			Type:    session.FlashType_Success,
 			Content: fmt.Sprintf("Saved changes for: %s", memberUpdated.Name),
+		})
+		err = sess.Save(r, w)
+		if err != nil {
+			logger.Error("failed to save session", slog.Any("error", err))
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+			return
+		}
+
+		access := rctx.GetAccess(r.Context())
+		http.Redirect(w, r, fmt.Sprintf("/s/%s/members", access.Token), http.StatusSeeOther)
+	}
+}
+
+func handleMembersDeleteConfirm(logger *slog.Logger) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		err := pages.MembersDelete().Render(r.Context(), w)
+		if err != nil {
+			logger.Error(
+				"failed to render template",
+				slog.Any("error", err),
+				slog.String("template", "MembersDelete"),
+			)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+		}
+	}
+}
+
+func handleMembersDelete(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		member := rctx.GetMember(r.Context())
+		identity := rctx.GetIdentity(r.Context())
+
+		if member.ID == identity.Member.ID {
+			http.Error(w, "cannot delete session identity member", http.StatusConflict)
+			return
+		}
+
+		err := queries.DeleteMember(r.Context(), member.ID)
+		if err != nil {
+			logger.Error("error deleting member in database", slog.Any("error", err))
+			http.Error(w, "error deleting member", http.StatusInternalServerError)
+			return
+		}
+
+		sess := rctx.GetSession(r.Context())
+		sess.AddFlash(session.FlashMessage{
+			Type:    session.FlashType_Success,
+			Content: fmt.Sprintf("Removed member: %s", member.Name),
 		})
 		err = sess.Save(r, w)
 		if err != nil {

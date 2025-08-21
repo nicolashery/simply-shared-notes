@@ -20,6 +20,13 @@
 
 - In the absence of proper user accounts, Members help track who created or edited items such as Notes in the Space
 - A Member is tied to a Space, and cannot be shared across Spaces
+- Members can be deleted from a Space
+- The last Member of the Space cannot be deleted
+- The current session can't delete the Member tied to the session's Identity
+- A Space must contain at least one Member
+  - When a Space is created, a first Member is created in the same SQL transaction
+  - The last Member of the Space cannot be deleted
+  - **NOTE**: Deleting the last Member of a Space can never happen. Either the session trying to delete _is_ identifyied as the last Member (and you can't delete your own session's Member), or the session trying to delete _is_ identified as a Member that has been deleted since (in a race condition scenario) in which case the identity middleware will redirect to the identity selection page.
 - See also [SQL - Deleting members](sql.md#deleting-members)
 
 ## Identity
