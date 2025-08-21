@@ -45,7 +45,7 @@ func handleIdentitySelect(logger *slog.Logger, queries *db.Queries) http.Handler
 }
 
 type SelectIdentityForm struct {
-	MemberPublicId string
+	MemberPublicID string
 }
 
 func parseSelectIdentityForm(r *http.Request, f *SelectIdentityForm) error {
@@ -54,7 +54,7 @@ func parseSelectIdentityForm(r *http.Request, f *SelectIdentityForm) error {
 		return err
 	}
 
-	f.MemberPublicId = strings.Trim(r.Form.Get("member"), " ")
+	f.MemberPublicID = strings.Trim(r.Form.Get("member"), " ")
 
 	return nil
 }
@@ -77,7 +77,7 @@ func handleIdentitySet(logger *slog.Logger, queries *db.Queries) http.HandlerFun
 		space := rctx.GetSpace(r.Context())
 		member, err := queries.GetMemberByPublicID(r.Context(), db.GetMemberByPublicIDParams{
 			SpaceID:  space.ID,
-			PublicID: form.MemberPublicId,
+			PublicID: form.MemberPublicID,
 		})
 		if err != nil {
 			http.Error(w, "member not found", http.StatusBadRequest)

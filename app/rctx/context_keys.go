@@ -9,4 +9,5 @@ const (
 	accessContextKey   contextKey = "access"
 	identityContextKey contextKey = "identity"
 	flashContextKey    contextKey = "flash"
+	memberContextKey   contextKey = "member"
 )

@@ -14,7 +14,7 @@ templ MembersNew(form *forms.CreateMember, errors forms.Errors) {
 			<h1 class="text-2xl font-bold mb-4">Add member</h1>
 			<form
 				method="POST"
-				action={ templ.URL(fmt.Sprintf("/s/%s/members", access.Token)) }
+				action={ templ.URL(fmt.Sprintf("/s/%s/members/new", access.Token)) }
 				class="flex flex-col gap-4"
 			>
 				<fieldset class="flex flex-col gap-1.5">

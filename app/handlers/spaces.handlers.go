@@ -70,7 +70,7 @@ func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, 
 			return
 		}
 
-		memberPublicId, err := publicid.Generate()
+		memberPublicID, err := publicid.Generate()
 		if err != nil {
 			logger.Error("error generating member public ID", slog.Any("error", err))
 			http.Error(w, "error creating space", http.StatusInternalServerError)
@@ -86,7 +86,7 @@ func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, 
 			form,
 			now,
 			tokens,
-			memberPublicId,
+			memberPublicID,
 		)
 		if err != nil {
 			logger.Error("error creating space and first member in database", slog.Any("error", err))
@@ -118,7 +118,7 @@ func createSpaceAndFirstMember(
 	form forms.CreateSpace,
 	now time.Time,
 	tokens access.AccessTokens,
-	memberPublicId string,
+	memberPublicID string,
 ) (*db.Space, *db.Member, error) {
 	tx, err := sqlDB.Begin()
 	if err != nil {
@@ -151,7 +151,7 @@ func createSpaceAndFirstMember(
 		CreatedBy: sql.NullInt64{Valid: false},
 		UpdatedBy: sql.NullInt64{Valid: false},
 		SpaceID:   space.ID,
-		PublicID:  memberPublicId,
+		PublicID:  memberPublicID,
 		Name:      form.Identity,
 	})
 	if err != nil {
@@ -235,7 +235,7 @@ func handleSpacesUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerFu
 		now := time.Now().UTC()
 		identity := rctx.GetIdentity(r.Context())
 		space := rctx.GetSpace(r.Context())
-		err := queries.UpdateSpace(
+		spaceUpdated, err := queries.UpdateSpace(
 			r.Context(),
 			db.UpdateSpaceParams{
 				UpdatedAt: now,
@@ -245,15 +245,15 @@ func handleSpacesUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerFu
 			},
 		)
 		if err != nil {
-			logger.Error("error creating space and first member in database", slog.Any("error", err))
-			http.Error(w, "error creating space", http.StatusInternalServerError)
+			logger.Error("error updating space in database", slog.Any("error", err))
+			http.Error(w, "error updating space", http.StatusInternalServerError)
 			return
 		}
 
 		sess := rctx.GetSession(r.Context())
 		sess.AddFlash(session.FlashMessage{
 			Type:    session.FlashType_Success,
-			Content: fmt.Sprintf("%s updated successfully.", space.Name),
+			Content: fmt.Sprintf("%s updated successfully.", spaceUpdated.Name),
 		})
 		err = sess.Save(r, w)
 		if err != nil {

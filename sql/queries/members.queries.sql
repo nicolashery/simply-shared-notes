@@ -38,3 +38,11 @@ LIMIT 1;
 SELECT * FROM members
 WHERE space_id = @space_id
 ORDER BY name;
+
+-- name: UpdateMember :one
+UPDATE members
+SET updated_at = @updated_at,
+  updated_by = @updated_by,
+  name = @name
+WHERE id = @member_id
+RETURNING *;

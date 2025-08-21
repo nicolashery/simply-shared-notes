@@ -46,12 +46,18 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 			r.Get("/notes", handleNotesList(logger))
 
 			r.Get("/members", handleMembersList(logger, queries))
-			r.With(Authorize(access.Action_CreateMember)).
-				Get("/members/new", handleMembersNew(logger))
-			r.With(Authorize(access.Action_CreateMember)).
-				Post("/members", handleMembersCreate(logger, queries))
-			r.With(Authorize(access.Action_UpdateMember)).
-				Get("/members/{memberId}/edit", handleMembersEdit(logger))
+			r.With(Authorize(access.Action_CreateMember)).Group(func(r chi.Router) {
+				r.Get("/members/new", handleMembersNew(logger))
+				r.Post("/members/new", handleMembersCreate(logger, queries))
+			})
+			r.Route("/members/{memberId}", func(r chi.Router) {
+				r.Use(rctx.MemberCtxMiddleware(queries))
+
+				r.With(Authorize(access.Action_UpdateMember)).Group(func(r chi.Router) {
+					r.Get("/edit", handleMembersEdit(logger))
+					r.Post("/edit", handleMembersUpdate(logger, queries))
+				})
+			})
 
 			r.Get("/activity", handleActivityList(logger))
 		})

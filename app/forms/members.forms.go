@@ -7,7 +7,7 @@ import (
 	"github.com/Oudwins/zog/zhttp"
 )
 
-var memberNameSchema = z.String().Trim().Required().Max(10)
+var memberNameSchema = z.String().Trim().Required().Max(255)
 
 type CreateMember struct {
 	Name string `zog:"name"`

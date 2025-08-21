@@ -153,6 +153,43 @@ func (q *Queries) ListMembers(ctx context.Context, spaceID int64) ([]Member, err
 	return items, nil
 }
 
+const updateMember = `-- name: UpdateMember :one
+UPDATE members
+SET updated_at = ?1,
+  updated_by = ?2,
+  name = ?3
+WHERE id = ?4
+RETURNING id, created_at, updated_at, created_by, updated_by, space_id, public_id, name
+`
+
+type UpdateMemberParams struct {
+	UpdatedAt time.Time
+	UpdatedBy sql.NullInt64
+	Name      string
+	MemberID  int64
+}
+
+func (q *Queries) UpdateMember(ctx context.Context, arg UpdateMemberParams) (Member, error) {
+	row := q.db.QueryRowContext(ctx, updateMember,
+		arg.UpdatedAt,
+		arg.UpdatedBy,
+		arg.Name,
+		arg.MemberID,
+	)
+	var i Member
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.CreatedBy,
+		&i.UpdatedBy,
+		&i.SpaceID,
+		&i.PublicID,
+		&i.Name,
+	)
+	return i, err
+}
+
 const updateMemberCreatedBy = `-- name: UpdateMemberCreatedBy :exec
 UPDATE members
 SET created_by = ?1,
