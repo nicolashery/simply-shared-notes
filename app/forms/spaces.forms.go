@@ -14,7 +14,7 @@ type CreateSpace struct {
 	Code     string `zog:"code"`
 }
 
-var spaceNameSchema = z.String().Trim().Required().Max(255)
+var spaceNameSchema = z.String().Trim().Required().Min(1).Max(255)
 
 func createSpaceSchema(requiresCode bool) *z.StructSchema {
 	codeSchema := z.String().Trim()
@@ -24,8 +24,8 @@ func createSpaceSchema(requiresCode bool) *z.StructSchema {
 
 	return z.Struct(z.Shape{
 		"name":     spaceNameSchema,
-		"identity": z.String().Trim().Required().Max(255),
-		"email":    z.String().Trim().Required().Email().Max(255),
+		"identity": z.String().Trim().Required().Min(1).Max(255),
+		"email":    z.String().Trim().Required().Min(1).Max(255).Email(),
 		"code":     codeSchema,
 	})
 }
