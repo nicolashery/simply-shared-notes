@@ -90,6 +90,13 @@ func handleIdentitySet(logger *slog.Logger, queries *db.Queries) http.HandlerFun
 			Type:    session.FlashType_Info,
 			Content: fmt.Sprintf("%s, welcome to the space %s!", member.Name, space.Name),
 		})
+
+		redirectURL := fmt.Sprintf("/s/%s", access.Token)
+		if storedRedirectURL, ok := sess.Values[session.RedirectKey].(string); ok && storedRedirectURL != "" {
+			redirectURL = storedRedirectURL
+			delete(sess.Values, session.RedirectKey)
+		}
+
 		err = sess.Save(r, w)
 		if err != nil {
 			logger.Error("failed to save session", slog.Any("error", err))
@@ -97,7 +104,7 @@ func handleIdentitySet(logger *slog.Logger, queries *db.Queries) http.HandlerFun
 			return
 		}
 
-		http.Redirect(w, r, fmt.Sprintf("/s/%s", access.Token), http.StatusSeeOther)
+		http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 	}
 }
 

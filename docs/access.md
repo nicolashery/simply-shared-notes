@@ -41,6 +41,12 @@
   - The cookie is encrypted and cannot be tampered with (the only way a user can identity as another member is through the UI)
   - The cookie value contains the selected Member internal ID (among other session values)
   - The cookie expires after 3 months (90 days)
-- The Member selection page is at the URI `/identity`
-  - All Space pages `/s/{token}/*` redirect to `/identity` if no valid Identity is found in the cookie
+- The Member selection page is at the URI `/s/{token}/identity`
+  - All Space pages `/s/{token}/*` redirect to `/s/{token}/identity` if no valid Identity is found in the cookie
   - Note that a stored Identity can become invalid if a Member is deleted from the Space
+
+**Redirect after Identity selection**:
+- When a user visits a protected URI without a valid session (e.g., `/s/{token}/members/{memberID}`), the system stores the original URI and redirects them to the identity selection page. After selecting their identity, they are automatically redirected back to the original URI they tried to visit instead of the space home page.
+- The original URI is stored securely in the encrypted session cookie using the `redirect_url` key
+- The redirect URI is cleared from the session after a single use to prevent replay
+- If no valid redirect URI is stored, users are redirected to the space home page

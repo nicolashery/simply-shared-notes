@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/gorilla/sessions"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/identity"
 	"github.com/nicolashery/simply-shared-notes/app/session"
@@ -26,6 +27,7 @@ func IdentityCtxMiddleware(logger *slog.Logger, queries *db.Queries) func(http.H
 			memberID, ok := sess.Values[session.IdentityKey].(int64)
 			if !ok {
 				delete(sess.Values, session.IdentityKey)
+				storeRedirectURL(r, sess)
 				err := sess.Save(r, w)
 				if err != nil {
 					logger.Error("failed to save session", slog.Any("error", err))
@@ -42,6 +44,7 @@ func IdentityCtxMiddleware(logger *slog.Logger, queries *db.Queries) func(http.H
 			member, err := queries.GetMemberByID(r.Context(), memberID)
 			if err != nil || member.SpaceID != space.ID {
 				delete(sess.Values, session.IdentityKey)
+				storeRedirectURL(r, sess)
 				err := sess.Save(r, w)
 				if err != nil {
 					logger.Error("failed to save session", slog.Any("error", err))
@@ -59,6 +62,14 @@ func IdentityCtxMiddleware(logger *slog.Logger, queries *db.Queries) func(http.H
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}
+}
+
+func storeRedirectURL(r *http.Request, sess *sessions.Session) {
+	redirectURL := r.URL.Path
+	if r.URL.RawQuery != "" {
+		redirectURL += "?" + r.URL.RawQuery
+	}
+	sess.Values[session.RedirectKey] = redirectURL
 }
 
 func GetIdentity(ctx context.Context) *identity.Identity {

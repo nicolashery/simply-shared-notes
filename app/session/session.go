@@ -7,8 +7,9 @@ import (
 )
 
 const (
-	CookieName  = "simplysharednotes_session"
-	IdentityKey = "identity"
+	CookieName   = "simplysharednotes_session"
+	IdentityKey  = "identity"
+	RedirectKey  = "redirect_url"
 )
 
 func InitStore(secret string, isDev bool) *sessions.CookieStore {
