@@ -50,7 +50,7 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 				r.Get("/members/new", handleMembersNew(logger))
 				r.Post("/members/new", handleMembersCreate(logger, queries))
 			})
-			r.Route("/members/{memberId}", func(r chi.Router) {
+			r.Route("/members/{memberPublicID}", func(r chi.Router) {
 				r.Use(rctx.MemberCtxMiddleware(queries))
 
 				r.With(Authorize(access.Action_UpdateMember)).Group(func(r chi.Router) {
