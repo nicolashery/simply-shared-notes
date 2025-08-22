@@ -44,6 +44,10 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 				Get("/share", handleTokensShow(logger))
 
 			r.Get("/notes", handleNotesList(logger))
+			r.With(Authorize(access.Action_CreateNote)).Group(func(r chi.Router) {
+				r.Get("/notes/new", handleNotesNew(logger))
+				r.Post("/notes/new", handleNotesCreate(logger, queries))
+			})
 
 			r.Get("/members", handleMembersList(logger, queries))
 			r.With(Authorize(access.Action_CreateMember)).Group(func(r chi.Router) {
