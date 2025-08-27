@@ -36,18 +36,18 @@ templ MembersList(members []db.Member) {
 				</a>
 			</div>
 			<ul class="list text-base">
-				for _, m := range members {
+				for _, member := range members {
 					<li class="list-row items-center">
 						<div class="avatar avatar-placeholder">
 							<div class="bg-neutral text-neutral-content w-8 rounded-full">
-								<span class="text-sm">{ string([]rune(m.Name)[:2]) }</span>
+								<span class="text-sm">{ string([]rune(member.Name)[:2]) }</span>
 							</div>
 						</div>
-						<div class="font-semibold text-neutral">{ m.Name }</div>
+						<div class="font-semibold text-neutral">{ member.Name }</div>
 						<div class="tooltip" data-tip="Edit">
 							<a
 								class="btn btn-square btn-ghost"
-								href={ templ.URL(fmt.Sprintf("/s/%s/members/%s/edit", access.Token, m.PublicID)) }
+								href={ templ.URL(fmt.Sprintf("/s/%s/members/%s/edit", access.Token, member.PublicID)) }
 							>
 								<svg
 									class="size-5"
@@ -64,11 +64,11 @@ templ MembersList(members []db.Member) {
 								</svg>
 							</a>
 						</div>
-						if m.ID != identity.Member.ID {
+						if member.ID != identity.Member.ID {
 							<div class="tooltip" data-tip="Remove">
 								<a
 									class="btn btn-square btn-ghost"
-									href={ templ.URL(fmt.Sprintf("/s/%s/members/%s/delete", access.Token, m.PublicID)) }
+									href={ templ.URL(fmt.Sprintf("/s/%s/members/%s/delete", access.Token, member.PublicID)) }
 								>
 									<svg
 										class="size-5"

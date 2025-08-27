@@ -37,7 +37,7 @@ LIMIT 1;
 -- name: ListMembers :many
 SELECT * FROM members
 WHERE space_id = @space_id
-ORDER BY name;
+ORDER BY name, id;
 
 -- name: UpdateMember :one
 UPDATE members

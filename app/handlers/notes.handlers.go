@@ -15,9 +15,21 @@ import (
 	"github.com/nicolashery/simply-shared-notes/app/views/pages"
 )
 
-func handleNotesList(logger *slog.Logger) http.HandlerFunc {
+func handleNotesList(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := pages.NotesList().Render(r.Context(), w)
+		space := rctx.GetSpace(r.Context())
+		notes, err := queries.ListNotes(r.Context(), space.ID)
+		if err != nil {
+			logger.Error(
+				"error getting notes from database",
+				slog.Any("error", err),
+				slog.Int64("space_id", space.ID),
+			)
+			http.Error(w, "internal server err", http.StatusInternalServerError)
+			return
+		}
+
+		err = pages.NotesList(notes).Render(r.Context(), w)
 		if err != nil {
 			logger.Error(
 				"failed to render template",

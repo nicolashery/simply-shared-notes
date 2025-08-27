@@ -127,7 +127,7 @@ func (q *Queries) GetMemberByPublicID(ctx context.Context, arg GetMemberByPublic
 const listMembers = `-- name: ListMembers :many
 SELECT id, created_at, updated_at, created_by, updated_by, space_id, public_id, name FROM members
 WHERE space_id = ?1
-ORDER BY name
+ORDER BY name, id
 `
 
 func (q *Queries) ListMembers(ctx context.Context, spaceID int64) ([]Member, error) {

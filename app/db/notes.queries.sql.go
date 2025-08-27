@@ -109,30 +109,54 @@ func (q *Queries) GetNoteByPublicID(ctx context.Context, arg GetNoteByPublicIDPa
 }
 
 const listNotes = `-- name: ListNotes :many
-SELECT id, created_at, updated_at, created_by, updated_by, space_id, public_id, title, content FROM notes
-WHERE space_id = ?1
-ORDER BY title
+SELECT
+    n.public_id,
+    n.created_at,
+    cb.public_id as created_by_public_id,
+    cb.name as created_by_name,
+    n.updated_at,
+    ub.public_id as updated_by_public_id,
+    ub.name as updated_by_name,
+    n.title
+FROM
+    notes n
+    LEFT JOIN members cb ON cb.id = n.created_by
+    LEFT JOIN members ub ON ub.id = n.updated_by
+WHERE n.space_id = ?1
+ORDER BY
+    n.updated_at DESC,
+    n.id DESC
 `
 
-func (q *Queries) ListNotes(ctx context.Context, spaceID int64) ([]Note, error) {
+type ListNotesRow struct {
+	PublicID          string
+	CreatedAt         time.Time
+	CreatedByPublicID sql.NullString
+	CreatedByName     sql.NullString
+	UpdatedAt         time.Time
+	UpdatedByPublicID sql.NullString
+	UpdatedByName     sql.NullString
+	Title             string
+}
+
+func (q *Queries) ListNotes(ctx context.Context, spaceID int64) ([]ListNotesRow, error) {
 	rows, err := q.db.QueryContext(ctx, listNotes, spaceID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Note
+	var items []ListNotesRow
 	for rows.Next() {
-		var i Note
+		var i ListNotesRow
 		if err := rows.Scan(
-			&i.ID,
-			&i.CreatedAt,
-			&i.UpdatedAt,
-			&i.CreatedBy,
-			&i.UpdatedBy,
-			&i.SpaceID,
 			&i.PublicID,
+			&i.CreatedAt,
+			&i.CreatedByPublicID,
+			&i.CreatedByName,
+			&i.UpdatedAt,
+			&i.UpdatedByPublicID,
+			&i.UpdatedByName,
 			&i.Title,
-			&i.Content,
 		); err != nil {
 			return nil, err
 		}

@@ -21,7 +21,7 @@ func handleMembersList(logger *slog.Logger, queries *db.Queries) http.HandlerFun
 		members, err := queries.ListMembers(r.Context(), space.ID)
 		if err != nil {
 			logger.Error(
-				"error getting space members from database",
+				"error getting members from database",
 				slog.Any("error", err),
 				slog.Int64("space_id", space.ID),
 			)
