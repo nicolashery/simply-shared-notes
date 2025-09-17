@@ -143,3 +143,76 @@ func handleNotesShow(logger *slog.Logger) http.HandlerFunc {
 		}
 	}
 }
+
+func handleNotesEdit(logger *slog.Logger) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		note := rctx.GetNote(r.Context())
+		form := forms.UpdateNote{
+			Title:   note.Title,
+			Content: note.Content,
+		}
+
+		err := pages.NotesEdit(&form, forms.EmptyErrors()).Render(r.Context(), w)
+		if err != nil {
+			logger.Error(
+				"failed to render template",
+				slog.Any("error", err),
+				slog.String("template", "NotesEdit"),
+			)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+		}
+	}
+}
+
+func handleNotesUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		form, errors := forms.ParseUpdateNote(r)
+		if errors != nil {
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			err := pages.NotesEdit(&form, errors).Render(r.Context(), w)
+			if err != nil {
+				logger.Error(
+					"failed to render template",
+					slog.Any("error", err),
+					slog.String("template", "NotesEdit"),
+				)
+				http.Error(w, "internal server error", http.StatusInternalServerError)
+			}
+			return
+		}
+
+		now := time.Now().UTC()
+		identity := rctx.GetIdentity(r.Context())
+		note := rctx.GetNote(r.Context())
+		_, err := queries.UpdateNote(
+			r.Context(),
+			db.UpdateNoteParams{
+				UpdatedAt: now,
+				UpdatedBy: sql.NullInt64{Int64: identity.Member.ID, Valid: true},
+				Title:     form.Title,
+				Content:   form.Content,
+				NoteID:    note.ID,
+			},
+		)
+		if err != nil {
+			logger.Error("error updating note in database", slog.Any("error", err))
+			http.Error(w, "error updating note", http.StatusInternalServerError)
+			return
+		}
+
+		sess := rctx.GetSession(r.Context())
+		sess.AddFlash(session.FlashMessage{
+			Type:    session.FlashType_Success,
+			Content: "Changes saved successfully",
+		})
+		err = sess.Save(r, w)
+		if err != nil {
+			logger.Error("failed to save session", slog.Any("error", err))
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+			return
+		}
+
+		access := rctx.GetAccess(r.Context())
+		http.Redirect(w, r, fmt.Sprintf("/s/%s/notes/%s", access.Token, note.PublicID), http.StatusSeeOther)
+	}
+}

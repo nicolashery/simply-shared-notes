@@ -52,6 +52,10 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 				r.Use(rctx.NoteCtxMiddleware(queries))
 
 				r.Get("/", handleNotesShow(logger))
+				r.With(Authorize(access.Action_UpdateNote)).Group(func(r chi.Router) {
+					r.Get("/edit", handleNotesEdit(logger))
+					r.Post("/edit", handleNotesUpdate(logger, queries))
+				})
 			})
 
 			r.Get("/members", handleMembersList(logger, queries))

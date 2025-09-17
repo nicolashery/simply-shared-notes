@@ -1,0 +1,64 @@
+package pages
+
+import (
+	"fmt"
+	"github.com/nicolashery/simply-shared-notes/app/forms"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
+	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
+)
+
+templ NotesEdit(form *forms.UpdateNote, errors forms.Errors) {
+	{{ access := rctx.GetAccess(ctx) }}
+	{{ note := rctx.GetNote(ctx) }}
+	@layouts.Space() {
+		<div>
+			<h1 class="text-2xl font-bold mb-4">Edit note</h1>
+			<form
+				method="POST"
+				action={ templ.URL(fmt.Sprintf("/s/%s/notes/%s/edit", access.Token, note.PublicID)) }
+				class="flex flex-col gap-4"
+			>
+				<fieldset class="flex flex-col gap-1.5">
+					<label for="title" class="text-sm font-semibold">Title</label>
+					<input
+						type="text"
+						name="title"
+						id="title"
+						value={ form.Title }
+						class={ "input w-full", templ.KV("input-error", forms.HasError(errors, "title")) }
+					/>
+					for _, e := range forms.GetErrors(errors, "title") {
+						<p class="text-sm text-error">
+							{ e }
+						</p>
+					}
+				</fieldset>
+				<fieldset class="flex flex-col gap-1.5">
+					<label for="content" class="text-sm font-semibold">Content</label>
+					<p class="text-sm opacity-60">
+						Uses <a class="link" target="_blank" href="https://www.markdownguide.org/cheat-sheet/">Markdown</a> syntax.
+					</p>
+					<textarea
+						name="content"
+						id="content"
+						class={ "textarea w-full h-48", templ.KV("textarea-error", forms.HasError(errors, "content")) }
+					>
+						{ form.Content }
+					</textarea>
+					for _, e := range forms.GetErrors(errors, "content") {
+						<p class="text-sm text-error">
+							{ e }
+						</p>
+					}
+				</fieldset>
+				<div class="flex items-center gap-4 mt-4">
+					<button type="submit" class="btn btn-primary">Save</button>
+					<a
+						href={ templ.URL(fmt.Sprintf("/s/%s/notes/%s", access.Token, note.PublicID)) }
+						class="btn btn-soft"
+					>Cancel</a>
+				</div>
+			</form>
+		</div>
+	}
+}
