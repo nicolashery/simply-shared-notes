@@ -5,12 +5,12 @@ import (
 	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
 )
 
-templ NotesShow() {
+templ NotesShow(renderedMarkdown string) {
 	{{ note := rctx.GetNote(ctx) }}
 	@layouts.Space() {
-		<div>
-			<h1 class="text-2xl font-bold mb-4">{ note.Title }</h1>
-			<pre class="overflow-scroll"><code>{ note.Content }</code></pre>
+		<div class="prose prose-headings:mt-5 prose-headings:mb-5 prose-h1:font-bold prose-h1:text-3xl prose-h1:mt-7 prose-h2:mt-7 prose-hr:mt-7 prose-hr:mb-7">
+			<h1>{ note.Title }</h1>
+			@templ.Raw(renderedMarkdown)
 		</div>
 	}
 }

@@ -1,29 +1,30 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 @plugin "daisyui" {
-  exclude: rootscrollgutter;
+    exclude: rootscrollgutter;
 }
 @plugin "daisyui/theme" {
-  name: "pastel";
-  default: true;
-  --radius-selector: 0.5rem;
-  --radius-field: 0.25rem;
-  --radius-box: 0rem;
+    name: "pastel";
+    default: true;
+    --radius-selector: 0.5rem;
+    --radius-field: 0.25rem;
+    --radius-box: 0rem;
 }
 @plugin "daisyui/theme" {
-  name: "dim";
-  prefersdark: true;
-  color-scheme: dark;
-  --radius-selector: 0.5rem;
-  --radius-field: 0.25rem;
-  --radius-box: 0rem;
-  --border: 2px;
-  --color-primary: oklch(74.229% 0.133 311.379);
-  --color-primary-content: oklch(14.845% 0.026 311.379);
-  --color-accent: oklch(86.133% 0.141 139.549);
-  --color-accent-content: oklch(17.226% 0.028 139.549);
+    name: "dim";
+    prefersdark: true;
+    color-scheme: dark;
+    --radius-selector: 0.5rem;
+    --radius-field: 0.25rem;
+    --radius-box: 0rem;
+    --border: 2px;
+    --color-primary: oklch(74.229% 0.133 311.379);
+    --color-primary-content: oklch(14.845% 0.026 311.379);
+    --color-accent: oklch(86.133% 0.141 139.549);
+    --color-accent-content: oklch(17.226% 0.028 139.549);
 }
 
 @utility input {
-  /* Font size 16px (vs 14px default) to prevent zoom on iOS when focusing input  */
-  font-size: 1rem;
+    /* Font size 16px (vs 14px default) to prevent zoom on iOS when focusing input  */
+    font-size: 1rem;
 }

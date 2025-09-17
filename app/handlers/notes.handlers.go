@@ -9,6 +9,7 @@ import (
 
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/forms"
+	"github.com/nicolashery/simply-shared-notes/app/markdown"
 	"github.com/nicolashery/simply-shared-notes/app/publicid"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/session"
@@ -123,7 +124,15 @@ func handleNotesCreate(logger *slog.Logger, queries *db.Queries) http.HandlerFun
 
 func handleNotesShow(logger *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := pages.NotesShow().Render(r.Context(), w)
+		note := rctx.GetNote(r.Context())
+		renderedMarkdown, err := markdown.Render(note.Content)
+		if err != nil {
+			logger.Error("failed to render Markdown", slog.Any("error", err))
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+			return
+		}
+
+		err = pages.NotesShow(renderedMarkdown).Render(r.Context(), w)
 		if err != nil {
 			logger.Error(
 				"failed to render template",
