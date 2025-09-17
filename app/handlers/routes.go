@@ -48,6 +48,11 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 				r.Get("/notes/new", handleNotesNew(logger))
 				r.Post("/notes/new", handleNotesCreate(logger, queries))
 			})
+			r.Route("/notes/{notePublicID}", func(r chi.Router) {
+				r.Use(rctx.NoteCtxMiddleware(queries))
+
+				r.Get("/", handleNotesShow(logger))
+			})
 
 			r.Get("/members", handleMembersList(logger, queries))
 			r.With(Authorize(access.Action_CreateMember)).Group(func(r chi.Router) {

@@ -120,3 +120,17 @@ func handleNotesCreate(logger *slog.Logger, queries *db.Queries) http.HandlerFun
 		http.Redirect(w, r, fmt.Sprintf("/s/%s/notes", access.Token), http.StatusSeeOther)
 	}
 }
+
+func handleNotesShow(logger *slog.Logger) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		err := pages.NotesShow().Render(r.Context(), w)
+		if err != nil {
+			logger.Error(
+				"failed to render template",
+				slog.Any("error", err),
+				slog.String("template", "NotesShow"),
+			)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+		}
+	}
+}

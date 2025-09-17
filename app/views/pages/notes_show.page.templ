@@ -1,0 +1,16 @@
+package pages
+
+import (
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
+	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
+)
+
+templ NotesShow() {
+	{{ note := rctx.GetNote(ctx) }}
+	@layouts.Space() {
+		<div>
+			<h1 class="text-2xl font-bold mb-4">{ note.Title }</h1>
+			<pre class="overflow-scroll"><code>{ note.Content }</code></pre>
+		</div>
+	}
+}

@@ -20,7 +20,7 @@ templ Space() {
 	@Base(space.Name) {
 		<div>
 			@navBar(route, space, access, identity)
-			<div class="px-4">
+			<div class="px-4 pb-6">
 				for _, message := range rctx.GetFlashMessages(ctx) {
 					@components.FlashMessage(&message)
 				}

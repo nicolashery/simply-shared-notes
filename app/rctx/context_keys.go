@@ -10,4 +10,5 @@ const (
 	identityContextKey contextKey = "identity"
 	flashContextKey    contextKey = "flash"
 	memberContextKey   contextKey = "member"
+	noteContextKey     contextKey = "note"
 )
