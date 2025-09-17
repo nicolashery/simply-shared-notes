@@ -4,24 +4,31 @@
     exclude: rootscrollgutter;
 }
 @plugin "daisyui/theme" {
-    name: "pastel";
+    name: "light";
     default: true;
+    prefersdark: false;
+    color-scheme: "light";
     --radius-selector: 0.5rem;
     --radius-field: 0.25rem;
     --radius-box: 0rem;
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+    --border: 2px;
+    --depth: 0;
+    --noise: 0;
 }
 @plugin "daisyui/theme" {
-    name: "dim";
+    name: "dark";
     prefersdark: true;
-    color-scheme: dark;
+    color-scheme: "dark";
     --radius-selector: 0.5rem;
     --radius-field: 0.25rem;
     --radius-box: 0rem;
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
     --border: 2px;
-    --color-primary: oklch(74.229% 0.133 311.379);
-    --color-primary-content: oklch(14.845% 0.026 311.379);
-    --color-accent: oklch(86.133% 0.141 139.549);
-    --color-accent-content: oklch(17.226% 0.028 139.549);
+    --depth: 0;
+    --noise: 0;
 }
 
 @utility input {
