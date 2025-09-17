@@ -12,14 +12,14 @@ templ MembersList(members []db.Member) {
 	{{ identity := rctx.GetIdentity(ctx) }}
 	@layouts.Space() {
 		<div>
-			<h1 class="text-2xl font-bold mb-2">Members</h1>
-			<div class="flex justify-end">
+			<div class="flex justify-between items-center mb-2">
+				<h1 class="text-2xl font-bold">Members</h1>
 				<a
 					href={ templ.URL(fmt.Sprintf("/s/%s/members/new", access.Token)) }
-					class="btn btn-ghost"
+					class="btn btn-sm"
 				>
 					<svg
-						class="size-5"
+						class="size-4"
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 24 24"
 						fill="none"
@@ -37,7 +37,7 @@ templ MembersList(members []db.Member) {
 			</div>
 			<ul class="list text-base">
 				for _, member := range members {
-					<li class="list-row items-center">
+					<li class="list-row px-0 items-center">
 						<div class="avatar avatar-placeholder">
 							<div class="bg-neutral text-neutral-content w-8 rounded-full">
 								<span class="text-sm">{ string([]rune(member.Name)[:2]) }</span>
@@ -46,11 +46,11 @@ templ MembersList(members []db.Member) {
 						<div class="font-semibold text-neutral">{ member.Name }</div>
 						<div class="tooltip" data-tip="Edit">
 							<a
-								class="btn btn-square btn-ghost"
+								class="btn btn-square btn-ghost btn-sm"
 								href={ templ.URL(fmt.Sprintf("/s/%s/members/%s/edit", access.Token, member.PublicID)) }
 							>
 								<svg
-									class="size-5"
+									class="size-4"
 									xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 24 24"
 									fill="none"
@@ -67,11 +67,11 @@ templ MembersList(members []db.Member) {
 						if member.ID != identity.Member.ID {
 							<div class="tooltip" data-tip="Remove">
 								<a
-									class="btn btn-square btn-ghost"
+									class="btn btn-square btn-ghost btn-sm"
 									href={ templ.URL(fmt.Sprintf("/s/%s/members/%s/delete", access.Token, member.PublicID)) }
 								>
 									<svg
-										class="size-5"
+										class="size-4"
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 24 24"
 										fill="none"
@@ -89,9 +89,9 @@ templ MembersList(members []db.Member) {
 								</a>
 							</div>
 						} else {
-							<a class="btn btn-square btn-ghost btn-disabled" tabindex="-1" role="button" aria-disabled="true">
+							<a class="btn btn-square btn-ghost btn-sm btn-disabled" tabindex="-1" role="button" aria-disabled="true">
 								<svg
-									class="size-5"
+									class="size-4"
 								></svg>
 							</a>
 						}
