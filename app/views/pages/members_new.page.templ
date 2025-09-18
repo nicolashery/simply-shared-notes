@@ -9,7 +9,7 @@ import (
 
 templ MembersNew(form *forms.CreateMember, errors forms.Errors) {
 	{{ access := rctx.GetAccess(ctx) }}
-	@layouts.Space() {
+	@layouts.Space(nil) {
 		<div>
 			<h1 class="text-2xl font-bold mb-4">Add member</h1>
 			<form

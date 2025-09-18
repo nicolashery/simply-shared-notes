@@ -10,7 +10,7 @@ import (
 templ MembersEdit(form *forms.UpdateMember, errors forms.Errors) {
 	{{ access := rctx.GetAccess(ctx) }}
 	{{ member := rctx.GetMember(ctx) }}
-	@layouts.Space() {
+	@layouts.Space(nil) {
 		<div>
 			<h1 class="text-2xl font-bold mb-4">Edit member</h1>
 			<form

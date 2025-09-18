@@ -10,7 +10,7 @@ import (
 
 templ NotesList(notes []db.ListNotesRow) {
 	{{ access := rctx.GetAccess(ctx) }}
-	@layouts.Space() {
+	@layouts.Space(nil) {
 		<div>
 			if len(notes) == 0 {
 				<h1 class="text-2xl font-bold mb-2">Notes</h1>

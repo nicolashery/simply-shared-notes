@@ -9,7 +9,7 @@ import (
 templ NotesDelete() {
 	{{ access := rctx.GetAccess(ctx) }}
 	{{ note := rctx.GetNote(ctx) }}
-	@layouts.Space() {
+	@layouts.Space(nil) {
 		<div>
 			<h1 class="text-2xl font-bold mb-4">Delete note</h1>
 			<p class="mb-4 text-sm opacity-60">

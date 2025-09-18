@@ -12,12 +12,12 @@ import (
 	"strings"
 )
 
-templ Space() {
+templ Space(assets []string) {
 	{{ route := chi.RouteContext(ctx).RoutePattern() }}
 	{{ space := rctx.GetSpace(ctx) }}
 	{{ access := rctx.GetAccess(ctx) }}
 	{{ identity := rctx.GetIdentity(ctx) }}
-	@Base(space.Name) {
+	@Base(space.Name, assets) {
 		<div>
 			@navBar(route, space, access, identity)
 			<div class="px-4 pb-6">

@@ -10,7 +10,7 @@ import (
 templ MembersList(members []db.Member) {
 	{{ access := rctx.GetAccess(ctx) }}
 	{{ identity := rctx.GetIdentity(ctx) }}
-	@layouts.Space() {
+	@layouts.Space(nil) {
 		<div>
 			<div class="flex justify-between items-center mb-2">
 				<h1 class="text-2xl font-bold">Members</h1>

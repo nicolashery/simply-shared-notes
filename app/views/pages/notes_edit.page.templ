@@ -10,7 +10,7 @@ import (
 templ NotesEdit(form *forms.UpdateNote, errors forms.Errors) {
 	{{ access := rctx.GetAccess(ctx) }}
 	{{ note := rctx.GetNote(ctx) }}
-	@layouts.Space() {
+	@layouts.Space([]string{"assets/editor.js"}) {
 		<div>
 			<h1 class="text-2xl font-bold mb-4">Edit note</h1>
 			<form

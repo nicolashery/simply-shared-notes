@@ -9,7 +9,7 @@ import (
 templ MembersDelete() {
 	{{ access := rctx.GetAccess(ctx) }}
 	{{ member := rctx.GetMember(ctx) }}
-	@layouts.Space() {
+	@layouts.Space(nil) {
 		<div>
 			<h1 class="text-2xl font-bold mb-4">Remove member</h1>
 			<p class="mb-4 text-sm opacity-60">
