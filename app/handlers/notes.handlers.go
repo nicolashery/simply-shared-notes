@@ -216,3 +216,45 @@ func handleNotesUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerFun
 		http.Redirect(w, r, fmt.Sprintf("/s/%s/notes/%s", access.Token, note.PublicID), http.StatusSeeOther)
 	}
 }
+
+func handleNotesDeleteConfirm(logger *slog.Logger) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		err := pages.NotesDelete().Render(r.Context(), w)
+		if err != nil {
+			logger.Error(
+				"failed to render template",
+				slog.Any("error", err),
+				slog.String("template", "NotesDelete"),
+			)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+		}
+	}
+}
+
+func handleNotesDelete(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		note := rctx.GetNote(r.Context())
+
+		err := queries.DeleteNote(r.Context(), note.ID)
+		if err != nil {
+			logger.Error("error deleting note in database", slog.Any("error", err))
+			http.Error(w, "error deleting note", http.StatusInternalServerError)
+			return
+		}
+
+		sess := rctx.GetSession(r.Context())
+		sess.AddFlash(session.FlashMessage{
+			Type:    session.FlashType_Success,
+			Content: fmt.Sprintf("Deleted note: %s", note.Title),
+		})
+		err = sess.Save(r, w)
+		if err != nil {
+			logger.Error("failed to save session", slog.Any("error", err))
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+			return
+		}
+
+		access := rctx.GetAccess(r.Context())
+		http.Redirect(w, r, fmt.Sprintf("/s/%s/notes", access.Token), http.StatusSeeOther)
+	}
+}
