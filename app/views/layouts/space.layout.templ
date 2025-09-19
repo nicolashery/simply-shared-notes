@@ -15,11 +15,12 @@ import (
 templ Space(assets []string) {
 	{{ route := chi.RouteContext(ctx).RoutePattern() }}
 	{{ space := rctx.GetSpace(ctx) }}
+	{{ stats := rctx.GetSpaceStats(ctx) }}
 	{{ access := rctx.GetAccess(ctx) }}
 	{{ identity := rctx.GetIdentity(ctx) }}
 	@Base(space.Name, assets) {
 		<div>
-			@navBar(route, space, access, identity)
+			@navBar(route, space, stats, access, identity)
 			<div class="px-4 pb-6">
 				for _, message := range rctx.GetFlashMessages(ctx) {
 					@components.FlashMessage(&message)
@@ -30,11 +31,11 @@ templ Space(assets []string) {
 	}
 }
 
-templ navBar(route string, space *db.Space, access *acc.Access, identity *identity.Identity) {
+templ navBar(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *acc.Access, identity *identity.Identity) {
 	<div class="navbar bg-base-100 px-4 border-b-2 border-base-300 mb-6">
 		<div class="navbar-start">
 			<div>
-				@navMenu(route, space, access)
+				@navMenu(route, space, stats, access)
 			</div>
 		</div>
 		<div class="navbar-center">
@@ -48,7 +49,7 @@ templ navBar(route string, space *db.Space, access *acc.Access, identity *identi
 	</div>
 }
 
-templ navMenu(route string, space *db.Space, access *acc.Access) {
+templ navMenu(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *acc.Access) {
 	<div class="drawer">
 		<input id="nav-drawer" type="checkbox" class="drawer-toggle"/>
 		<div class="drawer-content">
@@ -114,7 +115,7 @@ templ navMenu(route string, space *db.Space, access *acc.Access) {
 							<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path>
 						</svg>
 						Notes
-						<span class="badge badge-sm">7</span>
+						<span class="badge badge-sm">{ stats.NotesCount }</span>
 					</a>
 				</li>
 				<li>
@@ -135,7 +136,7 @@ templ navMenu(route string, space *db.Space, access *acc.Access) {
 							<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
 						</svg>
 						Members
-						<span class="badge badge-sm">3</span>
+						<span class="badge badge-sm">{ stats.MembersCount }</span>
 					</a>
 				</li>
 				<li>

@@ -93,6 +93,28 @@ func (q *Queries) GetSpaceByAccessToken(ctx context.Context, token string) (Spac
 	return i, err
 }
 
+const getSpaceStats = `-- name: GetSpaceStats :one
+SELECT
+  COUNT(DISTINCT n.id) AS notes_count,
+  COUNT(DISTINCT m.id) AS members_count
+FROM spaces s
+LEFT JOIN notes n ON n.space_id = s.id
+LEFT JOIN members m ON m.space_id = s.id
+WHERE s.id = ?1
+`
+
+type GetSpaceStatsRow struct {
+	NotesCount   int64
+	MembersCount int64
+}
+
+func (q *Queries) GetSpaceStats(ctx context.Context, spaceID int64) (GetSpaceStatsRow, error) {
+	row := q.db.QueryRowContext(ctx, getSpaceStats, spaceID)
+	var i GetSpaceStatsRow
+	err := row.Scan(&i.NotesCount, &i.MembersCount)
+	return i, err
+}
+
 const updateSpace = `-- name: UpdateSpace :one
 UPDATE spaces
 SET updated_at = ?1,

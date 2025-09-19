@@ -24,6 +24,15 @@ WHERE admin_token = @token
   OR view_token = @token
 LIMIT 1;
 
+-- name: GetSpaceStats :one
+SELECT
+  COUNT(DISTINCT n.id) AS notes_count,
+  COUNT(DISTINCT m.id) AS members_count
+FROM spaces s
+LEFT JOIN notes n ON n.space_id = s.id
+LEFT JOIN members m ON m.space_id = s.id
+WHERE s.id = @space_id;
+
 -- name: UpdateSpaceCreatedBy :exec
 UPDATE spaces
 SET created_by = @created_by,

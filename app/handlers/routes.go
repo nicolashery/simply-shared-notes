@@ -32,6 +32,7 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 
 		r.Group(func(r chi.Router) {
 			r.Use(rctx.IdentityCtxMiddleware(logger, queries))
+			r.Use(rctx.SpaceStatsCtxMiddleware(queries))
 			r.Use(rctx.FlashCtxMiddleware(logger))
 
 			r.Get("/", handleSpacesShow(logger))
