@@ -10,7 +10,7 @@ templ NotesShow(renderedMarkdown string) {
 	{{ access := rctx.GetAccess(ctx) }}
 	{{ note := rctx.GetNote(ctx) }}
 	@layouts.Space(nil) {
-		<div class="flex justify-between mb-6">
+		<div class="flex justify-between mb-2">
 			<a
 				href={ templ.URL(fmt.Sprintf("/s/%s/notes", access.Token)) }
 				class="btn btn-sm"
