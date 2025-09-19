@@ -1,0 +1,53 @@
+package pages
+
+import (
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
+	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
+)
+
+templ ThemeSelect() {
+	{{ theme := rctx.GetTheme(ctx) }}
+	@layouts.Landing("Change theme") {
+		<div class="max-w-md mx-auto py-4">
+			<h1 class="text-2xl font-bold mb-1.5">Change theme</h1>
+			<p class="mb-4 text-sm opacity-60">
+				Choose your preferred color theme:
+			</p>
+			<form method="POST" action="/theme" class="flex flex-col gap-3">
+				<label class="flex items-center cursor-pointer gap-2">
+					<input
+						type="radio"
+						name="theme"
+						value=""
+						class="radio radio-sm"
+						checked?={ theme == "" }
+					/>
+					<span>System</span>
+					<span class="text-sm opacity-60">(follows your device settings)</span>
+				</label>
+				<label class="flex items-center cursor-pointer gap-2">
+					<input
+						type="radio"
+						name="theme"
+						value="light"
+						class="radio radio-sm"
+						checked?={ theme == "light" }
+					/>
+					<span>Light</span>
+				</label>
+				<label class="flex items-center cursor-pointer gap-2">
+					<input
+						type="radio"
+						name="theme"
+						value="dark"
+						class="radio radio-sm"
+						checked?={ theme == "dark" }
+					/>
+					<span>Dark</span>
+				</label>
+				<button type="submit" class="btn btn-primary mt-4">Save</button>
+				<p class="text-sm opacity-60">Your theme preference will be saved in a secure session cookie.</p>
+			</form>
+		</div>
+	}
+}

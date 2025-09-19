@@ -30,6 +30,7 @@
     --depth: 0;
     --noise: 0;
 }
+@custom-variant theme-dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @utility input {
     /* Font size 16px (vs 14px default) to prevent zoom on iOS when focusing input  */

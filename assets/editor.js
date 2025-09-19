@@ -4,7 +4,22 @@ window.OverType = OverType;
 
 const themeLight = "solar";
 const themeDark = "cave";
-const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+// Read once; SSR guarantees this won't change at runtime
+const rootTheme = document.documentElement.getAttribute("data-theme");
+const isForcedTheme = rootTheme !== null;
+const isForcedDark = rootTheme === "dark";
+
+const mql = window.matchMedia("(prefers-color-scheme: dark)");
+
+function isEffectiveDark() {
+  // Forced mode wins; otherwise fall back to OS preference
+  return isForcedTheme ? isForcedDark : mql.matches;
+}
+
+function applyEditorTheme() {
+  OverType.setTheme(isEffectiveDark() ? themeDark : themeLight);
+}
 
 function createEditor() {
   // Get initial value
@@ -16,7 +31,7 @@ function createEditor() {
   }
 
   // Set initial theme
-  OverType.setTheme(darkModeQuery.matches ? themeDark : themeLight);
+  applyEditorTheme();
 
   // Create editor
   const [editor] = new OverType("#editor", {
@@ -34,7 +49,14 @@ function createEditor() {
 window.addEventListener("DOMContentLoaded", () => {
   createEditor();
 
-  darkModeQuery.addEventListener("change", (updatedDarkModeQuery) => {
-    OverType.setTheme(updatedDarkModeQuery.matches ? themeDark : themeLight);
-  });
+  // In System mode, track OS changes
+  if (!isForcedTheme) {
+    const onChange = () => applyEditorTheme();
+    if (mql.addEventListener) {
+      mql.addEventListener("change", onChange);
+    } else if (mql.addListener) {
+      // Safari fallback
+      mql.addListener(onChange);
+    }
+  }
 });

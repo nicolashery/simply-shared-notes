@@ -4,8 +4,9 @@ import "github.com/nicolashery/simply-shared-notes/app/rctx"
 
 templ Base(title string, assets []string) {
 	{{ vite := rctx.GetVite(ctx) }}
+	{{ theme := rctx.GetTheme(ctx) }}
 	<!DOCTYPE html>
-	<html lang="en">
+	<html lang="en" if theme != "" { data-theme={ theme } }>
 		<head>
 			<meta charset="utf-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>

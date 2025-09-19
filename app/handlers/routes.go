@@ -14,6 +14,7 @@ import (
 
 func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries, sessionStore *sessions.CookieStore) {
 	r.Use(rctx.SessionCtxMiddleware(logger, sessionStore))
+	r.Use(rctx.ThemeCtxMiddleware())
 
 	r.Get("/", handleHome(logger))
 
@@ -21,6 +22,8 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 	r.Post("/new", handleSpacesCreate(cfg, logger, sqlDB, queries))
 
 	r.Get("/language", handleLanguageSelect(logger))
+	r.Get("/theme", handleThemeSelect(logger))
+	r.Post("/theme", handleThemeSet(logger))
 
 	r.Route("/s/{token}", func(r chi.Router) {
 		r.Use(rctx.SpaceCtxMiddleware(queries))
