@@ -112,6 +112,8 @@ func handleIdentityClear(logger *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		sess := rctx.GetSession(r.Context())
 		delete(sess.Values, session.IdentityKey)
+		redirect := redirectFromReferer(r)
+		sess.Values[session.RedirectKey] = redirect
 		err := sess.Save(r, w)
 		if err != nil {
 			logger.Error("failed to save session", slog.Any("error", err))
