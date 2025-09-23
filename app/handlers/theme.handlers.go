@@ -12,7 +12,9 @@ import (
 
 func handleThemeSelect(logger *slog.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := pages.ThemeSelect().Render(r.Context(), w)
+		redirect := redirectFromReferer(r)
+
+		err := pages.ThemeSelect(redirect).Render(r.Context(), w)
 		if err != nil {
 			logger.Error(
 				"failed to render template",
@@ -25,7 +27,8 @@ func handleThemeSelect(logger *slog.Logger) http.HandlerFunc {
 }
 
 type SelectThemeForm struct {
-	Theme string
+	Theme    string
+	Redirect string
 }
 
 func parseSelectThemeForm(r *http.Request, f *SelectThemeForm) error {
@@ -35,6 +38,7 @@ func parseSelectThemeForm(r *http.Request, f *SelectThemeForm) error {
 	}
 
 	f.Theme = strings.Trim(r.Form.Get("theme"), " ")
+	f.Redirect = strings.Trim(r.Form.Get("redirect"), " ")
 
 	return nil
 }
@@ -74,12 +78,11 @@ func handleThemeSet(logger *slog.Logger) http.HandlerFunc {
 			return
 		}
 
-		// Redirect back to referring page or home
-		referer := r.Header.Get("Referer")
-		if referer != "" {
-			http.Redirect(w, r, referer, http.StatusSeeOther)
-		} else {
-			http.Redirect(w, r, "/", http.StatusSeeOther)
+		redirect := safeRedirect(form.Redirect)
+		if redirect == "" {
+			redirect = "/"
 		}
+
+		http.Redirect(w, r, redirect, http.StatusSeeOther)
 	}
 }

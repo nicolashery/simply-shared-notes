@@ -13,7 +13,7 @@ import (
 	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
 )
 
-func ThemeSelect() templ.Component {
+func ThemeSelect(redirect string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -47,37 +47,50 @@ func ThemeSelect() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"max-w-md mx-auto py-4\"><h1 class=\"text-2xl font-bold mb-1.5\">Change theme</h1><p class=\"mb-4 text-sm opacity-60\">Choose your preferred color theme:</p><form method=\"POST\" action=\"/theme\" class=\"flex flex-col gap-3\"><label class=\"flex items-center cursor-pointer gap-2\"><input type=\"radio\" name=\"theme\" value=\"\" class=\"radio radio-sm\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"max-w-md mx-auto py-4\"><h1 class=\"text-2xl font-bold mb-1.5\">Change theme</h1><p class=\"mb-4 text-sm opacity-60\">Choose your preferred color theme:</p><form method=\"POST\" action=\"/theme\" class=\"flex flex-col gap-3\"><input type=\"hidden\" name=\"redirect\" value=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var3 string
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(redirect)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/theme_select.page.templ`, Line: 17, Col: 57}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"> <label class=\"flex items-center cursor-pointer gap-2\"><input type=\"radio\" name=\"theme\" value=\"\" class=\"radio radio-sm\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			if theme == "" {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " checked")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, " checked")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "> <span>System</span> <span class=\"text-sm opacity-60\">(follows your device settings)</span></label> <label class=\"flex items-center cursor-pointer gap-2\"><input type=\"radio\" name=\"theme\" value=\"light\" class=\"radio radio-sm\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "> <span>System</span> <span class=\"text-sm opacity-60\">(follows your device settings)</span></label> <label class=\"flex items-center cursor-pointer gap-2\"><input type=\"radio\" name=\"theme\" value=\"light\" class=\"radio radio-sm\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			if theme == "light" {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, " checked")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, " checked")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "> <span>Light</span></label> <label class=\"flex items-center cursor-pointer gap-2\"><input type=\"radio\" name=\"theme\" value=\"dark\" class=\"radio radio-sm\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "> <span>Light</span></label> <label class=\"flex items-center cursor-pointer gap-2\"><input type=\"radio\" name=\"theme\" value=\"dark\" class=\"radio radio-sm\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			if theme == "dark" {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, " checked")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, " checked")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "> <span>Dark</span></label> <button type=\"submit\" class=\"btn btn-primary mt-4\">Save</button><p class=\"text-sm opacity-60\">Your theme preference will be saved in a secure session cookie.</p></form></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "> <span>Dark</span></label> <button type=\"submit\" class=\"btn btn-primary mt-4\">Save</button><p class=\"text-sm opacity-60\">Your theme preference will be saved in a secure session cookie.</p></form></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -115,7 +115,7 @@ func navBar(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *a
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"navbar bg-base-100 px-4 border-b-2 border-base-300 mb-2 dark:mb-6 theme-dark:mb-6\"><div class=\"navbar-start\"><div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"navbar bg-base-100 px-4 border-b-2 border-base-300 mb-2\"><div class=\"navbar-start\"><div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

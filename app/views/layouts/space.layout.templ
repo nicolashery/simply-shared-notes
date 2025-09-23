@@ -32,7 +32,7 @@ templ Space(assets []string) {
 }
 
 templ navBar(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *acc.Access, identity *identity.Identity) {
-	<div class="navbar bg-base-100 px-4 border-b-2 border-base-300 mb-2 dark:mb-6 theme-dark:mb-6">
+	<div class="navbar bg-base-100 px-4 border-b-2 border-base-300 mb-2">
 		<div class="navbar-start">
 			<div>
 				@navMenu(route, space, stats, access)
