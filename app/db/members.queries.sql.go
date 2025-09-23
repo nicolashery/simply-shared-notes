@@ -8,6 +8,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"strings"
 	"time"
 )
 
@@ -132,6 +133,60 @@ ORDER BY name, id
 
 func (q *Queries) ListMembers(ctx context.Context, spaceID int64) ([]Member, error) {
 	rows, err := q.db.QueryContext(ctx, listMembers, spaceID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Member
+	for rows.Next() {
+		var i Member
+		if err := rows.Scan(
+			&i.ID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.CreatedBy,
+			&i.UpdatedBy,
+			&i.SpaceID,
+			&i.PublicID,
+			&i.Name,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listMembersByIDs = `-- name: ListMembersByIDs :many
+SELECT id, created_at, updated_at, created_by, updated_by, space_id, public_id, name FROM members
+WHERE space_id = ?1
+  AND id IN (/*SLICE:member_ids*/?)
+`
+
+type ListMembersByIDsParams struct {
+	SpaceID   int64
+	MemberIds []int64
+}
+
+func (q *Queries) ListMembersByIDs(ctx context.Context, arg ListMembersByIDsParams) ([]Member, error) {
+	query := listMembersByIDs
+	var queryParams []interface{}
+	queryParams = append(queryParams, arg.SpaceID)
+	if len(arg.MemberIds) > 0 {
+		for _, v := range arg.MemberIds {
+			queryParams = append(queryParams, v)
+		}
+		query = strings.Replace(query, "/*SLICE:member_ids*/?", strings.Repeat(",?", len(arg.MemberIds))[1:], 1)
+	} else {
+		query = strings.Replace(query, "/*SLICE:member_ids*/?", "NULL", 1)
+	}
+	rows, err := q.db.QueryContext(ctx, query, queryParams...)
 	if err != nil {
 		return nil, err
 	}

@@ -26,23 +26,11 @@ WHERE space_id = @space_id
 LIMIT 1;
 
 -- name: ListNotes :many
-SELECT
-    n.public_id,
-    n.created_at,
-    cb.public_id as created_by_public_id,
-    cb.name as created_by_name,
-    n.updated_at,
-    ub.public_id as updated_by_public_id,
-    ub.name as updated_by_name,
-    n.title
-FROM
-    notes n
-    LEFT JOIN members cb ON cb.id = n.created_by
-    LEFT JOIN members ub ON ub.id = n.updated_by
-WHERE n.space_id = @space_id
+SELECT * FROM notes
+WHERE space_id = @space_id
 ORDER BY
-    n.updated_at DESC,
-    n.id DESC;
+    updated_at DESC,
+    id DESC;
 
 -- name: UpdateNote :one
 UPDATE notes

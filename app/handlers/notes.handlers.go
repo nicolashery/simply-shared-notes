@@ -30,7 +30,14 @@ func handleNotesList(logger *slog.Logger, queries *db.Queries) http.HandlerFunc 
 			return
 		}
 
-		err = pages.NotesList(notes).Render(r.Context(), w)
+		memberIDs := collectCreatedUpdatedByIDsFromNotes(notes)
+		members, err := queries.ListMembersByIDs(r.Context(), db.ListMembersByIDsParams{
+			SpaceID:   space.ID,
+			MemberIds: memberIDs,
+		})
+		memberByIDs := memberListToMap(members)
+
+		err = pages.NotesList(notes, memberByIDs).Render(r.Context(), w)
 		if err != nil {
 			logger.Error(
 				"failed to render template",

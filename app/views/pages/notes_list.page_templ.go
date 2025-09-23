@@ -16,7 +16,7 @@ import (
 	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
 )
 
-func NotesList(notes []db.ListNotesRow) templ.Component {
+func NotesList(notes []db.Note, membersByID map[int64]db.Member) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -127,9 +127,9 @@ func NotesList(notes []db.ListNotesRow) templ.Component {
 							return templ_7745c5c3_Err
 						}
 						var templ_7745c5c3_Var7 string
-						templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.DisplayMemberName(note.UpdatedByName))
+						templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.DisplayMemberName(note.UpdatedBy, membersByID))
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/notes_list.page.templ`, Line: 77, Col: 57}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/notes_list.page.templ`, Line: 77, Col: 66}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 						if templ_7745c5c3_Err != nil {
@@ -167,9 +167,9 @@ func NotesList(notes []db.ListNotesRow) templ.Component {
 							return templ_7745c5c3_Err
 						}
 						var templ_7745c5c3_Var10 string
-						templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.DisplayMemberName(note.CreatedByName))
+						templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.DisplayMemberName(note.CreatedBy, membersByID))
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/notes_list.page.templ`, Line: 84, Col: 57}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/notes_list.page.templ`, Line: 84, Col: 66}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 						if templ_7745c5c3_Err != nil {

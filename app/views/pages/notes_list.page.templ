@@ -8,7 +8,7 @@ import (
 	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
 )
 
-templ NotesList(notes []db.ListNotesRow) {
+templ NotesList(notes []db.Note, membersByID map[int64]db.Member) {
 	{{ access := rctx.GetAccess(ctx) }}
 	@layouts.Space(nil) {
 		<div>
@@ -74,14 +74,14 @@ templ NotesList(notes []db.ListNotesRow) {
 								<div class="text-sm opacity-60">
 									if note.UpdatedAt != note.CreatedAt {
 										<span>Updated by </span>
-										{ helpers.DisplayMemberName(note.UpdatedByName) }
+										{ helpers.DisplayMemberName(note.UpdatedBy, membersByID) }
 										<span>on </span>
 										{ helpers.FormatDate(note.UpdatedAt) }
 										<span>at </span>
 										{ helpers.FormatTime(note.UpdatedAt) }
 									} else {
 										<span>Created by </span>
-										{ helpers.DisplayMemberName(note.CreatedByName) }
+										{ helpers.DisplayMemberName(note.CreatedBy, membersByID) }
 										<span>on </span>
 										{ helpers.FormatDate(note.CreatedAt) }
 										<span>at </span>

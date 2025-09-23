@@ -39,6 +39,11 @@ SELECT * FROM members
 WHERE space_id = @space_id
 ORDER BY name, id;
 
+-- name: ListMembersByIDs :many
+SELECT * FROM members
+WHERE space_id = @space_id
+  AND id IN (sqlc.slice('member_ids'));
+
 -- name: UpdateMember :one
 UPDATE members
 SET updated_at = @updated_at,
