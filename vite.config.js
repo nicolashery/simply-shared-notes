@@ -7,7 +7,12 @@ export default defineConfig({
     manifest: true,
     emptyOutDir: false,
     rollupOptions: {
-      input: ["assets/app.css", "assets/app.js", "assets/editor.js"],
+      input: [
+        "assets/app.css",
+        "assets/app.js",
+        "assets/editor.js",
+        "assets/clipboard.js",
+      ],
     },
   },
 });
