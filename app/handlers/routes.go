@@ -40,7 +40,7 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 
 			r.Get("/", handleSpacesShow(logger))
 			r.With(Authorize(access.Action_UpdateSpace)).Group(func(r chi.Router) {
-				r.Get("/settings", handleSpacesEdit(logger))
+				r.Get("/settings", handleSpacesEdit(logger, queries))
 				r.Post("/settings", handleSpacesUpdate(logger, queries))
 			})
 
@@ -58,7 +58,7 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 				r.Get("/", handleNotesShow(logger))
 
 				r.With(Authorize(access.Action_UpdateNote)).Group(func(r chi.Router) {
-					r.Get("/edit", handleNotesEdit(logger))
+					r.Get("/edit", handleNotesEdit(logger, queries))
 					r.Post("/edit", handleNotesUpdate(logger, queries))
 				})
 
@@ -77,7 +77,7 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 				r.Use(rctx.MemberCtxMiddleware(queries))
 
 				r.With(Authorize(access.Action_UpdateMember)).Group(func(r chi.Router) {
-					r.Get("/edit", handleMembersEdit(logger))
+					r.Get("/edit", handleMembersEdit(logger, queries))
 					r.Post("/edit", handleMembersUpdate(logger, queries))
 				})
 

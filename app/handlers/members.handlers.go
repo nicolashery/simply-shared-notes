@@ -120,14 +120,31 @@ func handleMembersCreate(logger *slog.Logger, queries *db.Queries) http.HandlerF
 	}
 }
 
-func handleMembersEdit(logger *slog.Logger) http.HandlerFunc {
+func handleMembersEdit(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		member := rctx.GetMember(r.Context())
 		form := forms.UpdateMember{
 			Name: member.Name,
 		}
 
-		err := pages.MembersEdit(&form, forms.EmptyErrors()).Render(r.Context(), w)
+		space := rctx.GetSpace(r.Context())
+		memberIDs := collectCreatedUpdatedByIDsFromMembers([]db.Member{*member})
+		members, err := queries.ListMembersByIDs(r.Context(), db.ListMembersByIDsParams{
+			SpaceID:   space.ID,
+			MemberIds: memberIDs,
+		})
+		if err != nil {
+			logger.Error(
+				"error getting members from database",
+				slog.Any("error", err),
+				slog.Int64("space_id", space.ID),
+			)
+			http.Error(w, "internal server err", http.StatusInternalServerError)
+			return
+		}
+		membersByID := memberListToMap(members)
+
+		err = pages.MembersEdit(&form, forms.EmptyErrors(), membersByID).Render(r.Context(), w)
 		if err != nil {
 			logger.Error(
 				"failed to render template",
@@ -143,8 +160,26 @@ func handleMembersUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerF
 	return func(w http.ResponseWriter, r *http.Request) {
 		form, errors := forms.ParseUpdateMember(r)
 		if errors != nil {
+			space := rctx.GetSpace(r.Context())
+			member := rctx.GetMember(r.Context())
+			memberIDs := collectCreatedUpdatedByIDsFromMembers([]db.Member{*member})
+			members, err := queries.ListMembersByIDs(r.Context(), db.ListMembersByIDsParams{
+				SpaceID:   space.ID,
+				MemberIds: memberIDs,
+			})
+			if err != nil {
+				logger.Error(
+					"error getting members from database",
+					slog.Any("error", err),
+					slog.Int64("space_id", space.ID),
+				)
+				http.Error(w, "internal server err", http.StatusInternalServerError)
+				return
+			}
+			membersByID := memberListToMap(members)
+
 			w.WriteHeader(http.StatusUnprocessableEntity)
-			err := pages.MembersEdit(&form, errors).Render(r.Context(), w)
+			err = pages.MembersEdit(&form, errors, membersByID).Render(r.Context(), w)
 			if err != nil {
 				logger.Error(
 					"failed to render template",

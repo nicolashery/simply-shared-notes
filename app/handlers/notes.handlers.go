@@ -35,9 +35,18 @@ func handleNotesList(logger *slog.Logger, queries *db.Queries) http.HandlerFunc 
 			SpaceID:   space.ID,
 			MemberIds: memberIDs,
 		})
-		memberByIDs := memberListToMap(members)
+		if err != nil {
+			logger.Error(
+				"error getting members from database",
+				slog.Any("error", err),
+				slog.Int64("space_id", space.ID),
+			)
+			http.Error(w, "internal server err", http.StatusInternalServerError)
+			return
+		}
+		membersByID := memberListToMap(members)
 
-		err = pages.NotesList(notes, memberByIDs).Render(r.Context(), w)
+		err = pages.NotesList(notes, membersByID).Render(r.Context(), w)
 		if err != nil {
 			logger.Error(
 				"failed to render template",
@@ -151,7 +160,7 @@ func handleNotesShow(logger *slog.Logger) http.HandlerFunc {
 	}
 }
 
-func handleNotesEdit(logger *slog.Logger) http.HandlerFunc {
+func handleNotesEdit(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		note := rctx.GetNote(r.Context())
 		form := forms.UpdateNote{
@@ -159,7 +168,24 @@ func handleNotesEdit(logger *slog.Logger) http.HandlerFunc {
 			Content: note.Content,
 		}
 
-		err := pages.NotesEdit(&form, forms.EmptyErrors()).Render(r.Context(), w)
+		space := rctx.GetSpace(r.Context())
+		memberIDs := collectCreatedUpdatedByIDsFromNotes([]db.Note{*note})
+		members, err := queries.ListMembersByIDs(r.Context(), db.ListMembersByIDsParams{
+			SpaceID:   space.ID,
+			MemberIds: memberIDs,
+		})
+		if err != nil {
+			logger.Error(
+				"error getting members from database",
+				slog.Any("error", err),
+				slog.Int64("space_id", space.ID),
+			)
+			http.Error(w, "internal server err", http.StatusInternalServerError)
+			return
+		}
+		membersByID := memberListToMap(members)
+
+		err = pages.NotesEdit(&form, forms.EmptyErrors(), membersByID).Render(r.Context(), w)
 		if err != nil {
 			logger.Error(
 				"failed to render template",
@@ -175,8 +201,26 @@ func handleNotesUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerFun
 	return func(w http.ResponseWriter, r *http.Request) {
 		form, errors := forms.ParseUpdateNote(r)
 		if errors != nil {
+			space := rctx.GetSpace(r.Context())
+			note := rctx.GetNote(r.Context())
+			memberIDs := collectCreatedUpdatedByIDsFromNotes([]db.Note{*note})
+			members, err := queries.ListMembersByIDs(r.Context(), db.ListMembersByIDsParams{
+				SpaceID:   space.ID,
+				MemberIds: memberIDs,
+			})
+			if err != nil {
+				logger.Error(
+					"error getting members from database",
+					slog.Any("error", err),
+					slog.Int64("space_id", space.ID),
+				)
+				http.Error(w, "internal server err", http.StatusInternalServerError)
+				return
+			}
+			membersByID := memberListToMap(members)
+
 			w.WriteHeader(http.StatusUnprocessableEntity)
-			err := pages.NotesEdit(&form, errors).Render(r.Context(), w)
+			err = pages.NotesEdit(&form, errors, membersByID).Render(r.Context(), w)
 			if err != nil {
 				logger.Error(
 					"failed to render template",

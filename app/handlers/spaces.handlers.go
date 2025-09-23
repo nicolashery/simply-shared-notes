@@ -196,14 +196,30 @@ func handleSpacesShow(logger *slog.Logger) http.HandlerFunc {
 	}
 }
 
-func handleSpacesEdit(logger *slog.Logger) http.HandlerFunc {
+func handleSpacesEdit(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		space := rctx.GetSpace(r.Context())
 		form := forms.UpdateSpace{
 			Name: space.Name,
 		}
 
-		err := pages.SpacesEdit(&form, forms.EmptyErrors()).Render(r.Context(), w)
+		memberIDs := collectCreatedUpdatedByIDsFromSpace(space)
+		members, err := queries.ListMembersByIDs(r.Context(), db.ListMembersByIDsParams{
+			SpaceID:   space.ID,
+			MemberIds: memberIDs,
+		})
+		if err != nil {
+			logger.Error(
+				"error getting members from database",
+				slog.Any("error", err),
+				slog.Int64("space_id", space.ID),
+			)
+			http.Error(w, "internal server err", http.StatusInternalServerError)
+			return
+		}
+		membersByID := memberListToMap(members)
+
+		err = pages.SpacesEdit(&form, forms.EmptyErrors(), membersByID).Render(r.Context(), w)
 		if err != nil {
 			logger.Error(
 				"failed to render template",
@@ -219,8 +235,25 @@ func handleSpacesUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerFu
 	return func(w http.ResponseWriter, r *http.Request) {
 		form, errors := forms.ParseUpdateSpace(r)
 		if errors != nil {
+			space := rctx.GetSpace(r.Context())
+			memberIDs := collectCreatedUpdatedByIDsFromSpace(space)
+			members, err := queries.ListMembersByIDs(r.Context(), db.ListMembersByIDsParams{
+				SpaceID:   space.ID,
+				MemberIds: memberIDs,
+			})
+			if err != nil {
+				logger.Error(
+					"error getting members from database",
+					slog.Any("error", err),
+					slog.Int64("space_id", space.ID),
+				)
+				http.Error(w, "internal server err", http.StatusInternalServerError)
+				return
+			}
+			membersByID := memberListToMap(members)
+
 			w.WriteHeader(http.StatusUnprocessableEntity)
-			err := pages.SpacesEdit(&form, errors).Render(r.Context(), w)
+			err = pages.SpacesEdit(&form, errors, membersByID).Render(r.Context(), w)
 			if err != nil {
 				logger.Error(
 					"failed to render template",

@@ -93,16 +93,14 @@ func collectCreatedUpdatedByIDsFromMembers(members []db.Member) []int64 {
 	return ids
 }
 
-func collectCreatedUpdatedByIDsFromSpaces(spaces []db.Space) []int64 {
+func collectCreatedUpdatedByIDsFromSpace(space *db.Space) []int64 {
 	idSet := make(map[int64]bool)
 
-	for _, space := range spaces {
-		if space.CreatedBy.Valid {
-			idSet[space.CreatedBy.Int64] = true
-		}
-		if space.UpdatedBy.Valid {
-			idSet[space.UpdatedBy.Int64] = true
-		}
+	if space.CreatedBy.Valid {
+		idSet[space.CreatedBy.Int64] = true
+	}
+	if space.UpdatedBy.Valid {
+		idSet[space.UpdatedBy.Int64] = true
 	}
 
 	ids := make([]int64, 0, len(idSet))

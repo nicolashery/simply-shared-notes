@@ -2,12 +2,14 @@ package pages
 
 import (
 	"fmt"
+	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/forms"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
+	"github.com/nicolashery/simply-shared-notes/app/views/components"
 	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
 )
 
-templ NotesEdit(form *forms.UpdateNote, errors forms.Errors) {
+templ NotesEdit(form *forms.UpdateNote, errors forms.Errors, membersByID map[int64]db.Member) {
 	{{ access := rctx.GetAccess(ctx) }}
 	{{ note := rctx.GetNote(ctx) }}
 	@layouts.Space([]string{"assets/editor.js"}) {
@@ -16,7 +18,7 @@ templ NotesEdit(form *forms.UpdateNote, errors forms.Errors) {
 			<form
 				method="POST"
 				action={ templ.URL(fmt.Sprintf("/s/%s/notes/%s/edit", access.Token, note.PublicID)) }
-				class="flex flex-col gap-4"
+				class="flex flex-col gap-4 mb-8"
 			>
 				<fieldset class="flex flex-col gap-1.5">
 					<label for="title" class="text-sm font-semibold">Title</label>
@@ -63,6 +65,7 @@ templ NotesEdit(form *forms.UpdateNote, errors forms.Errors) {
 					>Delete</a>
 				</div>
 			</form>
+			@components.CreatedUpdatedAtBy(note.CreatedAt, note.UpdatedAt, note.CreatedBy, note.UpdatedBy, membersByID)
 		</div>
 	}
 }

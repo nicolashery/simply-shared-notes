@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
-	"github.com/nicolashery/simply-shared-notes/app/views/helpers"
+	"github.com/nicolashery/simply-shared-notes/app/views/components"
 	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
 )
 
@@ -71,23 +71,11 @@ templ NotesList(notes []db.Note, membersByID map[int64]db.Member) {
 								>
 									{ note.Title }
 								</a>
-								<div class="text-sm opacity-60">
-									if note.UpdatedAt != note.CreatedAt {
-										<span>Updated by </span>
-										{ helpers.DisplayMemberName(note.UpdatedBy, membersByID) }
-										<span>on </span>
-										{ helpers.FormatDate(note.UpdatedAt) }
-										<span>at </span>
-										{ helpers.FormatTime(note.UpdatedAt) }
-									} else {
-										<span>Created by </span>
-										{ helpers.DisplayMemberName(note.CreatedBy, membersByID) }
-										<span>on </span>
-										{ helpers.FormatDate(note.CreatedAt) }
-										<span>at </span>
-										{ helpers.FormatTime(note.CreatedAt) }
-									}
-								</div>
+								if note.UpdatedAt != note.CreatedAt {
+									@components.UpdatedAtBy(note.UpdatedAt, note.UpdatedBy, membersByID)
+								} else {
+									@components.CreatedAtBy(note.CreatedAt, note.CreatedBy, membersByID)
+								}
 							</div>
 						</li>
 					}

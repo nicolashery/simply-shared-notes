@@ -2,12 +2,14 @@ package pages
 
 import (
 	"fmt"
+	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/forms"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
+	"github.com/nicolashery/simply-shared-notes/app/views/components"
 	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
 )
 
-templ MembersEdit(form *forms.UpdateMember, errors forms.Errors) {
+templ MembersEdit(form *forms.UpdateMember, errors forms.Errors, membersByID map[int64]db.Member) {
 	{{ access := rctx.GetAccess(ctx) }}
 	{{ member := rctx.GetMember(ctx) }}
 	@layouts.Space(nil) {
@@ -16,7 +18,7 @@ templ MembersEdit(form *forms.UpdateMember, errors forms.Errors) {
 			<form
 				method="POST"
 				action={ templ.URL(fmt.Sprintf("/s/%s/members/%s/edit", access.Token, member.PublicID)) }
-				class="flex flex-col gap-4"
+				class="flex flex-col gap-4 mb-8"
 			>
 				<fieldset class="flex flex-col gap-1.5">
 					<label for="name" class="text-sm font-semibold">Name</label>
@@ -41,6 +43,7 @@ templ MembersEdit(form *forms.UpdateMember, errors forms.Errors) {
 					>Cancel</a>
 				</div>
 			</form>
+			@components.CreatedUpdatedAtBy(member.CreatedAt, member.UpdatedAt, member.CreatedBy, member.UpdatedBy, membersByID)
 		</div>
 	}
 }
