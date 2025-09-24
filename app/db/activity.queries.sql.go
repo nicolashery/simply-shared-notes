@@ -64,3 +64,20 @@ func (q *Queries) CreateActivity(ctx context.Context, arg CreateActivityParams) 
 	)
 	return i, err
 }
+
+const setActivityEntityIDToNull = `-- name: SetActivityEntityIDToNull :exec
+UPDATE activity
+SET entity_id = NULL
+WHERE entity_type = ?1
+  AND entity_id = ?2
+`
+
+type SetActivityEntityIDToNullParams struct {
+	EntityType string
+	EntityID   sql.NullInt64
+}
+
+func (q *Queries) SetActivityEntityIDToNull(ctx context.Context, arg SetActivityEntityIDToNullParams) error {
+	_, err := q.db.ExecContext(ctx, setActivityEntityIDToNull, arg.EntityType, arg.EntityID)
+	return err
+}

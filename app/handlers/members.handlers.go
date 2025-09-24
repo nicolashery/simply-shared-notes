@@ -327,19 +327,73 @@ func handleMembersDeleteConfirm(logger *slog.Logger) http.HandlerFunc {
 	}
 }
 
-func handleMembersDelete(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
+func handleMembersDelete(logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		now := time.Now().UTC()
 		member := rctx.GetMember(r.Context())
 		identity := rctx.GetIdentity(r.Context())
+		space := rctx.GetSpace(r.Context())
 
 		if member.ID == identity.Member.ID {
 			http.Error(w, "cannot delete session identity member", http.StatusConflict)
 			return
 		}
 
-		err := queries.DeleteMember(r.Context(), member.ID)
+		activityPublicID, err := publicid.Generate()
+		if err != nil {
+			logger.Error("error generating activity public ID", slog.Any("error", err))
+			http.Error(w, "error deleting member", http.StatusInternalServerError)
+			return
+		}
+
+		tx, err := sqlDB.Begin()
+		if err != nil {
+			logger.Error("error starting transaction", slog.Any("error", err))
+			http.Error(w, "error deleting member", http.StatusInternalServerError)
+			return
+		}
+		defer func() {
+			if rbErr := tx.Rollback(); rbErr != nil && err == nil {
+				logger.Error("error rolling back transaction", slog.Any("error", rbErr))
+			}
+		}()
+		qtx := queries.WithTx(tx)
+
+		err = qtx.DeleteMember(r.Context(), member.ID)
 		if err != nil {
 			logger.Error("error deleting member in database", slog.Any("error", err))
+			http.Error(w, "error deleting member", http.StatusInternalServerError)
+			return
+		}
+
+		_, err = qtx.CreateActivity(r.Context(), db.CreateActivityParams{
+			CreatedAt:  now,
+			SpaceID:    space.ID,
+			PublicID:   activityPublicID,
+			MemberID:   sql.NullInt64{Int64: identity.Member.ID, Valid: true},
+			Action:     db.ActivityAction_Delete,
+			EntityType: db.ActivityEntity_Member,
+			EntityID:   sql.NullInt64{Valid: false},
+		})
+		if err != nil {
+			logger.Error("error creating activity in database", slog.Any("error", err))
+			http.Error(w, "error deleting member", http.StatusInternalServerError)
+			return
+		}
+
+		err = qtx.SetActivityEntityIDToNull(r.Context(), db.SetActivityEntityIDToNullParams{
+			EntityType: db.ActivityEntity_Member,
+			EntityID:   sql.NullInt64{Int64: member.ID, Valid: true},
+		})
+		if err != nil {
+			logger.Error("error updating activity in database", slog.Any("error", err))
+			http.Error(w, "error deleting member", http.StatusInternalServerError)
+			return
+		}
+
+		err = tx.Commit()
+		if err != nil {
+			logger.Error("error committing transaction", slog.Any("error", err))
 			http.Error(w, "error deleting member", http.StatusInternalServerError)
 			return
 		}

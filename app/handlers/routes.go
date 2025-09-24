@@ -62,9 +62,9 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 					r.Post("/edit", handleNotesUpdate(logger, sqlDB, queries))
 				})
 
-				r.With(Authorize(access.Action_DeleteMember)).Group(func(r chi.Router) {
+				r.With(Authorize(access.Action_DeleteNote)).Group(func(r chi.Router) {
 					r.Get("/delete", handleNotesDeleteConfirm(logger))
-					r.Post("/delete", handleNotesDelete(logger, queries))
+					r.Post("/delete", handleNotesDelete(logger, sqlDB, queries))
 				})
 			})
 
@@ -83,7 +83,7 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 
 				r.With(Authorize(access.Action_DeleteMember)).Group(func(r chi.Router) {
 					r.Get("/delete", handleMembersDeleteConfirm(logger))
-					r.Post("/delete", handleMembersDelete(logger, queries))
+					r.Post("/delete", handleMembersDelete(logger, sqlDB, queries))
 				})
 			})
 

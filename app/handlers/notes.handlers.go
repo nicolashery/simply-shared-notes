@@ -369,13 +369,68 @@ func handleNotesDeleteConfirm(logger *slog.Logger) http.HandlerFunc {
 	}
 }
 
-func handleNotesDelete(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
+func handleNotesDelete(logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		now := time.Now().UTC()
+		identity := rctx.GetIdentity(r.Context())
 		note := rctx.GetNote(r.Context())
+		space := rctx.GetSpace(r.Context())
 
-		err := queries.DeleteNote(r.Context(), note.ID)
+		activityPublicID, err := publicid.Generate()
+		if err != nil {
+			logger.Error("error generating activity public ID", slog.Any("error", err))
+			http.Error(w, "error deleting note", http.StatusInternalServerError)
+			return
+		}
+
+		tx, err := sqlDB.Begin()
+		if err != nil {
+			logger.Error("error starting transaction", slog.Any("error", err))
+			http.Error(w, "error deleting note", http.StatusInternalServerError)
+			return
+		}
+		defer func() {
+			if rbErr := tx.Rollback(); rbErr != nil && err == nil {
+				logger.Error("error rolling back transaction", slog.Any("error", rbErr))
+			}
+		}()
+		qtx := queries.WithTx(tx)
+
+		err = qtx.DeleteNote(r.Context(), note.ID)
 		if err != nil {
 			logger.Error("error deleting note in database", slog.Any("error", err))
+			http.Error(w, "error deleting note", http.StatusInternalServerError)
+			return
+		}
+
+		_, err = qtx.CreateActivity(r.Context(), db.CreateActivityParams{
+			CreatedAt:  now,
+			SpaceID:    space.ID,
+			PublicID:   activityPublicID,
+			MemberID:   sql.NullInt64{Int64: identity.Member.ID, Valid: true},
+			Action:     db.ActivityAction_Delete,
+			EntityType: db.ActivityEntity_Note,
+			EntityID:   sql.NullInt64{Valid: false},
+		})
+		if err != nil {
+			logger.Error("error creating activity in database", slog.Any("error", err))
+			http.Error(w, "error deleting note", http.StatusInternalServerError)
+			return
+		}
+
+		err = qtx.SetActivityEntityIDToNull(r.Context(), db.SetActivityEntityIDToNullParams{
+			EntityType: db.ActivityEntity_Note,
+			EntityID:   sql.NullInt64{Int64: note.ID, Valid: true},
+		})
+		if err != nil {
+			logger.Error("error updating activity in database", slog.Any("error", err))
+			http.Error(w, "error deleting note", http.StatusInternalServerError)
+			return
+		}
+
+		err = tx.Commit()
+		if err != nil {
+			logger.Error("error committing transaction", slog.Any("error", err))
 			http.Error(w, "error deleting note", http.StatusInternalServerError)
 			return
 		}

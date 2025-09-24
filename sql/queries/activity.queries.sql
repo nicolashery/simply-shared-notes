@@ -16,3 +16,9 @@ INSERT INTO activity (
   @entity_type,
   @entity_id
 ) RETURNING *;
+
+-- name: SetActivityEntityIDToNull :exec
+UPDATE activity
+SET entity_id = NULL
+WHERE entity_type = @entity_type
+  AND entity_id = @entity_id;
