@@ -41,7 +41,7 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 			r.Get("/", handleSpacesShow(logger))
 			r.With(Authorize(access.Action_UpdateSpace)).Group(func(r chi.Router) {
 				r.Get("/settings", handleSpacesEdit(logger, queries))
-				r.Post("/settings", handleSpacesUpdate(logger, queries))
+				r.Post("/settings", handleSpacesUpdate(logger, sqlDB, queries))
 			})
 
 			r.With(Authorize(access.Action_ViewTokens)).

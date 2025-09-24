@@ -77,6 +77,20 @@ func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, 
 			return
 		}
 
+		spaceActivityPublicID, err := publicid.Generate()
+		if err != nil {
+			logger.Error("error generating activity public ID", slog.Any("error", err))
+			http.Error(w, "error creating space", http.StatusInternalServerError)
+			return
+		}
+
+		memberActivityPublicID, err := publicid.Generate()
+		if err != nil {
+			logger.Error("error generating activity public ID", slog.Any("error", err))
+			http.Error(w, "error creating space", http.StatusInternalServerError)
+			return
+		}
+
 		now := time.Now().UTC()
 
 		space, member, err := createSpaceAndFirstMember(
@@ -87,6 +101,8 @@ func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, 
 			now,
 			tokens,
 			memberPublicID,
+			spaceActivityPublicID,
+			memberActivityPublicID,
 		)
 		if err != nil {
 			logger.Error("error creating space and first member in database", slog.Any("error", err))
@@ -119,6 +135,8 @@ func createSpaceAndFirstMember(
 	now time.Time,
 	tokens access.AccessTokens,
 	memberPublicID string,
+	spaceActivityPublicID string,
+	memberActivityPublicID string,
 ) (*db.Space, *db.Member, error) {
 	tx, err := sqlDB.Begin()
 	if err != nil {
@@ -169,6 +187,32 @@ func createSpaceAndFirstMember(
 	err = qtx.UpdateMemberCreatedBy(ctx, db.UpdateMemberCreatedByParams{
 		MemberID:  member.ID,
 		CreatedBy: sql.NullInt64{Int64: member.ID, Valid: true},
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	_, err = qtx.CreateActivity(ctx, db.CreateActivityParams{
+		CreatedAt:  now,
+		SpaceID:    space.ID,
+		PublicID:   spaceActivityPublicID,
+		MemberID:   sql.NullInt64{Int64: member.ID, Valid: true},
+		Action:     db.ActivityAction_Create,
+		EntityType: db.ActivityEntity_Space,
+		EntityID:   sql.NullInt64{Int64: space.ID, Valid: true},
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	_, err = qtx.CreateActivity(ctx, db.CreateActivityParams{
+		CreatedAt:  now,
+		SpaceID:    space.ID,
+		PublicID:   memberActivityPublicID,
+		MemberID:   sql.NullInt64{Int64: member.ID, Valid: true},
+		Action:     db.ActivityAction_Create,
+		EntityType: db.ActivityEntity_Member,
+		EntityID:   sql.NullInt64{Int64: member.ID, Valid: true},
 	})
 	if err != nil {
 		return nil, nil, err
@@ -231,7 +275,7 @@ func handleSpacesEdit(logger *slog.Logger, queries *db.Queries) http.HandlerFunc
 	}
 }
 
-func handleSpacesUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
+func handleSpacesUpdate(logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		form, errors := forms.ParseUpdateSpace(r)
 		if errors != nil {
@@ -265,10 +309,32 @@ func handleSpacesUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerFu
 			return
 		}
 
+		activityPublicID, err := publicid.Generate()
+		if err != nil {
+			logger.Error("error generating activity public ID", slog.Any("error", err))
+			http.Error(w, "error updating space", http.StatusInternalServerError)
+			return
+		}
+
 		now := time.Now().UTC()
 		identity := rctx.GetIdentity(r.Context())
 		space := rctx.GetSpace(r.Context())
-		spaceUpdated, err := queries.UpdateSpace(
+
+		// Start transaction to update space and create activity atomically
+		tx, err := sqlDB.Begin()
+		if err != nil {
+			logger.Error("error starting transaction", slog.Any("error", err))
+			http.Error(w, "error updating space", http.StatusInternalServerError)
+			return
+		}
+		defer func() {
+			if rbErr := tx.Rollback(); rbErr != nil && err == nil {
+				logger.Error("error rolling back transaction", slog.Any("error", rbErr))
+			}
+		}()
+		qtx := queries.WithTx(tx)
+
+		spaceUpdated, err := qtx.UpdateSpace(
 			r.Context(),
 			db.UpdateSpaceParams{
 				UpdatedAt: now,
@@ -279,6 +345,28 @@ func handleSpacesUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerFu
 		)
 		if err != nil {
 			logger.Error("error updating space in database", slog.Any("error", err))
+			http.Error(w, "error updating space", http.StatusInternalServerError)
+			return
+		}
+
+		_, err = qtx.CreateActivity(r.Context(), db.CreateActivityParams{
+			CreatedAt:  now,
+			SpaceID:    space.ID,
+			PublicID:   activityPublicID,
+			MemberID:   sql.NullInt64{Int64: identity.Member.ID, Valid: true},
+			Action:     db.ActivityAction_Update,
+			EntityType: db.ActivityEntity_Space,
+			EntityID:   sql.NullInt64{Int64: space.ID, Valid: true},
+		})
+		if err != nil {
+			logger.Error("error creating activity in database", slog.Any("error", err))
+			http.Error(w, "error updating space", http.StatusInternalServerError)
+			return
+		}
+
+		err = tx.Commit()
+		if err != nil {
+			logger.Error("error committing transaction", slog.Any("error", err))
 			http.Error(w, "error updating space", http.StatusInternalServerError)
 			return
 		}

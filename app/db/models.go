@@ -9,6 +9,17 @@ import (
 	"time"
 )
 
+type Activity struct {
+	ID         int64
+	CreatedAt  time.Time
+	SpaceID    int64
+	PublicID   string
+	MemberID   sql.NullInt64
+	Action     string
+	EntityType string
+	EntityID   sql.NullInt64
+}
+
 type Member struct {
 	ID        int64
 	CreatedAt time.Time
