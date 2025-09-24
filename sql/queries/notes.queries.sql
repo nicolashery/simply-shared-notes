@@ -32,6 +32,11 @@ ORDER BY
     updated_at DESC,
     id DESC;
 
+-- name: ListNotesByIDs :many
+SELECT * FROM notes
+WHERE space_id = @space_id
+    AND id IN (sqlc.slice('note_ids'));
+
 -- name: UpdateNote :one
 UPDATE notes
 SET updated_at = @updated_at,

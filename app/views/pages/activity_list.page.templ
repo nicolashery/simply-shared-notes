@@ -1,9 +1,85 @@
 package pages
 
-import "github.com/nicolashery/simply-shared-notes/app/views/layouts"
+import (
+	"fmt"
+	"github.com/nicolashery/simply-shared-notes/app/db"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
+	"github.com/nicolashery/simply-shared-notes/app/views/helpers"
+	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
+)
 
-templ ActivityList() {
+templ ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesByID map[int64]db.Note) {
+	{{ access := rctx.GetAccess(ctx) }}
 	@layouts.Space(nil) {
-		<div>Activity</div>
+		<div>
+			<h1 class="text-2xl font-bold mb-2">Activity</h1>
+			<ul class="list">
+				for _, activity := range entries {
+					<li class="list-row px-0">
+						<a id={ activity.PublicID } href={ "#" + activity.PublicID } class="text-xs opacity-50">
+							{ helpers.FormatDate(activity.CreatedAt) }
+							{ " at " }
+							{ helpers.FormatTime(activity.CreatedAt) }
+						</a>
+						<div class="text-xs">
+							<span class="opacity-75">{ helpers.DisplayMemberName(activity.MemberID, membersByID) }</span>
+							<span class="opacity-50">
+								if activity.Action == db.ActivityAction_Create {
+									{ " created " }
+								} else if activity.Action == db.ActivityAction_Update {
+									{ " updated " }
+								} else if activity.Action == db.ActivityAction_Delete {
+									{ " deleted a " }
+								} else {
+									{ " [unknown action] " }
+								}
+							</span>
+							<span class="opacity-50">
+								if activity.EntityType == db.ActivityEntity_Space {
+									{ " this space" }
+								} else if activity.EntityType == db.ActivityEntity_Member {
+									{ " member" }
+								} else if activity.EntityType == db.ActivityEntity_Note {
+									{ " note" }
+								} else {
+									{ " unknown entity" }
+								}
+							</span>
+							if activity.Action != db.ActivityAction_Delete && activity.EntityType != db.ActivityEntity_Space {
+								<span class="opacity-75">
+									if activity.EntityType == db.ActivityEntity_Member {
+										if !activity.EntityID.Valid {
+											{ " Deleted Member" }
+										} else if member, ok := membersByID[activity.EntityID.Int64]; ok {
+											<a
+												class="link"
+												href={ templ.URL(fmt.Sprintf("/s/%s/members/%s/edit", access.Token, member.PublicID)) }
+											>
+												{ " "+member.Name }
+											</a>
+										} else {
+											{ " Unknown Member" }
+										}
+									} else if activity.EntityType == db.ActivityEntity_Note {
+										if !activity.EntityID.Valid {
+											{ " Deleted Note" }
+										} else if note, ok := notesByID[activity.EntityID.Int64]; ok {
+											<a
+												class="link"
+												href={ templ.URL(fmt.Sprintf("/s/%s/notes/%s", access.Token, note.PublicID)) }
+											>
+												{ " "+note.Title }
+											</a>
+										} else {
+											{ " Unknown Note" }
+										}
+									}
+								</span>
+							}
+						</div>
+					</li>
+				}
+			</ul>
+		</div>
 	}
 }

@@ -53,6 +53,14 @@ func memberListToMap(members []db.Member) map[int64]db.Member {
 	return memberMap
 }
 
+func noteListToMap(notes []db.Note) map[int64]db.Note {
+	noteMap := make(map[int64]db.Note, len(notes))
+	for _, note := range notes {
+		noteMap[note.ID] = note
+	}
+	return noteMap
+}
+
 func collectCreatedUpdatedByIDsFromNotes(notes []db.Note) []int64 {
 	idSet := make(map[int64]bool)
 
@@ -101,6 +109,46 @@ func collectCreatedUpdatedByIDsFromSpace(space *db.Space) []int64 {
 	}
 	if space.UpdatedBy.Valid {
 		idSet[space.UpdatedBy.Int64] = true
+	}
+
+	ids := make([]int64, 0, len(idSet))
+	for id := range idSet {
+		ids = append(ids, id)
+	}
+
+	return ids
+}
+
+func collectMemberIDsFromActivity(entries []db.Activity) []int64 {
+	idSet := make(map[int64]bool)
+
+	for _, activity := range entries {
+		if activity.MemberID.Valid {
+			idSet[activity.MemberID.Int64] = true
+		}
+		if activity.MemberID.Valid {
+			idSet[activity.MemberID.Int64] = true
+		}
+		if activity.EntityType == db.ActivityEntity_Member && activity.EntityID.Valid {
+			idSet[activity.EntityID.Int64] = true
+		}
+	}
+
+	ids := make([]int64, 0, len(idSet))
+	for id := range idSet {
+		ids = append(ids, id)
+	}
+
+	return ids
+}
+
+func collectNoteIDsFromActivity(entries []db.Activity) []int64 {
+	idSet := make(map[int64]bool)
+
+	for _, activity := range entries {
+		if activity.EntityType == db.ActivityEntity_Note && activity.EntityID.Valid {
+			idSet[activity.EntityID.Int64] = true
+		}
 	}
 
 	ids := make([]int64, 0, len(idSet))

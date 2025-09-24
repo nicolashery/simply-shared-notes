@@ -14,7 +14,6 @@ CREATE TABLE activity (
 );
 
 CREATE INDEX idx_activities_space_id_created_at ON activity(space_id, created_at DESC);
-CREATE INDEX idx_activities_member_id ON activity(member_id);
 CREATE INDEX idx_activities_entity_type_entity_id ON activity(entity_type, entity_id);
 CREATE UNIQUE INDEX idx_activities_space_id_public_id ON activity(space_id, public_id);
 

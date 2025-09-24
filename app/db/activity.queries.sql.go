@@ -65,6 +65,52 @@ func (q *Queries) CreateActivity(ctx context.Context, arg CreateActivityParams) 
 	return i, err
 }
 
+const listActivity = `-- name: ListActivity :many
+SELECT id, created_at, space_id, public_id, member_id, "action", entity_type, entity_id FROM activity
+WHERE space_id = ?1
+ORDER BY
+    created_at DESC,
+    id DESC
+LIMIT ?2
+`
+
+type ListActivityParams struct {
+	SpaceID int64
+	Limit   int64
+}
+
+func (q *Queries) ListActivity(ctx context.Context, arg ListActivityParams) ([]Activity, error) {
+	rows, err := q.db.QueryContext(ctx, listActivity, arg.SpaceID, arg.Limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Activity
+	for rows.Next() {
+		var i Activity
+		if err := rows.Scan(
+			&i.ID,
+			&i.CreatedAt,
+			&i.SpaceID,
+			&i.PublicID,
+			&i.MemberID,
+			&i.Action,
+			&i.EntityType,
+			&i.EntityID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const setActivityEntityIDToNull = `-- name: SetActivityEntityIDToNull :exec
 UPDATE activity
 SET entity_id = NULL

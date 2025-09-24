@@ -22,3 +22,11 @@ UPDATE activity
 SET entity_id = NULL
 WHERE entity_type = @entity_type
   AND entity_id = @entity_id;
+
+-- name: ListActivity :many
+SELECT * FROM activity
+WHERE space_id = @space_id
+ORDER BY
+    created_at DESC,
+    id DESC
+LIMIT @limit;

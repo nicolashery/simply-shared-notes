@@ -8,6 +8,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"strings"
 	"time"
 )
 
@@ -118,6 +119,61 @@ ORDER BY
 
 func (q *Queries) ListNotes(ctx context.Context, spaceID int64) ([]Note, error) {
 	rows, err := q.db.QueryContext(ctx, listNotes, spaceID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Note
+	for rows.Next() {
+		var i Note
+		if err := rows.Scan(
+			&i.ID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.CreatedBy,
+			&i.UpdatedBy,
+			&i.SpaceID,
+			&i.PublicID,
+			&i.Title,
+			&i.Content,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listNotesByIDs = `-- name: ListNotesByIDs :many
+SELECT id, created_at, updated_at, created_by, updated_by, space_id, public_id, title, content FROM notes
+WHERE space_id = ?1
+    AND id IN (/*SLICE:note_ids*/?)
+`
+
+type ListNotesByIDsParams struct {
+	SpaceID int64
+	NoteIds []int64
+}
+
+func (q *Queries) ListNotesByIDs(ctx context.Context, arg ListNotesByIDsParams) ([]Note, error) {
+	query := listNotesByIDs
+	var queryParams []interface{}
+	queryParams = append(queryParams, arg.SpaceID)
+	if len(arg.NoteIds) > 0 {
+		for _, v := range arg.NoteIds {
+			queryParams = append(queryParams, v)
+		}
+		query = strings.Replace(query, "/*SLICE:note_ids*/?", strings.Repeat(",?", len(arg.NoteIds))[1:], 1)
+	} else {
+		query = strings.Replace(query, "/*SLICE:note_ids*/?", "NULL", 1)
+	}
+	rows, err := q.db.QueryContext(ctx, query, queryParams...)
 	if err != nil {
 		return nil, err
 	}
