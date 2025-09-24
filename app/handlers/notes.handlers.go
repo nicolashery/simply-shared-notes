@@ -74,7 +74,7 @@ func handleNotesNew(logger *slog.Logger) http.HandlerFunc {
 	}
 }
 
-func handleNotesCreate(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
+func handleNotesCreate(logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		form, errors := forms.ParseCreateNote(r)
 		if errors != nil {
@@ -97,11 +97,32 @@ func handleNotesCreate(logger *slog.Logger, queries *db.Queries) http.HandlerFun
 			http.Error(w, "error creating note", http.StatusInternalServerError)
 			return
 		}
+
+		activityPublicID, err := publicid.Generate()
+		if err != nil {
+			logger.Error("error generating activity public ID", slog.Any("error", err))
+			http.Error(w, "error creating note", http.StatusInternalServerError)
+			return
+		}
+
 		identity := rctx.GetIdentity(r.Context())
 		space := rctx.GetSpace(r.Context())
 		now := time.Now().UTC()
 
-		note, err := queries.CreateNote(
+		tx, err := sqlDB.Begin()
+		if err != nil {
+			logger.Error("error starting transaction", slog.Any("error", err))
+			http.Error(w, "error creating note", http.StatusInternalServerError)
+			return
+		}
+		defer func() {
+			if rbErr := tx.Rollback(); rbErr != nil && err == nil {
+				logger.Error("error rolling back transaction", slog.Any("error", rbErr))
+			}
+		}()
+		qtx := queries.WithTx(tx)
+
+		note, err := qtx.CreateNote(
 			r.Context(),
 			db.CreateNoteParams{
 				CreatedAt: now,
@@ -116,6 +137,28 @@ func handleNotesCreate(logger *slog.Logger, queries *db.Queries) http.HandlerFun
 		)
 		if err != nil {
 			logger.Error("error creating note in database", slog.Any("error", err))
+			http.Error(w, "error creating note", http.StatusInternalServerError)
+			return
+		}
+
+		_, err = qtx.CreateActivity(r.Context(), db.CreateActivityParams{
+			CreatedAt:  now,
+			SpaceID:    space.ID,
+			PublicID:   activityPublicID,
+			MemberID:   sql.NullInt64{Int64: identity.Member.ID, Valid: true},
+			Action:     db.ActivityAction_Create,
+			EntityType: db.ActivityEntity_Note,
+			EntityID:   sql.NullInt64{Int64: note.ID, Valid: true},
+		})
+		if err != nil {
+			logger.Error("error creating activity in database", slog.Any("error", err))
+			http.Error(w, "error creating note", http.StatusInternalServerError)
+			return
+		}
+
+		err = tx.Commit()
+		if err != nil {
+			logger.Error("error committing transaction", slog.Any("error", err))
 			http.Error(w, "error creating note", http.StatusInternalServerError)
 			return
 		}
@@ -197,7 +240,7 @@ func handleNotesEdit(logger *slog.Logger, queries *db.Queries) http.HandlerFunc 
 	}
 }
 
-func handleNotesUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
+func handleNotesUpdate(logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		form, errors := forms.ParseUpdateNote(r)
 		if errors != nil {
@@ -232,10 +275,32 @@ func handleNotesUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerFun
 			return
 		}
 
+		activityPublicID, err := publicid.Generate()
+		if err != nil {
+			logger.Error("error generating activity public ID", slog.Any("error", err))
+			http.Error(w, "error updating note", http.StatusInternalServerError)
+			return
+		}
+
 		now := time.Now().UTC()
 		identity := rctx.GetIdentity(r.Context())
 		note := rctx.GetNote(r.Context())
-		_, err := queries.UpdateNote(
+		space := rctx.GetSpace(r.Context())
+
+		tx, err := sqlDB.Begin()
+		if err != nil {
+			logger.Error("error starting transaction", slog.Any("error", err))
+			http.Error(w, "error updating note", http.StatusInternalServerError)
+			return
+		}
+		defer func() {
+			if rbErr := tx.Rollback(); rbErr != nil && err == nil {
+				logger.Error("error rolling back transaction", slog.Any("error", rbErr))
+			}
+		}()
+		qtx := queries.WithTx(tx)
+
+		_, err = qtx.UpdateNote(
 			r.Context(),
 			db.UpdateNoteParams{
 				UpdatedAt: now,
@@ -247,6 +312,28 @@ func handleNotesUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerFun
 		)
 		if err != nil {
 			logger.Error("error updating note in database", slog.Any("error", err))
+			http.Error(w, "error updating note", http.StatusInternalServerError)
+			return
+		}
+
+		_, err = qtx.CreateActivity(r.Context(), db.CreateActivityParams{
+			CreatedAt:  now,
+			SpaceID:    space.ID,
+			PublicID:   activityPublicID,
+			MemberID:   sql.NullInt64{Int64: identity.Member.ID, Valid: true},
+			Action:     db.ActivityAction_Update,
+			EntityType: db.ActivityEntity_Note,
+			EntityID:   sql.NullInt64{Int64: note.ID, Valid: true},
+		})
+		if err != nil {
+			logger.Error("error creating activity in database", slog.Any("error", err))
+			http.Error(w, "error updating note", http.StatusInternalServerError)
+			return
+		}
+
+		err = tx.Commit()
+		if err != nil {
+			logger.Error("error committing transaction", slog.Any("error", err))
 			http.Error(w, "error updating note", http.StatusInternalServerError)
 			return
 		}

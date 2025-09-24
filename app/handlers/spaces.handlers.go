@@ -320,7 +320,6 @@ func handleSpacesUpdate(logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries)
 		identity := rctx.GetIdentity(r.Context())
 		space := rctx.GetSpace(r.Context())
 
-		// Start transaction to update space and create activity atomically
 		tx, err := sqlDB.Begin()
 		if err != nil {
 			logger.Error("error starting transaction", slog.Any("error", err))

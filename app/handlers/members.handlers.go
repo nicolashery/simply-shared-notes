@@ -57,7 +57,7 @@ func handleMembersNew(logger *slog.Logger) http.HandlerFunc {
 	}
 }
 
-func handleMembersCreate(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
+func handleMembersCreate(logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		form, errors := forms.ParseCreateMember(r)
 		if errors != nil {
@@ -80,11 +80,32 @@ func handleMembersCreate(logger *slog.Logger, queries *db.Queries) http.HandlerF
 			http.Error(w, "error creating member", http.StatusInternalServerError)
 			return
 		}
+
+		activityPublicID, err := publicid.Generate()
+		if err != nil {
+			logger.Error("error generating activity public ID", slog.Any("error", err))
+			http.Error(w, "error creating member", http.StatusInternalServerError)
+			return
+		}
+
 		identity := rctx.GetIdentity(r.Context())
 		space := rctx.GetSpace(r.Context())
 		now := time.Now().UTC()
 
-		member, err := queries.CreateMember(
+		tx, err := sqlDB.Begin()
+		if err != nil {
+			logger.Error("error starting transaction", slog.Any("error", err))
+			http.Error(w, "error creating member", http.StatusInternalServerError)
+			return
+		}
+		defer func() {
+			if rbErr := tx.Rollback(); rbErr != nil && err == nil {
+				logger.Error("error rolling back transaction", slog.Any("error", rbErr))
+			}
+		}()
+		qtx := queries.WithTx(tx)
+
+		member, err := qtx.CreateMember(
 			r.Context(),
 			db.CreateMemberParams{
 				CreatedAt: now,
@@ -98,6 +119,28 @@ func handleMembersCreate(logger *slog.Logger, queries *db.Queries) http.HandlerF
 		)
 		if err != nil {
 			logger.Error("error creating member in database", slog.Any("error", err))
+			http.Error(w, "error creating member", http.StatusInternalServerError)
+			return
+		}
+
+		_, err = qtx.CreateActivity(r.Context(), db.CreateActivityParams{
+			CreatedAt:  now,
+			SpaceID:    space.ID,
+			PublicID:   activityPublicID,
+			MemberID:   sql.NullInt64{Int64: identity.Member.ID, Valid: true},
+			Action:     db.ActivityAction_Create,
+			EntityType: db.ActivityEntity_Member,
+			EntityID:   sql.NullInt64{Int64: member.ID, Valid: true},
+		})
+		if err != nil {
+			logger.Error("error creating activity in database", slog.Any("error", err))
+			http.Error(w, "error creating member", http.StatusInternalServerError)
+			return
+		}
+
+		err = tx.Commit()
+		if err != nil {
+			logger.Error("error committing transaction", slog.Any("error", err))
 			http.Error(w, "error creating member", http.StatusInternalServerError)
 			return
 		}
@@ -156,7 +199,7 @@ func handleMembersEdit(logger *slog.Logger, queries *db.Queries) http.HandlerFun
 	}
 }
 
-func handleMembersUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
+func handleMembersUpdate(logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		form, errors := forms.ParseUpdateMember(r)
 		if errors != nil {
@@ -191,10 +234,32 @@ func handleMembersUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerF
 			return
 		}
 
+		activityPublicID, err := publicid.Generate()
+		if err != nil {
+			logger.Error("error generating activity public ID", slog.Any("error", err))
+			http.Error(w, "error updating member", http.StatusInternalServerError)
+			return
+		}
+
 		now := time.Now().UTC()
 		identity := rctx.GetIdentity(r.Context())
 		member := rctx.GetMember(r.Context())
-		memberUpdated, err := queries.UpdateMember(
+		space := rctx.GetSpace(r.Context())
+
+		tx, err := sqlDB.Begin()
+		if err != nil {
+			logger.Error("error starting transaction", slog.Any("error", err))
+			http.Error(w, "error updating member", http.StatusInternalServerError)
+			return
+		}
+		defer func() {
+			if rbErr := tx.Rollback(); rbErr != nil && err == nil {
+				logger.Error("error rolling back transaction", slog.Any("error", rbErr))
+			}
+		}()
+		qtx := queries.WithTx(tx)
+
+		memberUpdated, err := qtx.UpdateMember(
 			r.Context(),
 			db.UpdateMemberParams{
 				UpdatedAt: now,
@@ -205,6 +270,28 @@ func handleMembersUpdate(logger *slog.Logger, queries *db.Queries) http.HandlerF
 		)
 		if err != nil {
 			logger.Error("error updating member in database", slog.Any("error", err))
+			http.Error(w, "error updating member", http.StatusInternalServerError)
+			return
+		}
+
+		_, err = qtx.CreateActivity(r.Context(), db.CreateActivityParams{
+			CreatedAt:  now,
+			SpaceID:    space.ID,
+			PublicID:   activityPublicID,
+			MemberID:   sql.NullInt64{Int64: identity.Member.ID, Valid: true},
+			Action:     db.ActivityAction_Update,
+			EntityType: db.ActivityEntity_Member,
+			EntityID:   sql.NullInt64{Int64: member.ID, Valid: true},
+		})
+		if err != nil {
+			logger.Error("error creating activity in database", slog.Any("error", err))
+			http.Error(w, "error updating member", http.StatusInternalServerError)
+			return
+		}
+
+		err = tx.Commit()
+		if err != nil {
+			logger.Error("error committing transaction", slog.Any("error", err))
 			http.Error(w, "error updating member", http.StatusInternalServerError)
 			return
 		}

@@ -50,7 +50,7 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 			r.Get("/notes", handleNotesList(logger, queries))
 			r.With(Authorize(access.Action_CreateNote)).Group(func(r chi.Router) {
 				r.Get("/notes/new", handleNotesNew(logger))
-				r.Post("/notes/new", handleNotesCreate(logger, queries))
+				r.Post("/notes/new", handleNotesCreate(logger, sqlDB, queries))
 			})
 			r.Route("/notes/{notePublicID}", func(r chi.Router) {
 				r.Use(rctx.NoteCtxMiddleware(queries))
@@ -59,7 +59,7 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 
 				r.With(Authorize(access.Action_UpdateNote)).Group(func(r chi.Router) {
 					r.Get("/edit", handleNotesEdit(logger, queries))
-					r.Post("/edit", handleNotesUpdate(logger, queries))
+					r.Post("/edit", handleNotesUpdate(logger, sqlDB, queries))
 				})
 
 				r.With(Authorize(access.Action_DeleteMember)).Group(func(r chi.Router) {
@@ -71,14 +71,14 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 			r.Get("/members", handleMembersList(logger, queries))
 			r.With(Authorize(access.Action_CreateMember)).Group(func(r chi.Router) {
 				r.Get("/members/new", handleMembersNew(logger))
-				r.Post("/members/new", handleMembersCreate(logger, queries))
+				r.Post("/members/new", handleMembersCreate(logger, sqlDB, queries))
 			})
 			r.Route("/members/{memberPublicID}", func(r chi.Router) {
 				r.Use(rctx.MemberCtxMiddleware(queries))
 
 				r.With(Authorize(access.Action_UpdateMember)).Group(func(r chi.Router) {
 					r.Get("/edit", handleMembersEdit(logger, queries))
-					r.Post("/edit", handleMembersUpdate(logger, queries))
+					r.Post("/edit", handleMembersUpdate(logger, sqlDB, queries))
 				})
 
 				r.With(Authorize(access.Action_DeleteMember)).Group(func(r chi.Router) {
