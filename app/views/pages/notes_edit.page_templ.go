@@ -128,7 +128,7 @@ func NotesEdit(form *forms.UpdateNote, errors forms.Errors, membersByID map[int6
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var8 string
-			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(note.Content)
+			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(form.Content)
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/notes_edit.page.templ`, Line: 46, Col: 31}
 			}

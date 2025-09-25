@@ -43,7 +43,7 @@ templ NotesEdit(form *forms.UpdateNote, errors forms.Errors, membersByID map[int
 					<div
 						id="editor"
 						class="h-100 textarea w-full p-0"
-						data-value={ note.Content }
+						data-value={ form.Content }
 					></div>
 					for _, e := range forms.GetErrors(errors, "content") {
 						<p class="text-sm text-error">
