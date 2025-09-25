@@ -177,7 +177,7 @@ func handleNotesCreate(logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries) 
 
 		access := rctx.GetAccess(r.Context())
 
-		http.Redirect(w, r, fmt.Sprintf("/s/%s/notes", access.Token), http.StatusSeeOther)
+		http.Redirect(w, r, fmt.Sprintf("/s/%s/notes/%s", access.Token, note.PublicID), http.StatusSeeOther)
 	}
 }
 
