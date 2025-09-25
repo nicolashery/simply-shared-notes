@@ -9,7 +9,7 @@ import (
 
 templ NotesNew(form *forms.CreateNote, errors forms.Errors) {
 	{{ access := rctx.GetAccess(ctx) }}
-	@layouts.Space(nil) {
+	@layouts.Space([]string{"assets/editor.js"}) {
 		<div>
 			<h1 class="text-2xl font-bold mb-4">New note</h1>
 			<form
@@ -37,13 +37,11 @@ templ NotesNew(form *forms.CreateNote, errors forms.Errors) {
 					<p class="text-sm opacity-60">
 						Uses <a class="link" target="_blank" href="https://www.markdownguide.org/cheat-sheet/">Markdown</a> syntax.
 					</p>
-					<textarea
-						name="content"
-						id="content"
-						class={ "textarea w-full h-48", templ.KV("textarea-error", forms.HasError(errors, "content")) }
-					>
-						{ form.Content }
-					</textarea>
+					<div
+						id="editor"
+						class="h-100 textarea w-full p-0"
+						data-value={ form.Content }
+					></div>
 					for _, e := range forms.GetErrors(errors, "content") {
 						<p class="text-sm text-error">
 							{ e }
