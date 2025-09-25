@@ -16,7 +16,10 @@ templ ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notes
 			<ul class="list">
 				for _, activity := range entries {
 					<li class="list-row px-0">
-						<a id={ activity.PublicID } href={ "#" + activity.PublicID } class="text-xs opacity-50">
+						<a
+							class="text-xs opacity-50 link link-hover"
+							href={ templ.URL(fmt.Sprintf("/s/%s/activity/%s", access.Token, activity.PublicID)) }
+						>
 							{ helpers.FormatDate(activity.CreatedAt) }
 							{ " at " }
 							{ helpers.FormatTime(activity.CreatedAt) }

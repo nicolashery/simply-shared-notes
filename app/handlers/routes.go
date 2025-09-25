@@ -88,6 +88,7 @@ func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB
 			})
 
 			r.Get("/activity", handleActivityList(logger, queries))
+			r.Get("/activity/{activityPublicID}", handleActivityShow(logger, queries))
 		})
 	})
 }

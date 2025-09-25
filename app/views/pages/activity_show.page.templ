@@ -1,0 +1,118 @@
+package pages
+
+import (
+	"fmt"
+	"github.com/nicolashery/simply-shared-notes/app/db"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
+	"github.com/nicolashery/simply-shared-notes/app/views/helpers"
+	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
+)
+
+templ ActivityShow(activity db.Activity, membersByID map[int64]db.Member, notesByID map[int64]db.Note) {
+	{{ access := rctx.GetAccess(ctx) }}
+	{{ space := rctx.GetSpace(ctx) }}
+	@layouts.Space(nil) {
+		<div>
+			<h1 class="text-2xl font-bold mb-2">Activity</h1>
+			<div class="mb-2">
+				<a
+					href={ templ.URL(fmt.Sprintf("/s/%s/activity", access.Token)) }
+					class="btn btn-sm"
+				>
+					<svg
+						class="size-4"
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="lucide lucide-arrow-left-icon lucide-arrow-left"
+					>
+						<path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path>
+					</svg>
+					Back to all activity
+				</a>
+			</div>
+			<div class="list max-w-sm">
+				<div class="list-row px-0 items-center">
+					<div class="font-semibold list-col-grow">Time</div>
+					<div class="opacity-60">
+						{ helpers.FormatDate(activity.CreatedAt) }
+						{ " at " }
+						{ helpers.FormatTime(activity.CreatedAt) }
+					</div>
+				</div>
+				<div class="list-row px-0 items-center">
+					<div class="font-semibold list-col-grow">Member</div>
+					<div class="opacity-60">
+						{ helpers.DisplayMemberName(activity.MemberID, membersByID) }
+					</div>
+				</div>
+				<div class="list-row px-0 items-center">
+					<div class="font-semibold list-col-grow">Action</div>
+					<div class="opacity-60">
+						if activity.Action == db.ActivityAction_Create {
+							{ "created" }
+						} else if activity.Action == db.ActivityAction_Update {
+							{ "updated" }
+						} else if activity.Action == db.ActivityAction_Delete {
+							{ "deleted" }
+						} else {
+							{ "[unknown action]" }
+						}
+					</div>
+				</div>
+				<div class="list-row px-0 items-center">
+					<div class="font-semibold list-col-grow">Subject type</div>
+					<div class="opacity-60">
+						if activity.EntityType == db.ActivityEntity_Space {
+							{ "Space" }
+						} else if activity.EntityType == db.ActivityEntity_Member {
+							{ "Member" }
+						} else if activity.EntityType == db.ActivityEntity_Note {
+							{ "Note" }
+						} else {
+							{ "Unknown Entity" }
+						}
+					</div>
+				</div>
+				<div class="list-row px-0 items-center">
+					<div class="font-semibold list-col-grow">Subject</div>
+					<div class="opacity-60">
+						if activity.EntityType == db.ActivityEntity_Space {
+							{ space.Name }
+						} else if activity.EntityType == db.ActivityEntity_Member {
+							if !activity.EntityID.Valid {
+								{ "Deleted Member" }
+							} else if member, ok := membersByID[activity.EntityID.Int64]; ok {
+								<a
+									class="link"
+									href={ templ.URL(fmt.Sprintf("/s/%s/members/%s/edit", access.Token, member.PublicID)) }
+								>
+									{ member.Name }
+								</a>
+							} else {
+								{ "Unknown Member" }
+							}
+						} else if activity.EntityType == db.ActivityEntity_Note {
+							if !activity.EntityID.Valid {
+								{ "Deleted Note" }
+							} else if note, ok := notesByID[activity.EntityID.Int64]; ok {
+								<a
+									class="link"
+									href={ templ.URL(fmt.Sprintf("/s/%s/notes/%s", access.Token, note.PublicID)) }
+								>
+									{ note.Title }
+								</a>
+							} else {
+								{ "Unknown Note" }
+							}
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+}

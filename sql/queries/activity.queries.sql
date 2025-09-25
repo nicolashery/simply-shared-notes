@@ -30,3 +30,9 @@ ORDER BY
     created_at DESC,
     id DESC
 LIMIT @limit;
+
+-- name: GetActivityByPublicID :one
+SELECT * FROM activity
+WHERE space_id = @space_id
+  AND public_id = @public_id
+LIMIT 1;

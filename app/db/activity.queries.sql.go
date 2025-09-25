@@ -65,6 +65,34 @@ func (q *Queries) CreateActivity(ctx context.Context, arg CreateActivityParams) 
 	return i, err
 }
 
+const getActivityByPublicID = `-- name: GetActivityByPublicID :one
+SELECT id, created_at, space_id, public_id, member_id, "action", entity_type, entity_id FROM activity
+WHERE space_id = ?1
+  AND public_id = ?2
+LIMIT 1
+`
+
+type GetActivityByPublicIDParams struct {
+	SpaceID  int64
+	PublicID string
+}
+
+func (q *Queries) GetActivityByPublicID(ctx context.Context, arg GetActivityByPublicIDParams) (Activity, error) {
+	row := q.db.QueryRowContext(ctx, getActivityByPublicID, arg.SpaceID, arg.PublicID)
+	var i Activity
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.SpaceID,
+		&i.PublicID,
+		&i.MemberID,
+		&i.Action,
+		&i.EntityType,
+		&i.EntityID,
+	)
+	return i, err
+}
+
 const listActivity = `-- name: ListActivity :many
 SELECT id, created_at, space_id, public_id, member_id, "action", entity_type, entity_id FROM activity
 WHERE space_id = ?1

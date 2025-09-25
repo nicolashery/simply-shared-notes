@@ -24,7 +24,7 @@ func NoteCtxMiddleware(queries *db.Queries) func(http.Handler) http.Handler {
 				PublicID: notePublicID,
 			})
 			if err != nil {
-				http.Error(w, "member not found", http.StatusNotFound)
+				http.Error(w, "note not found", http.StatusNotFound)
 				return
 			}
 
