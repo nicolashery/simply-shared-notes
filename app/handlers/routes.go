@@ -9,17 +9,27 @@ import (
 	"github.com/nicolashery/simply-shared-notes/app/access"
 	"github.com/nicolashery/simply-shared-notes/app/config"
 	"github.com/nicolashery/simply-shared-notes/app/db"
+	"github.com/nicolashery/simply-shared-notes/app/email"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 )
 
-func RegisterRoutes(r chi.Router, cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries, sessionStore *sessions.CookieStore) {
+func RegisterRoutes(
+	r chi.Router,
+	cfg *config.Config,
+	logger *slog.Logger,
+	sqlDB *sql.DB,
+	queries *db.Queries,
+	sessionStore *sessions.CookieStore,
+	email *email.Email,
+) {
 	r.Use(rctx.SessionCtxMiddleware(logger, sessionStore))
 	r.Use(rctx.ThemeCtxMiddleware())
 
 	r.Get("/", handleHome(logger))
 
 	r.Get("/new", handleSpacesNew(cfg, logger))
-	r.Post("/new", handleSpacesCreate(cfg, logger, sqlDB, queries))
+	r.Post("/new", handleSpacesCreate(cfg, logger, sqlDB, queries, email))
+	r.With(rctx.FlashCtxMiddleware(logger)).Get("/new/success", handleSpacesNewSuccess(logger))
 
 	r.Get("/language", handleLanguageSelect(logger))
 	r.Get("/theme", handleThemeSelect(logger))

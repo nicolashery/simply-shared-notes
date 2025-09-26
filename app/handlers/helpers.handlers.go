@@ -45,6 +45,14 @@ func redirectFromReferer(r *http.Request) string {
 	return safeRedirect(u.RequestURI())
 }
 
+func baseUrlFromRequest(r *http.Request) string {
+	scheme := "http"
+	if r.TLS != nil || r.Header.Get("X-Forwarded-Proto") == "https" {
+		scheme = "https"
+	}
+	return scheme + "://" + r.Host
+}
+
 func memberListToMap(members []db.Member) map[int64]db.Member {
 	memberMap := make(map[int64]db.Member, len(members))
 	for _, member := range members {

@@ -10,6 +10,7 @@ import (
 
 	"github.com/nicolashery/simply-shared-notes/app/config"
 	"github.com/nicolashery/simply-shared-notes/app/db"
+	"github.com/nicolashery/simply-shared-notes/app/email"
 	"github.com/nicolashery/simply-shared-notes/app/server"
 	"github.com/nicolashery/simply-shared-notes/app/session"
 	"github.com/nicolashery/simply-shared-notes/app/vite"
@@ -45,7 +46,12 @@ func Run(ctx context.Context, distFS embed.FS, pragmasSQL string) error {
 
 	sessionStore := session.InitStore(cfg.CookieSecret, cfg.IsDev)
 
-	s := server.New(cfg, logger, sqlDB, queries, vite, sessionStore)
+	email, err := email.New(cfg)
+	if err != nil {
+		return err
+	}
+
+	s := server.New(cfg, logger, sqlDB, queries, vite, sessionStore, email)
 
 	return server.Run(ctx, s, logger, cfg.Port)
 }

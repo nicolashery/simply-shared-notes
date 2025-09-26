@@ -12,12 +12,21 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/nicolashery/simply-shared-notes/app/config"
 	"github.com/nicolashery/simply-shared-notes/app/db"
+	"github.com/nicolashery/simply-shared-notes/app/email"
 	"github.com/nicolashery/simply-shared-notes/app/handlers"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/vite"
 )
 
-func New(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries, vite *vite.Vite, sessionStore *sessions.CookieStore) http.Handler {
+func New(
+	cfg *config.Config,
+	logger *slog.Logger,
+	sqlDB *sql.DB,
+	queries *db.Queries,
+	vite *vite.Vite,
+	sessionStore *sessions.CookieStore,
+	email *email.Email,
+) http.Handler {
 	router := chi.NewRouter()
 
 	router.Use(
@@ -26,7 +35,7 @@ func New(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, queries *db.Que
 		rctx.ViteCtxMiddleware(vite),
 	)
 
-	handlers.RegisterRoutes(router, cfg, logger, sqlDB, queries, sessionStore)
+	handlers.RegisterRoutes(router, cfg, logger, sqlDB, queries, sessionStore, email)
 
 	StaticDir(router, "/assets", vite.AssetsFS)
 	StaticFile(router, "/robots.txt", vite.PublicFS)

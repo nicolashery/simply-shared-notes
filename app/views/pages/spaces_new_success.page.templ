@@ -1,0 +1,25 @@
+package pages
+
+import (
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
+	"github.com/nicolashery/simply-shared-notes/app/session"
+	"github.com/nicolashery/simply-shared-notes/app/views/components"
+	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
+)
+
+templ SpacesNewSuccess() {
+	{{ messages := rctx.GetFlashMessages(ctx) }}
+	@layouts.Landing("Create space") {
+		<div class="max-w-md mx-auto py-4">
+			<h1 class="text-2xl font-bold mb-6">Create a new space</h1>
+			if len(messages) > 0 {
+				@components.FlashMessage(&messages[0])
+			} else {
+				@components.FlashMessage(&session.FlashMessage{
+					Type:    session.FlashType_Success,
+					Content: "Your new space was created! Check your emails for the link to the space.",
+				})
+			}
+		</div>
+	}
+}

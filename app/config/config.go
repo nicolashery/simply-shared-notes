@@ -15,6 +15,11 @@ type Config struct {
 	DatabaseURL    string `env:"DATABASE_URL" envDefault:"sqlite:data/app.sqlite"`
 	InvitationCode string `env:"INVITATION_CODE"`
 	CookieSecret   string `env:"COOKIE_SECRET,required"`
+	SMTPHost       string `env:"SMTP_HOST" envDefault:"localhost"`
+	SMTPPort       int    `env:"SMTP_PORT" envDefault:"1025"`
+	SMTPUsername   string `env:"SMTP_USERNAME"`
+	SMTPPassword   string `env:"SMTP_PASSWORD"`
+	EmailFrom      string `env:"EMAIL_FROM" envDefault:"Simply Shared Notes <no-reply@local.test>"`
 }
 
 func New() (*Config, error) {

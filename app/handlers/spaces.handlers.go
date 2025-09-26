@@ -11,10 +11,12 @@ import (
 	"github.com/nicolashery/simply-shared-notes/app/access"
 	"github.com/nicolashery/simply-shared-notes/app/config"
 	"github.com/nicolashery/simply-shared-notes/app/db"
+	"github.com/nicolashery/simply-shared-notes/app/email"
 	"github.com/nicolashery/simply-shared-notes/app/forms"
 	"github.com/nicolashery/simply-shared-notes/app/publicid"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/session"
+	"github.com/nicolashery/simply-shared-notes/app/views/emails"
 	"github.com/nicolashery/simply-shared-notes/app/views/pages"
 )
 
@@ -39,7 +41,7 @@ func handleSpacesNew(cfg *config.Config, logger *slog.Logger) http.HandlerFunc {
 	}
 }
 
-func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries) http.HandlerFunc {
+func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries, email *email.Email) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		requiresCode := cfg.RequiresInvitationCode()
 
@@ -110,11 +112,25 @@ func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, 
 			return
 		}
 
+		emailSubject := emails.SpaceCreatedSubject(space)
+		baseURL := baseUrlFromRequest(r)
+		emailText := emails.SpaceCreatedText(member.Name, space, baseURL, tokens)
+		err = email.Send(space.Email, emailSubject, emailText)
+		if err != nil {
+			logger.Error(
+				"failed to send email",
+				slog.Any("error", err),
+				slog.String("email", "space_created"),
+			)
+		}
+
 		sess := rctx.GetSession(r.Context())
-		sess.Values[session.IdentityKey] = member.ID
 		sess.AddFlash(session.FlashMessage{
-			Type:    session.FlashType_Info,
-			Content: fmt.Sprintf("%s, welcome to the space %s!", member.Name, space.Name),
+			Type: session.FlashType_Success,
+			Content: fmt.Sprintf(
+				"Your new space %s was created! Check your emails for the link to the space at: %s!",
+				space.Name, space.Email,
+			),
 		})
 		err = sess.Save(r, w)
 		if err != nil {
@@ -123,7 +139,21 @@ func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, 
 			return
 		}
 
-		http.Redirect(w, r, fmt.Sprintf("/s/%s", space.AdminToken), http.StatusSeeOther)
+		http.Redirect(w, r, "/new/success", http.StatusSeeOther)
+	}
+}
+
+func handleSpacesNewSuccess(logger *slog.Logger) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		err := pages.SpacesNewSuccess().Render(r.Context(), w)
+		if err != nil {
+			logger.Error(
+				"failed to render template",
+				slog.Any("error", err),
+				slog.String("template", "SpacesNewSuccess"),
+			)
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+		}
 	}
 }
 
@@ -396,11 +426,7 @@ func handleTokensShow(logger *slog.Logger) http.HandlerFunc {
 			ViewToken:  space.ViewToken,
 		}
 
-		scheme := "http"
-		if r.TLS != nil || r.Header.Get("X-Forwarded-Proto") == "https" {
-			scheme = "https"
-		}
-		baseURL := scheme + "://" + r.Host
+		baseURL := baseUrlFromRequest(r)
 
 		err := pages.TokensShow(baseURL, tokens).Render(r.Context(), w)
 		if err != nil {
