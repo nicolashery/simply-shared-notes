@@ -5,6 +5,8 @@ primary_region = "ewr"
   DATABASE_URL="sqlite:/data/app.sqlite"
   DBMATE_MIGRATIONS_DIR="/migrations"
   DBMATE_NO_DUMP_SCHEMA="true"
+  SMTP_HOST="smtp.mailgun.org"
+  SMTP_PORT=587
 
 [http_service]
   internal_port = 3000
