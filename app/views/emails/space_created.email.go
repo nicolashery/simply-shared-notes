@@ -26,6 +26,6 @@ func SpaceCreatedText(memberName string, space *db.Space, baseURL string, tokens
 		memberName, space.Name,
 		baseURL, tokens.EditToken,
 		baseURL, tokens.ViewToken,
-		baseURL, tokens.ViewToken,
+		baseURL, tokens.AdminToken,
 	)
 }
