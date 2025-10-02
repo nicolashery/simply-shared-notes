@@ -19,8 +19,8 @@ WORKDIR /app
 
 RUN apk add curl
 RUN mkdir -p bin && \
-  curl -fsSL -o bin/dbmate https://github.com/amacneil/dbmate/releases/download/v2.26.0/dbmate-linux-amd64 && \
-  chmod +x bin/dbmate
+    curl -fsSL -o bin/dbmate https://github.com/amacneil/dbmate/releases/download/v2.26.0/dbmate-linux-amd64 && \
+    chmod +x bin/dbmate
 
 COPY go.mod go.sum ./
 RUN go mod download
@@ -30,17 +30,17 @@ COPY --from=frontend-builder /app/dist ./dist
 COPY sql/pragmas.sql ./sql/
 # Go source files
 COPY app ./app/
-COPY main.go ./ 
+COPY main.go ./
 RUN CGO_ENABLED=0 GOOS=linux go build -o bin/app .
 
 # Stage 3: Runtime image
 FROM alpine:latest
 
+RUN apk add --no-cache sqlite
+
 COPY --from=backend-builder /app/bin/dbmate /dbmate
 COPY sql/migrations /migrations
-
 COPY --from=backend-builder /app/bin/app /app
-
 COPY deploy/run.sh /run.sh
 
 EXPOSE 3000

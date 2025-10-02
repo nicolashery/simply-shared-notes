@@ -19,7 +19,7 @@ type Config struct {
 	SMTPPort       int    `env:"SMTP_PORT" envDefault:"1025"`
 	SMTPUsername   string `env:"SMTP_USERNAME"`
 	SMTPPassword   string `env:"SMTP_PASSWORD"`
-	EmailFrom      string `env:"EMAIL_FROM" envDefault:"Simply Shared Notes <no-reply@local.test>"`
+	EmailFrom      string `env:"EMAIL_FROM" envDefault:"Simply Shared Notes <noreply@local.test>"`
 }
 
 func New() (*Config, error) {
