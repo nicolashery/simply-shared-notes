@@ -147,7 +147,7 @@ func handleMembersCreate(logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries
 
 		sess := rctx.GetSession(r.Context())
 		sess.AddFlash(session.FlashMessage{
-			Type:    session.FlashType_Info,
+			Type:    session.FlashType_Success,
 			Content: fmt.Sprintf("Added new member: %s", member.Name),
 		})
 		err = sess.Save(r, w)
