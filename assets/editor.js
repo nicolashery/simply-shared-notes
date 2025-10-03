@@ -37,6 +37,7 @@ function createEditor() {
   const [editor] = new OverType("#editor", {
     value: value,
     padding: "12px", // Match daisyUI intput/textarea padding
+    fontSize: "16px", // To prevent zoom on iOS when focusing input
     textareaProps: {
       id: "content",
       name: "content",
