@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 tasks:
   setup:
@@ -50,6 +50,11 @@ tasks:
       - "assets/**/*.js"
     cmds:
       - npm run build
+
+  assets-watch:
+    desc: Build frontend assets and watch for changes
+    cmds:
+      - npm run build:watch
 
   vite:
     desc: Run Vite development server
