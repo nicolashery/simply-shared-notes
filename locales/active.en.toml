@@ -1,0 +1,7 @@
+"Emails.SpaceCreated" = "Your space was created: {{.Space}}"
+"Spaces.Show.Flash" = "{{.Member}}, welcome to the space {{.Space}}!"
+"Spaces.Show.NotesLinkText" = "{{.Count}} notes"
+
+["Spaces.Show.Welcome"]
+other = "Welcome to your space! You have %% N notes %%."
+zero = "Welcome to your space! You don't have any notes yet."

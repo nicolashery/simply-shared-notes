@@ -10,6 +10,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/gorilla/sessions"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/config"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/email"
@@ -26,6 +27,7 @@ func New(
 	vite *vite.Vite,
 	sessionStore *sessions.CookieStore,
 	email *email.Email,
+	i18nBundle *i18n.Bundle,
 ) http.Handler {
 	router := chi.NewRouter()
 
@@ -35,7 +37,7 @@ func New(
 		rctx.ViteCtxMiddleware(vite),
 	)
 
-	handlers.RegisterRoutes(router, cfg, logger, sqlDB, queries, sessionStore, email)
+	handlers.RegisterRoutes(router, cfg, logger, sqlDB, queries, sessionStore, email, i18nBundle)
 
 	StaticDir(router, "/assets", vite.AssetsFS)
 	StaticFile(router, "/robots.txt", vite.PublicFS)

@@ -1,0 +1,78 @@
+package intl
+
+import (
+	"embed"
+	"fmt"
+	"log/slog"
+	"strings"
+
+	"github.com/BurntSushi/toml"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"golang.org/x/text/language"
+)
+
+var DefaultLang language.Tag = language.English
+
+var SupportedLangs = []language.Tag{
+	language.English,
+	language.French,
+}
+
+const LocalizeErrorMessage string = "<failed to localize>"
+
+type Intl struct {
+	CurrentLang language.Tag
+	localizer   *i18n.Localizer
+	logger      *slog.Logger
+}
+
+func NewBundle(localesFS embed.FS) (*i18n.Bundle, error) {
+	b := i18n.NewBundle(DefaultLang)
+	b.RegisterUnmarshalFunc("toml", toml.Unmarshal)
+
+	for _, tag := range SupportedLangs {
+		path := fmt.Sprintf("locales/active.%s.toml", tag.String())
+		// debug: check if path exists in localFS
+		// if _, err := localeFS.Open(path); err != nil {
+		// 	return nil, fmt.Errorf("loading i18n file %q: %w", path, err)
+		// }
+		if _, err := b.LoadMessageFileFS(localesFS, path); err != nil {
+			return nil, fmt.Errorf("loading i18n file %q: %w", path, err)
+		}
+	}
+
+	return b, nil
+}
+
+func New(logger *slog.Logger, i18nBundle *i18n.Bundle, lang language.Tag) *Intl {
+	localizer := i18n.NewLocalizer(i18nBundle, lang.String())
+
+	return &Intl{
+		CurrentLang: lang,
+		localizer:   localizer,
+		logger:      logger,
+	}
+}
+
+func (i *Intl) Localize(lc *i18n.LocalizeConfig) string {
+	msg, err := i.localizer.Localize(lc)
+	if err != nil {
+		i.logger.Error(
+			"failed to localize",
+			slog.Any("error", err),
+			slog.String("lang", i.CurrentLang.String()),
+			slog.String("key", lc.MessageID),
+		)
+		return LocalizeErrorMessage
+	}
+
+	return msg
+}
+
+func (i *Intl) SplitOnSlot(s, slot string) (string, string) {
+	j := strings.Index(s, slot)
+	if j < 0 {
+		return s, ""
+	}
+	return s[:j], s[j+len(slot):]
+}

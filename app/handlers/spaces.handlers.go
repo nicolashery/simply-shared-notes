@@ -112,7 +112,7 @@ func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, 
 			return
 		}
 
-		emailSubject := emails.SpaceCreatedSubject(space)
+		emailSubject := emails.SpaceCreatedSubject(r.Context(), space)
 		baseURL := baseUrlFromRequest(r)
 		emailText := emails.SpaceCreatedText(member.Name, space, baseURL, tokens)
 		err = email.Send(space.Email, emailSubject, emailText)

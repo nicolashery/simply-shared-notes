@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/access"
 	"github.com/nicolashery/simply-shared-notes/app/config"
 	"github.com/nicolashery/simply-shared-notes/app/db"
@@ -21,9 +22,11 @@ func RegisterRoutes(
 	queries *db.Queries,
 	sessionStore *sessions.CookieStore,
 	email *email.Email,
+	i18nBundle *i18n.Bundle,
 ) {
 	r.Use(rctx.SessionCtxMiddleware(logger, sessionStore))
 	r.Use(rctx.ThemeCtxMiddleware())
+	r.Use(rctx.IntlCtxMiddleware(logger, i18nBundle))
 
 	r.Get("/", handleHome(logger))
 

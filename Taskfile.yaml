@@ -101,3 +101,19 @@ tasks:
       - task: drop
       - task: migrate
       - task: seed
+
+  i18n-extract:
+    desc: Extract messages from Go source files to the default `active.en.toml` file
+    cmds:
+      - goi18n extract -outdir locales app
+
+  i18n-translate:
+    desc: Generate updated `translate.*.toml` files to be translated
+    cmds:
+      - goi18n merge -outdir locales locales/active.*.toml
+
+  i18n-merge:
+    desc: Merge translated messages back into `active.*.toml` files and clean up translation files
+    cmds:
+      - goi18n merge -outdir locales locales/active.*.toml locales/translate.*.toml
+      - rm locales/translate.*.toml

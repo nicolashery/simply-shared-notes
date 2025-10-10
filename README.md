@@ -52,6 +52,7 @@ Install tools:
 - [Templ](https://templ.guide/): `go install github.com/a-h/templ/cmd/templ@latest`
 - [sqlc](https://docs.sqlc.dev/): `brew install sqlc`
 - [Dbmate](https://github.com/amacneil/dbmate): `brew install dbmate`
+- [goi18n](https://github.com/nicksnyder/go-i18n): `go install github.com/nicksnyder/go-i18n/v2/goi18n@latest`
 
 Install Node and upgrade npm, for example with [mise](https://mise.jdx.dev/lang/node.html):
 

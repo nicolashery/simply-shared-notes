@@ -6,6 +6,7 @@ const (
 	viteContextKey       contextKey = "vite"
 	sessionContextKey    contextKey = "session"
 	themeContextKey      contextKey = "theme"
+	intlContextKey       contextKey = "intl"
 	spaceContextKey      contextKey = "space"
 	spaceStatsContextKey contextKey = "space_stats"
 	accessContextKey     contextKey = "access"

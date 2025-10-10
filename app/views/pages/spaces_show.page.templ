@@ -1,11 +1,48 @@
 package pages
 
-import "github.com/nicolashery/simply-shared-notes/app/views/layouts"
+import (
+	"fmt"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
+	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
+)
 
 templ SpacesShow() {
+	{{ intl := rctx.GetIntl(ctx) }}
+	{{ access := rctx.GetAccess(ctx) }}
+	{{ stats := rctx.GetSpaceStats(ctx) }}
 	@layouts.Space(nil) {
 		<div>
-			Welcome to your space!
+			{{
+				msg := intl.Localize(&i18n.LocalizeConfig{
+					DefaultMessage: &i18n.Message{
+						ID:    "Spaces.Show.Welcome",
+						Zero:  "Welcome to your space! You don't have any notes yet.",
+						Other: "Welcome to your space! You have %% N notes %%.",
+					},
+					PluralCount: stats.NotesCount,
+				})
+			}}
+			if stats.NotesCount == 0 {
+				{ msg }
+			} else {
+				{{ pre, post := intl.SplitOnSlot(msg, "%% N notes %%") }}
+				<span>{ pre }</span>
+				<a
+					href={ templ.URL(fmt.Sprintf("/s/%s/notes", access.Token)) }
+					class="link link-primary"
+				>
+					{ intl.Localize(&i18n.LocalizeConfig{
+						DefaultMessage: &i18n.Message{
+							ID:    "Spaces.Show.NotesLinkText",
+							Other: "{{.Count}} notes",
+						},
+						TemplateData: map[string]any{
+							"Count": stats.NotesCount,
+						},
+					}) }
+				</a><span>{ post }</span>
+			}
 		</div>
 	}
 }

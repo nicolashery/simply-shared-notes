@@ -1,14 +1,27 @@
 package emails
 
 import (
+	"context"
 	"fmt"
 
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/access"
 	"github.com/nicolashery/simply-shared-notes/app/db"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
 )
 
-func SpaceCreatedSubject(space *db.Space) string {
-	return fmt.Sprintf("Your space was created: %s", space.Name)
+func SpaceCreatedSubject(ctx context.Context, space *db.Space) string {
+	intl := rctx.GetIntl(ctx)
+	msg := intl.Localize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Emails.SpaceCreated",
+			Other: "Your space was created: {{.Space}}",
+		},
+		TemplateData: map[string]any{
+			"Space": space.Name,
+		},
+	})
+	return msg
 }
 
 func SpaceCreatedText(memberName string, space *db.Space, baseURL string, tokens access.AccessTokens) string {

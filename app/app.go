@@ -11,12 +11,13 @@ import (
 	"github.com/nicolashery/simply-shared-notes/app/config"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/email"
+	"github.com/nicolashery/simply-shared-notes/app/intl"
 	"github.com/nicolashery/simply-shared-notes/app/server"
 	"github.com/nicolashery/simply-shared-notes/app/session"
 	"github.com/nicolashery/simply-shared-notes/app/vite"
 )
 
-func Run(ctx context.Context, distFS embed.FS, pragmasSQL string) error {
+func Run(ctx context.Context, distFS embed.FS, pragmasSQL string, localesFS embed.FS) error {
 	ctx, stop := signal.NotifyContext(ctx, os.Interrupt)
 	defer stop()
 
@@ -51,7 +52,12 @@ func Run(ctx context.Context, distFS embed.FS, pragmasSQL string) error {
 		return err
 	}
 
-	s := server.New(cfg, logger, sqlDB, queries, vite, sessionStore, email)
+	i18nBundle, err := intl.NewBundle(localesFS)
+	if err != nil {
+		return err
+	}
+
+	s := server.New(cfg, logger, sqlDB, queries, vite, sessionStore, email, i18nBundle)
 
 	return server.Run(ctx, s, logger, cfg.Port)
 }

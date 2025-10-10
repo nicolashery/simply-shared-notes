@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/session"
@@ -84,11 +85,23 @@ func handleIdentitySet(logger *slog.Logger, queries *db.Queries) http.HandlerFun
 			return
 		}
 
+		intl := rctx.GetIntl(r.Context())
+		msg := intl.Localize(&i18n.LocalizeConfig{
+			DefaultMessage: &i18n.Message{
+				ID:    "Spaces.Show.Flash",
+				Other: "{{.Member}}, welcome to the space {{.Space}}!",
+			},
+			TemplateData: map[string]any{
+				"Member": member.Name,
+				"Space":  space.Name,
+			},
+		})
+
 		sess := rctx.GetSession(r.Context())
 		sess.Values[session.IdentityKey] = member.ID
 		sess.AddFlash(session.FlashMessage{
 			Type:    session.FlashType_Info,
-			Content: fmt.Sprintf("%s, welcome to the space %s!", member.Name, space.Name),
+			Content: msg,
 		})
 
 		redirectURL := fmt.Sprintf("/s/%s", access.Token)
