@@ -28,6 +28,7 @@ RUN go mod download
 # Embedded files
 COPY --from=frontend-builder /app/dist ./dist
 COPY sql/pragmas.sql ./sql/
+COPY locales ./locales/
 # Go source files
 COPY app ./app/
 COPY main.go ./
