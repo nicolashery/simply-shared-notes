@@ -10,6 +10,7 @@ import (
 
 templ ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesByID map[int64]db.Note) {
 	{{ access := rctx.GetAccess(ctx) }}
+	{{ intl := rctx.GetIntl(ctx) }}
 	@layouts.Space(nil) {
 		<div>
 			<h1 class="text-2xl font-bold mb-2">Activity</h1>
@@ -20,9 +21,9 @@ templ ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notes
 							class="text-xs opacity-50 link link-hover"
 							href={ templ.URL(fmt.Sprintf("/s/%s/activity/%s", access.Token, activity.PublicID)) }
 						>
-							{ helpers.FormatDate(activity.CreatedAt) }
+							{ intl.FormatDate(activity.CreatedAt) }
 							{ " at " }
-							{ helpers.FormatTime(activity.CreatedAt) }
+							{ intl.FormatTime(activity.CreatedAt) }
 						</a>
 						<div class="text-xs">
 							<span class="opacity-75">{ helpers.DisplayMemberName(activity.MemberID, membersByID) }</span>

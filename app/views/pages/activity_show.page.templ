@@ -11,6 +11,7 @@ import (
 templ ActivityShow(activity db.Activity, membersByID map[int64]db.Member, notesByID map[int64]db.Note) {
 	{{ access := rctx.GetAccess(ctx) }}
 	{{ space := rctx.GetSpace(ctx) }}
+	{{ intl := rctx.GetIntl(ctx) }}
 	@layouts.Space(nil) {
 		<div>
 			<h1 class="text-2xl font-bold mb-2">Activity</h1>
@@ -39,9 +40,9 @@ templ ActivityShow(activity db.Activity, membersByID map[int64]db.Member, notesB
 				<div class="list-row px-0 items-center">
 					<div class="font-semibold list-col-grow">Time</div>
 					<div class="opacity-60">
-						{ helpers.FormatDate(activity.CreatedAt) }
+						{ intl.FormatDate(activity.CreatedAt) }
 						{ " at " }
-						{ helpers.FormatTime(activity.CreatedAt) }
+						{ intl.FormatTime(activity.CreatedAt) }
 					</div>
 				</div>
 				<div class="list-row px-0 items-center">

@@ -8,6 +8,7 @@ require (
 	github.com/a-h/templ v0.3.943
 	github.com/caarlos0/env/v11 v11.3.1
 	github.com/go-chi/chi/v5 v5.2.1
+	github.com/goodsign/monday v1.0.2
 	github.com/gorilla/sessions v1.4.0
 	github.com/joho/godotenv v1.5.1
 	github.com/matoous/go-nanoid/v2 v2.1.0

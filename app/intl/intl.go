@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"log/slog"
 	"strings"
+	"time"
 
 	"github.com/BurntSushi/toml"
+	"github.com/goodsign/monday"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"golang.org/x/text/language"
 )
@@ -75,4 +77,33 @@ func (i *Intl) SplitOnSlot(s, slot string) (string, string) {
 		return s, ""
 	}
 	return s[:j], s[j+len(slot):]
+}
+
+func mondayLocale(tag language.Tag) monday.Locale {
+	base, _ := tag.Base()
+
+	switch base.String() {
+	case "fr":
+		return monday.LocaleFrFR
+	default:
+		return monday.LocaleEnUS
+	}
+}
+
+func (i *Intl) FormatDate(t time.Time) string {
+	locale := mondayLocale(i.CurrentLang)
+	format, ok := monday.MediumFormatsByLocale[locale]
+	if !ok {
+		format = "Jan 02, 2006"
+	}
+	return monday.Format(t, format, locale)
+}
+
+func (i *Intl) FormatTime(t time.Time) string {
+	switch i.CurrentLang {
+	case language.French:
+		return t.Format("15:04 MST")
+	default:
+		return t.Format("3:04 PM MST")
+	}
 }

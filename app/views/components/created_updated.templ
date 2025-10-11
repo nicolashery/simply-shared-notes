@@ -3,6 +3,7 @@ package components
 import (
 	"database/sql"
 	"github.com/nicolashery/simply-shared-notes/app/db"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/views/helpers"
 	"time"
 )
@@ -25,13 +26,14 @@ templ CreatedAtBy(
 	createdBy sql.NullInt64,
 	membersByID map[int64]db.Member,
 ) {
+	{{ intl := rctx.GetIntl(ctx) }}
 	<div class="text-xs">
 		<span class="opacity-50">{ "Created by " }</span>
 		<span class="opacity-75">{ helpers.DisplayMemberName(createdBy, membersByID) }</span>
 		<span class="opacity-50">{ " on " } </span>
-		<span class="opacity-75">{ helpers.FormatDate(createdAt) }</span>
+		<span class="opacity-75">{ intl.FormatDate(createdAt) }</span>
 		<span class="opacity-50">{ " at " } </span>
-		<span class="opacity-75">{ helpers.FormatTime(createdAt) }</span>
+		<span class="opacity-75">{ intl.FormatTime(createdAt) }</span>
 	</div>
 }
 
@@ -40,12 +42,13 @@ templ UpdatedAtBy(
 	updatedBy sql.NullInt64,
 	membersByID map[int64]db.Member,
 ) {
+	{{ intl := rctx.GetIntl(ctx) }}
 	<div class="text-xs">
 		<span class="opacity-50">{ " Updated by " }</span>
 		<span class="opacity-75">{ helpers.DisplayMemberName(updatedBy, membersByID) }</span>
 		<span class="opacity-50">{ " on " }</span>
-		<span class="opacity-75">{ helpers.FormatDate(updatedAt) }</span>
+		<span class="opacity-75">{ intl.FormatDate(updatedAt) }</span>
 		<span class="opacity-50">{ " at " }</span>
-		<span class="opacity-75">{ helpers.FormatTime(updatedAt) }</span>
+		<span class="opacity-75">{ intl.FormatTime(updatedAt) }</span>
 	</div>
 }
