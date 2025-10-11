@@ -6,6 +6,7 @@ import (
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/views/helpers"
 	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
+	"time"
 )
 
 templ ActivityShow(activity db.Activity, membersByID map[int64]db.Member, notesByID map[int64]db.Note) {
@@ -39,11 +40,11 @@ templ ActivityShow(activity db.Activity, membersByID map[int64]db.Member, notesB
 			<div class="list max-w-sm">
 				<div class="list-row px-0 items-center">
 					<div class="font-semibold list-col-grow">Time</div>
-					<div class="opacity-60">
+					<time class="opacity-60" datetime={ activity.CreatedAt.Format(time.RFC3339) }>
 						{ intl.FormatDate(activity.CreatedAt) }
 						{ " at " }
 						{ intl.FormatTime(activity.CreatedAt) }
-					</div>
+					</time>
 				</div>
 				<div class="list-row px-0 items-center">
 					<div class="font-semibold list-col-grow">Member</div>

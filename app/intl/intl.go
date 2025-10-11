@@ -20,12 +20,15 @@ var SupportedLangs = []language.Tag{
 	language.French,
 }
 
+var DefaultTimezone *time.Location = time.UTC
+
 const LocalizeErrorMessage string = "<failed to localize>"
 
 type Intl struct {
-	CurrentLang language.Tag
-	localizer   *i18n.Localizer
-	logger      *slog.Logger
+	CurrentLang     language.Tag
+	CurrentTimezone *time.Location
+	localizer       *i18n.Localizer
+	logger          *slog.Logger
 }
 
 func NewBundle(localesFS embed.FS) (*i18n.Bundle, error) {
@@ -34,10 +37,6 @@ func NewBundle(localesFS embed.FS) (*i18n.Bundle, error) {
 
 	for _, tag := range SupportedLangs {
 		path := fmt.Sprintf("locales/active.%s.toml", tag.String())
-		// debug: check if path exists in localFS
-		// if _, err := localeFS.Open(path); err != nil {
-		// 	return nil, fmt.Errorf("loading i18n file %q: %w", path, err)
-		// }
 		if _, err := b.LoadMessageFileFS(localesFS, path); err != nil {
 			return nil, fmt.Errorf("loading i18n file %q: %w", path, err)
 		}
@@ -46,13 +45,14 @@ func NewBundle(localesFS embed.FS) (*i18n.Bundle, error) {
 	return b, nil
 }
 
-func New(logger *slog.Logger, i18nBundle *i18n.Bundle, lang language.Tag) *Intl {
+func New(logger *slog.Logger, i18nBundle *i18n.Bundle, lang language.Tag, tz *time.Location) *Intl {
 	localizer := i18n.NewLocalizer(i18nBundle, lang.String())
 
 	return &Intl{
-		CurrentLang: lang,
-		localizer:   localizer,
-		logger:      logger,
+		CurrentLang:     lang,
+		CurrentTimezone: tz,
+		localizer:       localizer,
+		logger:          logger,
 	}
 }
 
@@ -91,6 +91,8 @@ func mondayLocale(tag language.Tag) monday.Locale {
 }
 
 func (i *Intl) FormatDate(t time.Time) string {
+	t = i.TimeInUserTz(t)
+
 	locale := mondayLocale(i.CurrentLang)
 	format, ok := monday.MediumFormatsByLocale[locale]
 	if !ok {
@@ -100,10 +102,20 @@ func (i *Intl) FormatDate(t time.Time) string {
 }
 
 func (i *Intl) FormatTime(t time.Time) string {
+	t = i.TimeInUserTz(t)
+
 	switch i.CurrentLang {
 	case language.French:
 		return t.Format("15:04 MST")
 	default:
 		return t.Format("3:04 PM MST")
 	}
+}
+
+func (i *Intl) TimeInUserTz(t time.Time) time.Time {
+	if i.CurrentTimezone == DefaultTimezone {
+		return t
+	}
+
+	return t.In(i.CurrentTimezone)
 }
