@@ -5,6 +5,7 @@ import (
 
 	z "github.com/Oudwins/zog"
 	"github.com/Oudwins/zog/zhttp"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
 )
 
 var noteTitleSchema = z.String().Trim().Required().Min(1).Max(255)
@@ -21,7 +22,8 @@ var createNoteSchema = z.Struct(z.Shape{
 
 func ParseCreateNote(r *http.Request) (CreateNote, map[string][]string) {
 	var form CreateNote
-	errs := createNoteSchema.Parse(zhttp.Request(r), &form)
+	intl := rctx.GetIntl(r.Context())
+	errs := createNoteSchema.Parse(zhttp.Request(r), &form, intl.ZogParseOpts())
 	if errs == nil {
 		return form, nil
 	}
@@ -41,7 +43,8 @@ var updateNoteSchema = z.Struct(z.Shape{
 
 func ParseUpdateNote(r *http.Request) (UpdateNote, map[string][]string) {
 	var form UpdateNote
-	errs := updateNoteSchema.Parse(zhttp.Request(r), &form)
+	intl := rctx.GetIntl(r.Context())
+	errs := updateNoteSchema.Parse(zhttp.Request(r), &form, intl.ZogParseOpts())
 	if errs == nil {
 		return form, nil
 	}

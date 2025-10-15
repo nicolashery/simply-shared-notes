@@ -5,6 +5,7 @@ import (
 
 	z "github.com/Oudwins/zog"
 	"github.com/Oudwins/zog/zhttp"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
 )
 
 type CreateSpace struct {
@@ -36,7 +37,8 @@ func ParseCreateSpace(r *http.Request, requiresCode bool) (CreateSpace, map[stri
 		form.Code = "placeholder"
 	}
 
-	errs := createSpaceSchema(requiresCode).Parse(zhttp.Request(r), &form)
+	intl := rctx.GetIntl(r.Context())
+	errs := createSpaceSchema(requiresCode).Parse(zhttp.Request(r), &form, intl.ZogParseOpts())
 	if errs == nil {
 		return form, nil
 	}
@@ -54,7 +56,8 @@ var updateSpaceSchema = z.Struct(z.Shape{
 
 func ParseUpdateSpace(r *http.Request) (UpdateSpace, map[string][]string) {
 	var form UpdateSpace
-	errs := updateSpaceSchema.Parse(zhttp.Request(r), &form)
+	intl := rctx.GetIntl(r.Context())
+	errs := updateSpaceSchema.Parse(zhttp.Request(r), &form, intl.ZogParseOpts())
 	if errs == nil {
 		return form, nil
 	}

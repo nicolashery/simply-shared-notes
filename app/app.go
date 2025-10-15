@@ -57,6 +57,8 @@ func Run(ctx context.Context, distFS embed.FS, pragmasSQL string, localesFS embe
 		return err
 	}
 
+	intl.SetupZogI18n()
+
 	s := server.New(cfg, logger, sqlDB, queries, vite, sessionStore, email, i18nBundle)
 
 	return server.Run(ctx, s, logger, cfg.Port)

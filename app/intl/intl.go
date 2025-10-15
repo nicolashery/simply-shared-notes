@@ -8,6 +8,9 @@ import (
 	"time"
 
 	"github.com/BurntSushi/toml"
+	z "github.com/Oudwins/zog"
+	zogi18n "github.com/Oudwins/zog/i18n"
+	"github.com/Oudwins/zog/i18n/en"
 	"github.com/goodsign/monday"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"golang.org/x/text/language"
@@ -44,6 +47,16 @@ func NewBundle(localesFS embed.FS) (*i18n.Bundle, error) {
 	}
 
 	return b, nil
+}
+
+func SetupZogI18n() {
+	zogi18n.SetLanguagesErrsMap(
+		map[string]zogi18n.LangMap{
+			"en": en.Map,
+			"fr": ZogFrenchMap,
+		},
+		"en", // default language
+	)
 }
 
 func New(
@@ -126,4 +139,10 @@ func (i *Intl) TimeInUserTz(t time.Time) time.Time {
 	}
 
 	return t.In(i.CurrentTimezone)
+}
+
+func (i *Intl) ZogParseOpts() z.ExecOption {
+	base, _ := i.CurrentLang.Base()
+
+	return z.WithCtxValue("lang", base.String())
 }
