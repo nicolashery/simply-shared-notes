@@ -1,20 +1,42 @@
 package pages
 
 import (
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/forms"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
 )
 
 templ SpacesNew(requiresCode bool, form *forms.CreateSpace, errors forms.Errors) {
+	{{ intl := rctx.GetIntl(ctx) }}
 	@layouts.Landing("Create space") {
 		<div class="max-w-md mx-auto py-4">
-			<h1 class="text-2xl font-bold mb-1.5">Create a new space</h1>
+			<h1 class="text-2xl font-bold mb-1.5">
+				{ intl.Localize(&i18n.LocalizeConfig{
+					DefaultMessage: &i18n.Message{
+						ID:    "Spaces.New.Title",
+						Other: "Create a new space",
+					},
+				}) }
+			</h1>
 			<p class="mb-4 text-sm opacity-60">
-				Each space has a unique access link and can contain any number of notes.
+				{ intl.Localize(&i18n.LocalizeConfig{
+					DefaultMessage: &i18n.Message{
+						ID:    "Spaces.New.Description",
+						Other: "Each space has a unique access link and can contain any number of notes.",
+					},
+				}) }
 			</p>
 			<form method="POST" action="/new" class="flex flex-col gap-4">
 				<fieldset class="flex flex-col gap-1.5">
-					<label for="name" class="text-sm font-semibold">Space name</label>
+					<label for="name" class="text-sm font-semibold">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Spaces.New.NameLabel",
+								Other: "Space name",
+							},
+						}) }
+					</label>
 					<input
 						type="text"
 						name="name"
@@ -27,10 +49,24 @@ templ SpacesNew(requiresCode bool, form *forms.CreateSpace, errors forms.Errors)
 							{ e }
 						</p>
 					}
-					<p class="text-sm opacity-60">You can always change the name later in the space settings.</p>
+					<p class="text-sm opacity-60">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Spaces.New.NameHelp",
+								Other: "You can always change the name later in the space settings.",
+							},
+						}) }
+					</p>
 				</fieldset>
 				<fieldset class="flex flex-col gap-1.5">
-					<label for="identity" class="text-sm font-semibold">Your name</label>
+					<label for="identity" class="text-sm font-semibold">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Spaces.New.IdentityLabel",
+								Other: "Your name",
+							},
+						}) }
+					</label>
 					<input
 						type="text"
 						name="identity"
@@ -43,10 +79,24 @@ templ SpacesNew(requiresCode bool, form *forms.CreateSpace, errors forms.Errors)
 							{ e }
 						</p>
 					}
-					<p class="text-sm opacity-60">We'll use this to create the first member of your new space. You can add more later from the members page.</p>
+					<p class="text-sm opacity-60">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Spaces.New.IdentityHelp",
+								Other: "We'll use this to create the first member of your new space. You can add more later from the members page.",
+							},
+						}) }
+					</p>
 				</fieldset>
 				<fieldset class="flex flex-col gap-1.5">
-					<label for="email" class="text-sm font-semibold">Your email</label>
+					<label for="email" class="text-sm font-semibold">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Spaces.New.EmailLabel",
+								Other: "Your email",
+							},
+						}) }
+					</label>
 					<input
 						type="email"
 						name="email"
@@ -59,11 +109,25 @@ templ SpacesNew(requiresCode bool, form *forms.CreateSpace, errors forms.Errors)
 							{ e }
 						</p>
 					}
-					<p class="text-sm opacity-60">Your email is only used to send you the secure access link to your space. We will never spam or share your email with a third party.</p>
+					<p class="text-sm opacity-60">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Spaces.New.EmailHelp",
+								Other: "Your email is only used to send you the secure access link to your space. We will never spam or share your email with a third party.",
+							},
+						}) }
+					</p>
 				</fieldset>
 				if requiresCode {
 					<fieldset class="flex flex-col gap-1.5">
-						<label for="code" class="text-sm font-semibold">Invitation code</label>
+						<label for="code" class="text-sm font-semibold">
+							{ intl.Localize(&i18n.LocalizeConfig{
+								DefaultMessage: &i18n.Message{
+									ID:    "Spaces.New.CodeLabel",
+									Other: "Invitation code",
+								},
+							}) }
+						</label>
 						<input
 							type="text"
 							name="code"
@@ -76,10 +140,24 @@ templ SpacesNew(requiresCode bool, form *forms.CreateSpace, errors forms.Errors)
 								{ e }
 							</p>
 						}
-						<p class="text-sm opacity-60">Creating spaces is only possible with an invitation code.</p>
+						<p class="text-sm opacity-60">
+							{ intl.Localize(&i18n.LocalizeConfig{
+								DefaultMessage: &i18n.Message{
+									ID:    "Spaces.New.CodeHelp",
+									Other: "Creating spaces is only possible with an invitation code.",
+								},
+							}) }
+						</p>
 					</fieldset>
 				}
-				<button type="submit" class="btn btn-primary mt-4">Create space</button>
+				<button type="submit" class="btn btn-primary mt-4">
+					{ intl.Localize(&i18n.LocalizeConfig{
+						DefaultMessage: &i18n.Message{
+							ID:    "Spaces.New.CreateButton",
+							Other: "Create space",
+						},
+					}) }
+				</button>
 			</form>
 		</div>
 	}

@@ -18,6 +18,7 @@ templ SpacesShow() {
 					DefaultMessage: &i18n.Message{
 						ID:    "Spaces.Show.Welcome",
 						Zero:  "Welcome to your space! You don't have any notes yet.",
+						One:   "Welcome to your space! You have %% N notes %%.",
 						Other: "Welcome to your space! You have %% N notes %%.",
 					},
 					PluralCount: stats.NotesCount,
@@ -35,6 +36,7 @@ templ SpacesShow() {
 					{ intl.Localize(&i18n.LocalizeConfig{
 						DefaultMessage: &i18n.Message{
 							ID:    "Spaces.Show.NotesLinkText",
+							One: "{{.Count}} note",
 							Other: "{{.Count}} notes",
 						},
 						TemplateData: map[string]any{

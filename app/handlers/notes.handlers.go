@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/forms"
 	"github.com/nicolashery/simply-shared-notes/app/markdown"
@@ -163,10 +164,21 @@ func handleNotesCreate(logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries) 
 			return
 		}
 
+		intl := rctx.GetIntl(r.Context())
+		flashMsg := intl.Localize(&i18n.LocalizeConfig{
+			DefaultMessage: &i18n.Message{
+				ID:    "Handlers.Notes.Created",
+				Other: "Created new note: {{.Title}}",
+			},
+			TemplateData: map[string]any{
+				"Title": note.Title,
+			},
+		})
+
 		sess := rctx.GetSession(r.Context())
 		sess.AddFlash(session.FlashMessage{
 			Type:    session.FlashType_Success,
-			Content: fmt.Sprintf("Created new note: %s", note.Title),
+			Content: flashMsg,
 		})
 		err = sess.Save(r, w)
 		if err != nil {
@@ -338,10 +350,18 @@ func handleNotesUpdate(logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries) 
 			return
 		}
 
+		intl := rctx.GetIntl(r.Context())
+		flashMsg := intl.Localize(&i18n.LocalizeConfig{
+			DefaultMessage: &i18n.Message{
+				ID:    "Handlers.Notes.Saved",
+				Other: "Changes saved successfully",
+			},
+		})
+
 		sess := rctx.GetSession(r.Context())
 		sess.AddFlash(session.FlashMessage{
 			Type:    session.FlashType_Success,
-			Content: "Changes saved successfully",
+			Content: flashMsg,
 		})
 		err = sess.Save(r, w)
 		if err != nil {
@@ -435,10 +455,21 @@ func handleNotesDelete(logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries) 
 			return
 		}
 
+		intl := rctx.GetIntl(r.Context())
+		flashMsg := intl.Localize(&i18n.LocalizeConfig{
+			DefaultMessage: &i18n.Message{
+				ID:    "Handlers.Notes.Deleted",
+				Other: "Deleted note: {{.Title}}",
+			},
+			TemplateData: map[string]any{
+				"Title": note.Title,
+			},
+		})
+
 		sess := rctx.GetSession(r.Context())
 		sess.AddFlash(session.FlashMessage{
 			Type:    session.FlashType_Success,
-			Content: fmt.Sprintf("Deleted note: %s", note.Title),
+			Content: flashMsg,
 		})
 		err = sess.Save(r, w)
 		if err != nil {

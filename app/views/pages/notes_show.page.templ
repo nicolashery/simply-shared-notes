@@ -2,11 +2,13 @@ package pages
 
 import (
 	"fmt"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
 )
 
 templ NotesShow(renderedMarkdown string) {
+	{{ intl := rctx.GetIntl(ctx) }}
 	{{ access := rctx.GetAccess(ctx) }}
 	{{ note := rctx.GetNote(ctx) }}
 	@layouts.Space(nil) {
@@ -28,7 +30,12 @@ templ NotesShow(renderedMarkdown string) {
 				>
 					<path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path>
 				</svg>
-				Back to notes
+				{ intl.Localize(&i18n.LocalizeConfig{
+					DefaultMessage: &i18n.Message{
+						ID:    "Notes.Show.BackButton",
+						Other: "Back to notes",
+					},
+				}) }
 			</a>
 			<a
 				href={ templ.URL(fmt.Sprintf("/s/%s/notes/%s/edit", access.Token, note.PublicID)) }
@@ -47,7 +54,12 @@ templ NotesShow(renderedMarkdown string) {
 					<path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
 					<path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"></path>
 				</svg>
-				Edit note
+				{ intl.Localize(&i18n.LocalizeConfig{
+					DefaultMessage: &i18n.Message{
+						ID:    "Notes.Show.EditButton",
+						Other: "Edit note",
+					},
+				}) }
 			</a>
 		</div>
 		<h1 class="text-3xl font-bold mb-5">{ note.Title }</h1>

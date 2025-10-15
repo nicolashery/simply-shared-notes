@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/access"
 	"github.com/nicolashery/simply-shared-notes/app/config"
 	"github.com/nicolashery/simply-shared-notes/app/db"
@@ -114,7 +115,7 @@ func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, 
 
 		emailSubject := emails.SpaceCreatedSubject(r.Context(), space)
 		baseURL := baseUrlFromRequest(r)
-		emailText := emails.SpaceCreatedText(member.Name, space, baseURL, tokens)
+		emailText := emails.SpaceCreatedText(r.Context(), member.Name, space, baseURL, tokens)
 		err = email.Send(space.Email, emailSubject, emailText)
 		if err != nil {
 			logger.Error(
@@ -124,13 +125,22 @@ func handleSpacesCreate(cfg *config.Config, logger *slog.Logger, sqlDB *sql.DB, 
 			)
 		}
 
+		intl := rctx.GetIntl(r.Context())
+		flashMsg := intl.Localize(&i18n.LocalizeConfig{
+			DefaultMessage: &i18n.Message{
+				ID:    "Handlers.Spaces.Created",
+				Other: "Your new space {{.Space}} was created! Check your emails for the link to the space at: {{.Email}}!",
+			},
+			TemplateData: map[string]any{
+				"Space": space.Name,
+				"Email": space.Email,
+			},
+		})
+
 		sess := rctx.GetSession(r.Context())
 		sess.AddFlash(session.FlashMessage{
-			Type: session.FlashType_Success,
-			Content: fmt.Sprintf(
-				"Your new space %s was created! Check your emails for the link to the space at: %s!",
-				space.Name, space.Email,
-			),
+			Type:    session.FlashType_Success,
+			Content: flashMsg,
 		})
 		err = sess.Save(r, w)
 		if err != nil {
@@ -400,10 +410,21 @@ func handleSpacesUpdate(logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries)
 			return
 		}
 
+		intl := rctx.GetIntl(r.Context())
+		flashMsg := intl.Localize(&i18n.LocalizeConfig{
+			DefaultMessage: &i18n.Message{
+				ID:    "Handlers.Spaces.Updated",
+				Other: "{{.Space}} updated successfully.",
+			},
+			TemplateData: map[string]any{
+				"Space": spaceUpdated.Name,
+			},
+		})
+
 		sess := rctx.GetSession(r.Context())
 		sess.AddFlash(session.FlashMessage{
 			Type:    session.FlashType_Success,
-			Content: fmt.Sprintf("%s updated successfully.", spaceUpdated.Name),
+			Content: flashMsg,
 		})
 		err = sess.Save(r, w)
 		if err != nil {

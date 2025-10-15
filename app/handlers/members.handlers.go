@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/forms"
 	"github.com/nicolashery/simply-shared-notes/app/publicid"
@@ -145,10 +146,21 @@ func handleMembersCreate(logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries
 			return
 		}
 
+		intl := rctx.GetIntl(r.Context())
+		flashMsg := intl.Localize(&i18n.LocalizeConfig{
+			DefaultMessage: &i18n.Message{
+				ID:    "Handlers.Members.Added",
+				Other: "Added new member: {{.Name}}",
+			},
+			TemplateData: map[string]any{
+				"Name": member.Name,
+			},
+		})
+
 		sess := rctx.GetSession(r.Context())
 		sess.AddFlash(session.FlashMessage{
 			Type:    session.FlashType_Success,
-			Content: fmt.Sprintf("Added new member: %s", member.Name),
+			Content: flashMsg,
 		})
 		err = sess.Save(r, w)
 		if err != nil {
@@ -296,10 +308,21 @@ func handleMembersUpdate(logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries
 			return
 		}
 
+		intl := rctx.GetIntl(r.Context())
+		flashMsg := intl.Localize(&i18n.LocalizeConfig{
+			DefaultMessage: &i18n.Message{
+				ID:    "Handlers.Members.Saved",
+				Other: "Saved changes for: {{.Name}}",
+			},
+			TemplateData: map[string]any{
+				"Name": memberUpdated.Name,
+			},
+		})
+
 		sess := rctx.GetSession(r.Context())
 		sess.AddFlash(session.FlashMessage{
 			Type:    session.FlashType_Success,
-			Content: fmt.Sprintf("Saved changes for: %s", memberUpdated.Name),
+			Content: flashMsg,
 		})
 		err = sess.Save(r, w)
 		if err != nil {
@@ -398,10 +421,21 @@ func handleMembersDelete(logger *slog.Logger, sqlDB *sql.DB, queries *db.Queries
 			return
 		}
 
+		intl := rctx.GetIntl(r.Context())
+		flashMsg := intl.Localize(&i18n.LocalizeConfig{
+			DefaultMessage: &i18n.Message{
+				ID:    "Handlers.Members.Removed",
+				Other: "Removed member: {{.Name}}",
+			},
+			TemplateData: map[string]any{
+				"Name": member.Name,
+			},
+		})
+
 		sess := rctx.GetSession(r.Context())
 		sess.AddFlash(session.FlashMessage{
 			Type:    session.FlashType_Success,
-			Content: fmt.Sprintf("Removed member: %s", member.Name),
+			Content: flashMsg,
 		})
 		err = sess.Save(r, w)
 		if err != nil {

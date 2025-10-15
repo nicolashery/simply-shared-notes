@@ -1,17 +1,41 @@
 package pages
 
-import "github.com/nicolashery/simply-shared-notes/app/views/layouts"
+import (
+	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
+	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
+)
 
 templ Home() {
+	{{ intl := rctx.GetIntl(ctx) }}
 	@layouts.Landing("Home") {
 		<div class="hero">
 			<div class="hero-content text-center">
 				<div class="max-w-md">
-					<h1 class="text-4xl font-bold">Simply Shared Notes</h1>
+					<h1 class="text-4xl font-bold">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Home.Hero.Title",
+								Other: "Simply Shared Notes",
+							},
+						}) }
+					</h1>
 					<p class="py-6">
-						Create and share notes with others using access links — no accounts necessary, just simple collaboration.
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Home.Hero.Description",
+								Other: "Create and share notes with others using access links — no accounts necessary, just simple collaboration.",
+							},
+						}) }
 					</p>
-					<a href="/new" class="btn btn-primary">Get started</a>
+					<a href="/new" class="btn btn-primary">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Home.Hero.GetStartedButton",
+								Other: "Get started",
+							},
+						}) }
+					</a>
 				</div>
 			</div>
 		</div>

@@ -2,23 +2,39 @@ package pages
 
 import (
 	"fmt"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/forms"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
 )
 
 templ NotesNew(form *forms.CreateNote, errors forms.Errors) {
+	{{ intl := rctx.GetIntl(ctx) }}
 	{{ access := rctx.GetAccess(ctx) }}
 	@layouts.Space([]string{"assets/editor.js"}) {
 		<div>
-			<h1 class="text-2xl font-bold mb-4">New note</h1>
+			<h1 class="text-2xl font-bold mb-4">
+				{ intl.Localize(&i18n.LocalizeConfig{
+					DefaultMessage: &i18n.Message{
+						ID:    "Notes.New.Title",
+						Other: "New note",
+					},
+				}) }
+			</h1>
 			<form
 				method="POST"
 				action={ templ.URL(fmt.Sprintf("/s/%s/notes/new", access.Token)) }
 				class="flex flex-col gap-4"
 			>
 				<fieldset class="flex flex-col gap-1.5">
-					<label for="title" class="text-sm font-semibold">Title</label>
+					<label for="title" class="text-sm font-semibold">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Notes.New.TitleLabel",
+								Other: "Title",
+							},
+						}) }
+					</label>
 					<input
 						type="text"
 						name="title"
@@ -33,9 +49,25 @@ templ NotesNew(form *forms.CreateNote, errors forms.Errors) {
 					}
 				</fieldset>
 				<fieldset class="flex flex-col gap-1.5">
-					<label for="content" class="text-sm font-semibold">Content</label>
+					<label for="content" class="text-sm font-semibold">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Notes.New.ContentLabel",
+								Other: "Content",
+							},
+						}) }
+					</label>
 					<p class="text-sm opacity-60">
-						Uses <a class="link" target="_blank" href="https://www.markdownguide.org/cheat-sheet/">Markdown</a> syntax.
+						{{
+							msg := intl.Localize(&i18n.LocalizeConfig{
+								DefaultMessage: &i18n.Message{
+									ID:    "Notes.New.ContentHelp",
+									Other: "Uses %% Markdown %% syntax.",
+								},
+							})
+							pre, post := intl.SplitOnSlot(msg, "%% Markdown %%")
+						}}
+						<span>{ pre }</span><a class="link" target="_blank" href="https://www.markdownguide.org/cheat-sheet/">Markdown</a><span>{ post }</span>
 					</p>
 					<div
 						id="editor"
@@ -49,11 +81,25 @@ templ NotesNew(form *forms.CreateNote, errors forms.Errors) {
 					}
 				</fieldset>
 				<div class="flex items-center gap-4 mt-4">
-					<button type="submit" class="btn btn-primary">Create</button>
+					<button type="submit" class="btn btn-primary">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Common.CreateButton",
+								Other: "Create",
+							},
+						}) }
+					</button>
 					<a
 						href={ templ.URL(fmt.Sprintf("/s/%s/notes", access.Token)) }
 						class="btn btn-soft"
-					>Cancel</a>
+					>
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Common.CancelButton",
+								Other: "Cancel",
+							},
+						}) }
+					</a>
 				</div>
 			</form>
 		</div>

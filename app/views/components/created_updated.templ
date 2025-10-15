@@ -2,6 +2,7 @@ package components
 
 import (
 	"database/sql"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/views/helpers"
@@ -28,12 +29,38 @@ templ CreatedAtBy(
 ) {
 	{{ intl := rctx.GetIntl(ctx) }}
 	<div class="text-xs">
-		<span class="opacity-50">{ "Created by " }</span>
-		<span class="opacity-75">{ helpers.DisplayMemberName(createdBy, membersByID) }</span>
-		<span class="opacity-50">{ " on " } </span>
+		<span class="opacity-50">
+			{ intl.Localize(&i18n.LocalizeConfig{
+				DefaultMessage: &i18n.Message{
+					ID:    "Components.CreatedBy",
+					Other: "Created by",
+				},
+			}) }
+			{ " " }
+		</span>
+		<span class="opacity-75">{ helpers.DisplayMemberName(intl, createdBy, membersByID) }</span>
+		<span class="opacity-50">
+			{ " " }
+			{ intl.Localize(&i18n.LocalizeConfig{
+				DefaultMessage: &i18n.Message{
+					ID:    "Components.OnConnector",
+					Other: "on",
+				},
+			}) }
+			{ " " }
+		</span>
 		<time datetime={ createdAt.Format(time.RFC3339) }>
 			<span class="opacity-75">{ intl.FormatDate(createdAt) }</span>
-			<span class="opacity-50">{ " at " } </span>
+			<span class="opacity-50">
+				{ " " }
+				{ intl.Localize(&i18n.LocalizeConfig{
+					DefaultMessage: &i18n.Message{
+						ID:    "Components.AtConnector",
+						Other: "at",
+					},
+				}) }
+				{ " " }
+			</span>
 			<span class="opacity-75">{ intl.FormatTime(createdAt) }</span>
 		</time>
 	</div>
@@ -46,12 +73,38 @@ templ UpdatedAtBy(
 ) {
 	{{ intl := rctx.GetIntl(ctx) }}
 	<div class="text-xs">
-		<span class="opacity-50">{ " Updated by " }</span>
-		<span class="opacity-75">{ helpers.DisplayMemberName(updatedBy, membersByID) }</span>
-		<span class="opacity-50">{ " on " }</span>
+		<span class="opacity-50">
+			{ intl.Localize(&i18n.LocalizeConfig{
+				DefaultMessage: &i18n.Message{
+					ID:    "Components.UpdatedBy",
+					Other: "Updated by",
+				},
+			}) }
+			{ " " }
+		</span>
+		<span class="opacity-75">{ helpers.DisplayMemberName(intl, updatedBy, membersByID) }</span>
+		<span class="opacity-50">
+			{ " " }
+			{ intl.Localize(&i18n.LocalizeConfig{
+				DefaultMessage: &i18n.Message{
+					ID:    "Components.OnConnector",
+					Other: "on",
+				},
+			}) }
+			{ " " }
+		</span>
 		<time datetime={ updatedAt.Format(time.RFC3339) }>
 			<span class="opacity-75">{ intl.FormatDate(updatedAt) }</span>
-			<span class="opacity-50">{ " at " }</span>
+			<span class="opacity-50">
+				{ " " }
+				{ intl.Localize(&i18n.LocalizeConfig{
+					DefaultMessage: &i18n.Message{
+						ID:    "Components.AtConnector",
+						Other: "at",
+					},
+				}) }
+				{ " " }
+			</span>
 			<span class="opacity-75">{ intl.FormatTime(updatedAt) }</span>
 		</time>
 	</div>

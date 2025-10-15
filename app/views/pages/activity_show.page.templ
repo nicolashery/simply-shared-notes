@@ -2,6 +2,7 @@ package pages
 
 import (
 	"fmt"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/views/helpers"
@@ -15,7 +16,14 @@ templ ActivityShow(activity db.Activity, membersByID map[int64]db.Member, notesB
 	{{ intl := rctx.GetIntl(ctx) }}
 	@layouts.Space(nil) {
 		<div>
-			<h1 class="text-2xl font-bold mb-2">Activity</h1>
+			<h1 class="text-2xl font-bold mb-2">
+				{ intl.Localize(&i18n.LocalizeConfig{
+					DefaultMessage: &i18n.Message{
+						ID:    "Activity.Show.Title",
+						Other: "Activity",
+					},
+				}) }
+			</h1>
 			<div class="mb-2">
 				<a
 					href={ templ.URL(fmt.Sprintf("/s/%s/activity", access.Token)) }
@@ -34,60 +42,152 @@ templ ActivityShow(activity db.Activity, membersByID map[int64]db.Member, notesB
 					>
 						<path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path>
 					</svg>
-					Back to all activity
+					{ intl.Localize(&i18n.LocalizeConfig{
+						DefaultMessage: &i18n.Message{
+							ID:    "Activity.Show.BackButton",
+							Other: "Back to all activity",
+						},
+					}) }
 				</a>
 			</div>
 			<div class="list max-w-sm">
 				<div class="list-row px-0 items-center">
-					<div class="font-semibold list-col-grow">Time</div>
+					<div class="font-semibold list-col-grow">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Activity.Show.TimeLabel",
+								Other: "Time",
+							},
+						}) }
+					</div>
 					<time class="opacity-60" datetime={ activity.CreatedAt.Format(time.RFC3339) }>
 						{ intl.FormatDate(activity.CreatedAt) }
-						{ " at " }
+						{ " " }
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Activity.Show.AtConnector",
+								Other: "at",
+							},
+						}) }
+						{ " " }
 						{ intl.FormatTime(activity.CreatedAt) }
 					</time>
 				</div>
 				<div class="list-row px-0 items-center">
-					<div class="font-semibold list-col-grow">Member</div>
+					<div class="font-semibold list-col-grow">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Activity.Show.MemberLabel",
+								Other: "Member",
+							},
+						}) }
+					</div>
 					<div class="opacity-60">
-						{ helpers.DisplayMemberName(activity.MemberID, membersByID) }
+						{ helpers.DisplayMemberName(intl, activity.MemberID, membersByID) }
 					</div>
 				</div>
 				<div class="list-row px-0 items-center">
-					<div class="font-semibold list-col-grow">Action</div>
+					<div class="font-semibold list-col-grow">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Activity.Show.ActionLabel",
+								Other: "Action",
+							},
+						}) }
+					</div>
 					<div class="opacity-60">
 						if activity.Action == db.ActivityAction_Create {
-							{ "created" }
+							{ intl.Localize(&i18n.LocalizeConfig{
+								DefaultMessage: &i18n.Message{
+									ID:    "Activity.Show.ActionCreated",
+									Other: "created",
+								},
+							}) }
 						} else if activity.Action == db.ActivityAction_Update {
-							{ "updated" }
+							{ intl.Localize(&i18n.LocalizeConfig{
+								DefaultMessage: &i18n.Message{
+									ID:    "Activity.Show.ActionUpdated",
+									Other: "updated",
+								},
+							}) }
 						} else if activity.Action == db.ActivityAction_Delete {
-							{ "deleted" }
+							{ intl.Localize(&i18n.LocalizeConfig{
+								DefaultMessage: &i18n.Message{
+									ID:    "Activity.Show.ActionDeleted",
+									Other: "deleted",
+								},
+							}) }
 						} else {
-							{ "[unknown action]" }
+							{ intl.Localize(&i18n.LocalizeConfig{
+								DefaultMessage: &i18n.Message{
+									ID:    "Activity.Show.ActionUnknown",
+									Other: "[unknown action]",
+								},
+							}) }
 						}
 					</div>
 				</div>
 				<div class="list-row px-0 items-center">
-					<div class="font-semibold list-col-grow">Subject type</div>
+					<div class="font-semibold list-col-grow">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Activity.Show.SubjectTypeLabel",
+								Other: "Subject type",
+							},
+						}) }
+					</div>
 					<div class="opacity-60">
 						if activity.EntityType == db.ActivityEntity_Space {
-							{ "Space" }
+							{ intl.Localize(&i18n.LocalizeConfig{
+								DefaultMessage: &i18n.Message{
+									ID:    "Activity.Show.EntitySpace",
+									Other: "Space",
+								},
+							}) }
 						} else if activity.EntityType == db.ActivityEntity_Member {
-							{ "Member" }
+							{ intl.Localize(&i18n.LocalizeConfig{
+								DefaultMessage: &i18n.Message{
+									ID:    "Activity.Show.EntityMember",
+									Other: "Member",
+								},
+							}) }
 						} else if activity.EntityType == db.ActivityEntity_Note {
-							{ "Note" }
+							{ intl.Localize(&i18n.LocalizeConfig{
+								DefaultMessage: &i18n.Message{
+									ID:    "Activity.Show.EntityNote",
+									Other: "Note",
+								},
+							}) }
 						} else {
-							{ "Unknown Entity" }
+							{ intl.Localize(&i18n.LocalizeConfig{
+								DefaultMessage: &i18n.Message{
+									ID:    "Activity.Show.EntityUnknown",
+									Other: "Unknown Entity",
+								},
+							}) }
 						}
 					</div>
 				</div>
 				<div class="list-row px-0 items-center">
-					<div class="font-semibold list-col-grow">Subject</div>
+					<div class="font-semibold list-col-grow">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Activity.Show.SubjectLabel",
+								Other: "Subject",
+							},
+						}) }
+					</div>
 					<div class="opacity-60">
 						if activity.EntityType == db.ActivityEntity_Space {
 							{ space.Name }
 						} else if activity.EntityType == db.ActivityEntity_Member {
 							if !activity.EntityID.Valid {
-								{ "Deleted Member" }
+								{ intl.Localize(&i18n.LocalizeConfig{
+									DefaultMessage: &i18n.Message{
+										ID:    "Activity.Show.DeletedMember",
+										Other: "Deleted Member",
+									},
+								}) }
 							} else if member, ok := membersByID[activity.EntityID.Int64]; ok {
 								<a
 									class="link"
@@ -96,11 +196,21 @@ templ ActivityShow(activity db.Activity, membersByID map[int64]db.Member, notesB
 									{ member.Name }
 								</a>
 							} else {
-								{ "Unknown Member" }
+								{ intl.Localize(&i18n.LocalizeConfig{
+									DefaultMessage: &i18n.Message{
+										ID:    "Activity.Show.UnknownMember",
+										Other: "Unknown Member",
+									},
+								}) }
 							}
 						} else if activity.EntityType == db.ActivityEntity_Note {
 							if !activity.EntityID.Valid {
-								{ "Deleted Note" }
+								{ intl.Localize(&i18n.LocalizeConfig{
+									DefaultMessage: &i18n.Message{
+										ID:    "Activity.Show.DeletedNote",
+										Other: "Deleted Note",
+									},
+								}) }
 							} else if note, ok := notesByID[activity.EntityID.Int64]; ok {
 								<a
 									class="link"
@@ -109,7 +219,12 @@ templ ActivityShow(activity db.Activity, membersByID map[int64]db.Member, notesB
 									{ note.Title }
 								</a>
 							} else {
-								{ "Unknown Note" }
+								{ intl.Localize(&i18n.LocalizeConfig{
+									DefaultMessage: &i18n.Message{
+										ID:    "Activity.Show.UnknownNote",
+										Other: "Unknown Note",
+									},
+								}) }
 							}
 						}
 					</div>

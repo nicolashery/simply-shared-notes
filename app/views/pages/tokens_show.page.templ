@@ -2,23 +2,44 @@ package pages
 
 import (
 	"fmt"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/access"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
 )
 
 templ TokensShow(baseURL string, tokens access.AccessTokens) {
+	{{ intl := rctx.GetIntl(ctx) }}
 	@layouts.Space([]string{"assets/clipboard.js"}) {
 		<div>
 			<div class="mb-4">
-				<h1 class="text-2xl font-bold mb-1.5">Share space</h1>
+				<h1 class="text-2xl font-bold mb-1.5">
+					{ intl.Localize(&i18n.LocalizeConfig{
+						DefaultMessage: &i18n.Message{
+							ID:    "Tokens.Show.Title",
+							Other: "Share space",
+						},
+					}) }
+				</h1>
 				<p class="text-sm opacity-60">
-					Share these links to give friends and collaborators access to this space and all its notes.
-					Each access link grants different permissions to this space.
+					{ intl.Localize(&i18n.LocalizeConfig{
+						DefaultMessage: &i18n.Message{
+							ID:    "Tokens.Show.Description",
+							Other: "Share these links to give friends and collaborators access to this space and all its notes. Each access link grants different permissions to this space.",
+						},
+					}) }
 				</p>
 			</div>
 			<div class="flex flex-col gap-4">
 				<fieldset class="flex flex-col gap-1.5">
-					<label for="admin" class="text-sm font-semibold">Admin</label>
+					<label for="admin" class="text-sm font-semibold">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Tokens.Show.AdminLabel",
+								Other: "Admin",
+							},
+						}) }
+					</label>
 					<div class="join">
 						<label class="input w-full join-item">
 							<svg
@@ -40,12 +61,43 @@ templ TokensShow(baseURL string, tokens access.AccessTokens) {
 								readonly
 							/>
 						</label>
-						<button class="btn btn-soft join-item" data-target="admin" data-copied-text="Copied!" data-error-text="Error">Copy</button>
+						<button class="btn btn-soft join-item" data-target="admin" data-copied-text={ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Tokens.Show.CopiedText",
+								Other: "Copied!",
+							},
+						}) } data-error-text={ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Tokens.Show.ErrorText",
+								Other: "Error",
+							},
+						}) }>
+							{ intl.Localize(&i18n.LocalizeConfig{
+								DefaultMessage: &i18n.Message{
+									ID:    "Common.CopyButton",
+									Other: "Copy",
+								},
+							}) }
+						</button>
 					</div>
-					<p class="text-sm opacity-60">Everyone with this link can do anything in this space.</p>
+					<p class="text-sm opacity-60">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Tokens.Show.AdminHelp",
+								Other: "Everyone with this link can do anything in this space.",
+							},
+						}) }
+					</p>
 				</fieldset>
 				<fieldset class="flex flex-col gap-1.5">
-					<label for="edit" class="text-sm font-semibold">Editor</label>
+					<label for="edit" class="text-sm font-semibold">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Tokens.Show.EditorLabel",
+								Other: "Editor",
+							},
+						}) }
+					</label>
 					<div class="join">
 						<label class="input w-full join-item">
 							<svg
@@ -67,12 +119,43 @@ templ TokensShow(baseURL string, tokens access.AccessTokens) {
 								readonly
 							/>
 						</label>
-						<button class="btn btn-soft join-item" data-target="edit" data-copied-text="Copied!" data-error-text="Error">Copy</button>
+						<button class="btn btn-soft join-item" data-target="edit" data-copied-text={ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Tokens.Show.CopiedText",
+								Other: "Copied!",
+							},
+						}) } data-error-text={ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Tokens.Show.ErrorText",
+								Other: "Error",
+							},
+						}) }>
+							{ intl.Localize(&i18n.LocalizeConfig{
+								DefaultMessage: &i18n.Message{
+									ID:    "Common.CopyButton",
+									Other: "Copy",
+								},
+							}) }
+						</button>
 					</div>
-					<p class="text-sm opacity-60">Everyone with this link can create and edit notes, as well as add or rename members.</p>
+					<p class="text-sm opacity-60">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Tokens.Show.EditorHelp",
+								Other: "Everyone with this link can create and edit notes, as well as add or rename members.",
+							},
+						}) }
+					</p>
 				</fieldset>
 				<fieldset class="flex flex-col gap-1.5">
-					<label for="view" class="text-sm font-semibold">View-only</label>
+					<label for="view" class="text-sm font-semibold">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Tokens.Show.ViewOnlyLabel",
+								Other: "View-only",
+							},
+						}) }
+					</label>
 					<div class="join">
 						<label class="input w-full join-item">
 							<svg
@@ -94,9 +177,33 @@ templ TokensShow(baseURL string, tokens access.AccessTokens) {
 								readonly
 							/>
 						</label>
-						<button class="btn btn-soft join-item" data-target="view" data-copied-text="Copied!" data-error-text="Error">Copy</button>
+						<button class="btn btn-soft join-item" data-target="view" data-copied-text={ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Tokens.Show.CopiedText",
+								Other: "Copied!",
+							},
+						}) } data-error-text={ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Tokens.Show.ErrorText",
+								Other: "Error",
+							},
+						}) }>
+							{ intl.Localize(&i18n.LocalizeConfig{
+								DefaultMessage: &i18n.Message{
+									ID:    "Common.CopyButton",
+									Other: "Copy",
+								},
+							}) }
+						</button>
 					</div>
-					<p class="text-sm opacity-60">Everyone with this link can only view notes and members.</p>
+					<p class="text-sm opacity-60">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Tokens.Show.ViewOnlyHelp",
+								Other: "Everyone with this link can only view notes and members.",
+							},
+						}) }
+					</p>
 				</fieldset>
 			</div>
 		</div>

@@ -2,18 +2,27 @@ package pages
 
 import (
 	"fmt"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
 )
 
 templ MembersList(members []db.Member) {
+	{{ intl := rctx.GetIntl(ctx) }}
 	{{ access := rctx.GetAccess(ctx) }}
 	{{ identity := rctx.GetIdentity(ctx) }}
 	@layouts.Space(nil) {
 		<div>
 			<div class="flex justify-between items-center mb-2">
-				<h1 class="text-2xl font-bold">Members</h1>
+				<h1 class="text-2xl font-bold">
+					{ intl.Localize(&i18n.LocalizeConfig{
+						DefaultMessage: &i18n.Message{
+							ID:    "Members.List.Title",
+							Other: "Members",
+						},
+					}) }
+				</h1>
 				<a
 					href={ templ.URL(fmt.Sprintf("/s/%s/members/new", access.Token)) }
 					class="btn btn-sm"
@@ -32,7 +41,12 @@ templ MembersList(members []db.Member) {
 						<path d="M8 12h8"></path>
 						<path d="M12 8v8"></path>
 					</svg>
-					Add member
+					{ intl.Localize(&i18n.LocalizeConfig{
+						DefaultMessage: &i18n.Message{
+							ID:    "Members.List.AddButton",
+							Other: "Add member",
+						},
+					}) }
 				</a>
 			</div>
 			<ul class="list text-base">
@@ -49,7 +63,12 @@ templ MembersList(members []db.Member) {
 						>
 							{ member.Name }
 						</a>
-						<div class="tooltip" data-tip="Edit">
+						<div class="tooltip" data-tip={ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Members.List.EditTooltip",
+								Other: "Edit",
+							},
+						}) }>
 							<a
 								class="btn btn-square btn-ghost btn-sm"
 								href={ templ.URL(fmt.Sprintf("/s/%s/members/%s/edit", access.Token, member.PublicID)) }
@@ -70,7 +89,12 @@ templ MembersList(members []db.Member) {
 							</a>
 						</div>
 						if member.ID != identity.Member.ID {
-							<div class="tooltip" data-tip="Remove">
+							<div class="tooltip" data-tip={ intl.Localize(&i18n.LocalizeConfig{
+								DefaultMessage: &i18n.Message{
+									ID:    "Members.List.RemoveTooltip",
+									Other: "Remove",
+								},
+							}) }>
 								<a
 									class="btn btn-square btn-ghost btn-sm"
 									href={ templ.URL(fmt.Sprintf("/s/%s/members/%s/delete", access.Token, member.PublicID)) }

@@ -2,19 +2,26 @@ package pages
 
 import (
 	"fmt"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
 )
 
 templ IdentitySelect(members []db.Member) {
+	{{ intl := rctx.GetIntl(ctx) }}
 	{{ space := rctx.GetSpace(ctx) }}
 	{{ access := rctx.GetAccess(ctx) }}
 	@layouts.Landing("Select identity") {
 		<div class="max-w-md mx-auto py-4">
 			<h1 class="text-2xl font-bold mb-1.5">{ space.Name }</h1>
 			<p class="mb-4 text-sm opacity-60">
-				Welcome to this space! To get started, let us know who you are:
+				{ intl.Localize(&i18n.LocalizeConfig{
+					DefaultMessage: &i18n.Message{
+						ID:    "Identity.Select.Welcome",
+						Other: "Welcome to this space! To get started, let us know who you are:",
+					},
+				}) }
 			</p>
 			<form method="POST" action={ templ.URL(fmt.Sprintf("/s/%s/identity", access.Token)) } class="flex flex-col gap-3">
 				for _, m := range members {
@@ -28,8 +35,22 @@ templ IdentitySelect(members []db.Member) {
 						<span>{ m.Name }</span>
 					</label>
 				}
-				<button type="submit" class="btn btn-primary mt-4">Select</button>
-				<p class="text-sm opacity-60">We will remember your choice for in a secure session cookie. You can always change your selection from the member menu in the top right.</p>
+				<button type="submit" class="btn btn-primary mt-4">
+					{ intl.Localize(&i18n.LocalizeConfig{
+						DefaultMessage: &i18n.Message{
+							ID:    "Identity.Select.SelectButton",
+							Other: "Select",
+						},
+					}) }
+				</button>
+				<p class="text-sm opacity-60">
+					{ intl.Localize(&i18n.LocalizeConfig{
+						DefaultMessage: &i18n.Message{
+							ID:    "Identity.Select.Help",
+							Other: "We will remember your choice for in a secure session cookie. You can always change your selection from the member menu in the top right.",
+						},
+					}) }
+				</p>
 			</form>
 		</div>
 	}

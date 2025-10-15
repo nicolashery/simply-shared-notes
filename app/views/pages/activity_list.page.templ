@@ -2,6 +2,7 @@ package pages
 
 import (
 	"fmt"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/views/helpers"
@@ -14,7 +15,14 @@ templ ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notes
 	{{ intl := rctx.GetIntl(ctx) }}
 	@layouts.Space(nil) {
 		<div>
-			<h1 class="text-2xl font-bold mb-2">Activity</h1>
+			<h1 class="text-2xl font-bold mb-2">
+				{ intl.Localize(&i18n.LocalizeConfig{
+					DefaultMessage: &i18n.Message{
+						ID:    "Activity.List.Title",
+						Other: "Activity",
+					},
+				}) }
+			</h1>
 			<ul class="list">
 				for _, activity := range entries {
 					<li class="list-row px-0">
@@ -24,39 +32,100 @@ templ ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notes
 						>
 							<time datetime={ activity.CreatedAt.Format(time.RFC3339) }>
 								{ intl.FormatDate(activity.CreatedAt) }
-								{ " at " }
+								{ " " }
+								{ intl.Localize(&i18n.LocalizeConfig{
+									DefaultMessage: &i18n.Message{
+										ID:    "Activity.List.AtConnector",
+										Other: "at",
+									},
+								}) }
+								{ " " }
 								{ intl.FormatTime(activity.CreatedAt) }
 							</time>
 						</a>
 						<div class="text-xs">
-							<span class="opacity-75">{ helpers.DisplayMemberName(activity.MemberID, membersByID) }</span>
+							<span class="opacity-75">{ helpers.DisplayMemberName(intl, activity.MemberID, membersByID) }</span>
 							<span class="opacity-50">
 								if activity.Action == db.ActivityAction_Create {
-									{ " created " }
+									{ " " }
+									{ intl.Localize(&i18n.LocalizeConfig{
+										DefaultMessage: &i18n.Message{
+											ID:    "Activity.List.ActionCreated",
+											Other: "created",
+										},
+									}) }
+									{ " " }
 								} else if activity.Action == db.ActivityAction_Update {
-									{ " updated " }
+									{ " " }
+									{ intl.Localize(&i18n.LocalizeConfig{
+										DefaultMessage: &i18n.Message{
+											ID:    "Activity.List.ActionUpdated",
+											Other: "updated",
+										},
+									}) }
+									{ " " }
 								} else if activity.Action == db.ActivityAction_Delete {
-									{ " deleted a " }
+									{ " " }
+									{ intl.Localize(&i18n.LocalizeConfig{
+										DefaultMessage: &i18n.Message{
+											ID:    "Activity.List.ActionDeleted",
+											Other: "deleted a",
+										},
+									}) }
+									{ " " }
 								} else {
-									{ " [unknown action] " }
+									{ " " }
+									{ intl.Localize(&i18n.LocalizeConfig{
+										DefaultMessage: &i18n.Message{
+											ID:    "Activity.List.ActionUnknown",
+											Other: "[unknown action]",
+										},
+									}) }
+									{ " " }
 								}
 							</span>
 							<span class="opacity-50">
 								if activity.EntityType == db.ActivityEntity_Space {
-									{ " this space" }
+									{ intl.Localize(&i18n.LocalizeConfig{
+										DefaultMessage: &i18n.Message{
+											ID:    "Activity.List.EntitySpace",
+											Other: "this space",
+										},
+									}) }
 								} else if activity.EntityType == db.ActivityEntity_Member {
-									{ " member" }
+									{ intl.Localize(&i18n.LocalizeConfig{
+										DefaultMessage: &i18n.Message{
+											ID:    "Activity.List.EntityMember",
+											Other: "member",
+										},
+									}) }
 								} else if activity.EntityType == db.ActivityEntity_Note {
-									{ " note" }
+									{ intl.Localize(&i18n.LocalizeConfig{
+										DefaultMessage: &i18n.Message{
+											ID:    "Activity.List.EntityNote",
+											Other: "note",
+										},
+									}) }
 								} else {
-									{ " unknown entity" }
+									{ intl.Localize(&i18n.LocalizeConfig{
+										DefaultMessage: &i18n.Message{
+											ID:    "Activity.List.EntityUnknown",
+											Other: "unknown entity",
+										},
+									}) }
 								}
 							</span>
 							if activity.Action != db.ActivityAction_Delete && activity.EntityType != db.ActivityEntity_Space {
 								<span class="opacity-75">
 									if activity.EntityType == db.ActivityEntity_Member {
 										if !activity.EntityID.Valid {
-											{ " Deleted Member" }
+											{ " " }
+											{ intl.Localize(&i18n.LocalizeConfig{
+												DefaultMessage: &i18n.Message{
+													ID:    "Activity.List.DeletedMember",
+													Other: "Deleted Member",
+												},
+											}) }
 										} else if member, ok := membersByID[activity.EntityID.Int64]; ok {
 											<a
 												class="link"
@@ -65,11 +134,23 @@ templ ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notes
 												{ " "+member.Name }
 											</a>
 										} else {
-											{ " Unknown Member" }
+											{ " " }
+											{ intl.Localize(&i18n.LocalizeConfig{
+												DefaultMessage: &i18n.Message{
+													ID:    "Activity.List.UnknownMember",
+													Other: "Unknown Member",
+												},
+											}) }
 										}
 									} else if activity.EntityType == db.ActivityEntity_Note {
 										if !activity.EntityID.Valid {
-											{ " Deleted Note" }
+											{ " " }
+											{ intl.Localize(&i18n.LocalizeConfig{
+												DefaultMessage: &i18n.Message{
+													ID:    "Activity.List.DeletedNote",
+													Other: "Deleted Note",
+												},
+											}) }
 										} else if note, ok := notesByID[activity.EntityID.Int64]; ok {
 											<a
 												class="link"
@@ -78,7 +159,13 @@ templ ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notes
 												{ " "+note.Title }
 											</a>
 										} else {
-											{ " Unknown Note" }
+											{ " " }
+											{ intl.Localize(&i18n.LocalizeConfig{
+												DefaultMessage: &i18n.Message{
+													ID:    "Activity.List.UnknownNote",
+													Other: "Unknown Note",
+												},
+											}) }
 										}
 									}
 								</span>

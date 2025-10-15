@@ -1,6 +1,518 @@
+["Activity.List.ActionCreated"]
+hash = "sha1-21c50805b553b7a40e48394a5d77d442587ddee2"
+other = "a créé"
+
+["Activity.List.ActionDeleted"]
+hash = "sha1-b52a1e3689757dc2e5e9e642f4341e6b74dc9c0b"
+other = "a supprimé"
+
+["Activity.List.ActionUnknown"]
+hash = "sha1-700111f579a0d9346b5a4c70b12d9bb8b7aeeea8"
+other = "[unknown action]"
+
+["Activity.List.ActionUpdated"]
+hash = "sha1-13a1891af75c642306a6b695377d16e4a91f0e1b"
+other = "a modifié"
+
+["Activity.List.AtConnector"]
+hash = "sha1-27e90dfa57c358acfaf470860f6f72c9282ce995"
+other = "à"
+
+["Activity.List.DeletedMember"]
+hash = "sha1-3afeabf45f0bbe78fe1af9debed1945da8e23e52"
+other = "Membre supprimé"
+
+["Activity.List.DeletedNote"]
+hash = "sha1-9ae0948a5e9bf86598d4c8739b357f77926bb70a"
+other = "Note supprimée"
+
+["Activity.List.EntityMember"]
+hash = "sha1-6467baa3b187373e3931422e2a8ef22f3e447d77"
+other = "membre"
+
+["Activity.List.EntityNote"]
+hash = "sha1-c51048b7325d60e326d19a9cfbeff2577be1672e"
+other = "note"
+
+["Activity.List.EntitySpace"]
+hash = "sha1-fe404c4ecab488755c38b95c77eb5768bdc7008a"
+other = "cet espace"
+
+["Activity.List.EntityUnknown"]
+hash = "sha1-d473460a2de97479980e0f58e90756d6ed740c59"
+other = "entité inconnue"
+
+["Activity.List.Title"]
+hash = "sha1-81c0d915fa6d82fd30661c5e66e204cea52bb2b5"
+other = "Activité"
+
+["Activity.List.UnknownMember"]
+hash = "sha1-6bc31e4f75de98ac7b055c412d6697035b4af8f5"
+other = "Membre inconnu"
+
+["Activity.List.UnknownNote"]
+hash = "sha1-0ace0b318758866673dd0c0dc310657bda61b9fd"
+other = "Note inconnue"
+
+["Activity.Show.ActionCreated"]
+hash = "sha1-21c50805b553b7a40e48394a5d77d442587ddee2"
+other = "créé"
+
+["Activity.Show.ActionDeleted"]
+hash = "sha1-b639f5cc719831458c83999303237e8499c0cabe"
+other = "supprimé"
+
+["Activity.Show.ActionLabel"]
+hash = "sha1-97c89a4d6630adeb18fa12ba9976a31413fe293e"
+other = "Action"
+
+["Activity.Show.ActionUnknown"]
+hash = "sha1-700111f579a0d9346b5a4c70b12d9bb8b7aeeea8"
+other = "[unknown action]"
+
+["Activity.Show.ActionUpdated"]
+hash = "sha1-13a1891af75c642306a6b695377d16e4a91f0e1b"
+other = "modifié"
+
+["Activity.Show.AtConnector"]
+hash = "sha1-27e90dfa57c358acfaf470860f6f72c9282ce995"
+other = "à"
+
+["Activity.Show.BackButton"]
+hash = "sha1-789234a34351c66c2f5b5ca72933e3c7ce8eb674"
+other = "Retour à l'activité"
+
+["Activity.Show.DeletedMember"]
+hash = "sha1-3afeabf45f0bbe78fe1af9debed1945da8e23e52"
+other = "Membre supprimé"
+
+["Activity.Show.DeletedNote"]
+hash = "sha1-9ae0948a5e9bf86598d4c8739b357f77926bb70a"
+other = "Note supprimée"
+
+["Activity.Show.EntityMember"]
+hash = "sha1-6853c98a6f4358bbfed1b3b9c81d308649299b0f"
+other = "Membre"
+
+["Activity.Show.EntityNote"]
+hash = "sha1-2c924e3088204ee77ba681f72be3444357932fca"
+other = "Note"
+
+["Activity.Show.EntitySpace"]
+hash = "sha1-6d8c9b124d521027647b4f270cb2872798f9264e"
+other = "Espace"
+
+["Activity.Show.EntityUnknown"]
+hash = "sha1-73397374934f8c982bc8af0312512a7df5a7e797"
+other = "Entité inconnue"
+
+["Activity.Show.MemberLabel"]
+hash = "sha1-6853c98a6f4358bbfed1b3b9c81d308649299b0f"
+other = "Membre"
+
+["Activity.Show.SubjectLabel"]
+hash = "sha1-8d183dbdcea3b29906090bd83fa6fa37923cc8ec"
+other = "Sujet"
+
+["Activity.Show.SubjectTypeLabel"]
+hash = "sha1-7bbb5dad07c78f8d03b6e4dacdf24f36e9d2f044"
+other = "Type de sujet"
+
+["Activity.Show.TimeLabel"]
+hash = "sha1-6c82e6dd86807ee3db07e3c82bec1ae1ce00b08b"
+other = "Heure"
+
+["Activity.Show.Title"]
+hash = "sha1-81c0d915fa6d82fd30661c5e66e204cea52bb2b5"
+other = "Activité"
+
+["Activity.Show.UnknownMember"]
+hash = "sha1-6bc31e4f75de98ac7b055c412d6697035b4af8f5"
+other = "Membre inconnu"
+
+["Activity.Show.UnknownNote"]
+hash = "sha1-0ace0b318758866673dd0c0dc310657bda61b9fd"
+other = "Note inconnue"
+
+["Common.AddButton"]
+hash = "sha1-61cc55aa0453184734c3fa0b621eda6fa874bd83"
+other = "Ajouter"
+
+["Common.CancelButton"]
+hash = "sha1-77dfd2135f4db726c47299bb55be26f7f4525a46"
+other = "Annuler"
+
+["Common.CopyButton"]
+hash = "sha1-af74f7c5362aaee985bf8cda3dd75fc80751ce51"
+other = "Copier"
+
+["Common.CreateButton"]
+hash = "sha1-6e157c5da4410b7e9de85f5c93026b9176e69064"
+other = "Créer"
+
+["Common.DeleteButton"]
+hash = "sha1-f6fdbe48dc54dd86f63097a03bd24094dedd713a"
+other = "Supprimer"
+
+["Common.RemoveButton"]
+hash = "sha1-e963907dac5cd5c017869b4c96c18021c9bd058b"
+other = "Retirer"
+
+["Common.ResetButton"]
+hash = "sha1-44c57abd888a66b36d4b7c902134063e4a097223"
+other = "Réinitialiser"
+
+["Common.SaveButton"]
+hash = "sha1-efc007a393f66cdb14d57d385822a3d9e36ef873"
+other = "Enregistrer"
+
+["Components.AtConnector"]
+hash = "sha1-27e90dfa57c358acfaf470860f6f72c9282ce995"
+other = "à"
+
+["Components.CreatedBy"]
+hash = "sha1-5d73cc30510c739ed68c572c5199e106d325b648"
+other = "Créé par"
+
+["Components.OnConnector"]
+hash = "sha1-db3d405b10675998c030223177d42e71b4e7a312"
+other = "le"
+
+["Components.UpdatedBy"]
+hash = "sha1-c793ca7d411aa4ee1ef6928c30d7fbe8eb8ef207"
+other = "Modifié par"
+
 ["Emails.SpaceCreated"]
 hash = "sha1-c6259b245d9bba6ec752a86e168805f28745fc73"
 other = "Votre espace a été créé : {{.Space}}"
+
+["Emails.SpaceCreated.AdminLink"]
+hash = "sha1-c47a968bbc599ce7336d1482bc0c898002ffdb42"
+other = "Enfin, conservez ce lien pour vous-même car il vous permettra de tout faire dans cet espace (accès administrateur) :\n{{.URL}}"
+
+["Emails.SpaceCreated.EditorLink"]
+hash = "sha1-6fa78e7b7f1530ea69923d07111da17330f9d46a"
+other = "Partagez ce lien avec toute personne avec qui vous souhaitez collaborer dans cet espace (accès éditeur) :\n{{.URL}}"
+
+["Emails.SpaceCreated.Greeting"]
+hash = "sha1-c576ae188623f29689c9c7eec0c15a0882b7e3f6"
+other = "Bonjour {{.Name}} !"
+
+["Emails.SpaceCreated.Introduction"]
+hash = "sha1-2ded5d4ce4fb17f0e07ee56f27a0e79c702ad03b"
+other = "Vous avez créé un nouvel espace pour vos notes : {{.Space}}."
+
+["Emails.SpaceCreated.Signature"]
+hash = "sha1-8a6aebd8ef34aa4cd713fb9688041cc76a538e2b"
+other = "Cordialement,\n- Simply Shared Notes"
+
+["Emails.SpaceCreated.ViewLink"]
+hash = "sha1-a807cc2bd889118f9eb92f786e52e0a6874de8a0"
+other = "Vous pouvez également partager ce lien si vous ne souhaitez pas autoriser les modifications (accès en lecture seule) :\n{{.URL}}"
+
+["Handlers.Members.Added"]
+hash = "sha1-979f2b23d9ba3fe4d6c320255c7401c7752343c0"
+other = "Nouveau membre ajouté : {{.Name}}"
+
+["Handlers.Members.Removed"]
+hash = "sha1-3566354866ee278cddfb832e1204f496c79f4756"
+other = "Membre retiré : {{.Name}}"
+
+["Handlers.Members.Saved"]
+hash = "sha1-c3aa38895886968cb4e6de9e74abeb5c8cf81c87"
+other = "Modifications enregistrées pour : {{.Name}}"
+
+["Handlers.Notes.Created"]
+hash = "sha1-2b7c87c511e32c0832e40c9d98ffc495fc72ba71"
+other = "Nouvelle note créée : {{.Title}}"
+
+["Handlers.Notes.Deleted"]
+hash = "sha1-dd63c33c4b065b9672cb78790eeccaa166b9aedf"
+other = "Note supprimée : {{.Title}}"
+
+["Handlers.Notes.Saved"]
+hash = "sha1-f280abfbdd2b446b83b726202b040224495bff89"
+other = "Modifications enregistrées avec succès"
+
+["Handlers.Spaces.Created"]
+hash = "sha1-53f3c1383fed927effcf160ec745c375cc5edc0e"
+other = "Votre nouvel espace {{.Space}} a été créé ! Consultez vos emails pour obtenir le lien vers l'espace à l'adresse : {{.Email}} !"
+
+["Handlers.Spaces.Updated"]
+hash = "sha1-2458714c4203d68a1c71ac0ee34edc75d60204a7"
+other = "{{.Space}} mis à jour avec succès."
+
+["Helpers.Identity.Anonymous"]
+hash = "sha1-9bed5104004c5fe4e3e46673da174472bff1360a"
+other = "Anonyme"
+
+["Helpers.Member.Deleted"]
+hash = "sha1-3afeabf45f0bbe78fe1af9debed1945da8e23e52"
+other = "Membre supprimé"
+
+["Helpers.Member.Unknown"]
+hash = "sha1-6bc31e4f75de98ac7b055c412d6697035b4af8f5"
+other = "Membre inconnu"
+
+["Helpers.Role.Admin"]
+hash = "sha1-4e7afebcfbae000b22c7c85e5560f89a2a0280b4"
+other = "Administrateur"
+
+["Helpers.Role.Editor"]
+hash = "sha1-c7e9fb2ea6c3b8c3ce97645eb902c348d859f36d"
+other = "Éditeur"
+
+["Helpers.Role.ViewOnly"]
+hash = "sha1-bd0aae2579470d5e5f8f929445ef59305e61809b"
+other = "Lecture seule"
+
+["Home.Hero.Description"]
+hash = "sha1-7c25fa211c8e073c19d826c7149be2dcdac4a7c0"
+other = "Créez et partagez des notes avec d'autres personnes en utilisant des liens d'accès — aucun compte nécessaire, juste une collaboration simple."
+
+["Home.Hero.GetStartedButton"]
+hash = "sha1-90e40d504340834d9e79a4d800e45283591c5927"
+other = "Commencer"
+
+["Home.Hero.Title"]
+hash = "sha1-975e53527908f84f19536f2d550935c8a6f28f6d"
+other = "Simply Shared Notes"
+
+["Identity.Select.Help"]
+hash = "sha1-40ed7b01694e988bad8503d349b52d48141376ca"
+other = "Nous mémoriserons votre choix dans un cookie de session sécurisé. Vous pouvez toujours modifier votre sélection depuis le menu membre en haut à droite."
+
+["Identity.Select.SelectButton"]
+hash = "sha1-8598222918d3c6e513d63060cf55e2971ded729a"
+other = "Sélectionner"
+
+["Identity.Select.Welcome"]
+hash = "sha1-7bfc1b4b5d7d856fee9a4b884fd4cab3d656b39f"
+other = "Bienvenue dans cet espace ! Pour commencer, indiquez-nous qui vous êtes :"
+
+["Language.Select.Automatic"]
+hash = "sha1-ac9041e76816a34aba228a736ec30da6984c5777"
+other = "Automatique"
+
+["Language.Select.AutomaticHelp"]
+hash = "sha1-86f9dd810bf8c14bee0b3e4194aa04ad8b872fee"
+other = "(suit les paramètres de votre appareil)"
+
+["Language.Select.CookieNotice"]
+hash = "sha1-10754cf82ddb9768a33af3b1776c5051284a92d6"
+other = "Votre préférence de langue sera enregistrée dans un cookie de session sécurisé."
+
+["Language.Select.Description"]
+hash = "sha1-a482b4ccdba38ab96cc2c385dcad2a7759b884ed"
+other = "Sélectionnez votre langue préférée pour l'interface de l'application :"
+
+["Language.Select.PageTitle"]
+hash = "sha1-789b14dfa8cb7b36e164a4ef9f37dbfc44c25ba0"
+other = "Changer de langue"
+
+["Language.Select.Title"]
+hash = "sha1-789b14dfa8cb7b36e164a4ef9f37dbfc44c25ba0"
+other = "Changer de langue"
+
+["Layout.AppName"]
+hash = "sha1-975e53527908f84f19536f2d550935c8a6f28f6d"
+other = "Simply Shared Notes"
+
+["Layout.Nav.Activity"]
+hash = "sha1-81c0d915fa6d82fd30661c5e66e204cea52bb2b5"
+other = "Activité"
+
+["Layout.Nav.Home"]
+hash = "sha1-70f8bb9a8a5393ef080507a89e4b98d139000d65"
+other = "Accueil"
+
+["Layout.Nav.Members"]
+hash = "sha1-1cb449c1126609b4b41e1d87f65f0d7cd19b49b9"
+other = "Membres"
+
+["Layout.Nav.Notes"]
+hash = "sha1-70440046a3dc2e079f23ee1c57dfa76669b732aa"
+other = "Notes"
+
+["Layout.Nav.Settings"]
+hash = "sha1-c7f73bb54d928922c3838bb789ee9fb8a5b1eb37"
+other = "Paramètres"
+
+["Layout.Nav.Share"]
+hash = "sha1-09ca55ca52d207f2cc1d9339e0226a88e9e96e2f"
+other = "Partager"
+
+["Layout.UserMenu.ChangeTheme"]
+hash = "sha1-b9bfabec0b746c494bd8dfffbd38482f885b4500"
+other = "Changer de thème"
+
+["Layout.UserMenu.NewSpace"]
+hash = "sha1-89f3d523d25760ac054c8911723ac46a60384838"
+other = "Nouvel espace"
+
+["Layout.UserMenu.Profile"]
+hash = "sha1-ff4fc0276e960c348647b647235f68200887c9d2"
+other = "Profil"
+
+["Layout.UserMenu.SwitchMember"]
+hash = "sha1-76404347e870d5e2003f8a0f161a7f88c831a6dc"
+other = "Changer de membre"
+
+["Members.Delete.Confirmation"]
+hash = "sha1-be7348d0e8b8ac20a903e465e29384aaf086eda3"
+other = "Êtes-vous sûr de vouloir retirer ce membre ? Cette action ne peut pas être annulée."
+
+["Members.Delete.Title"]
+hash = "sha1-1c31d1d273c0c54243040e0af1b6d070075772ee"
+other = "Retirer le membre"
+
+["Members.Edit.NameLabel"]
+hash = "sha1-709a23220f2c3d64d1e1d6d18c4d5280f8d82fca"
+other = "Nom"
+
+["Members.Edit.Title"]
+hash = "sha1-775824c1c39f0ca8807cbe11eac8cc736845d2fc"
+other = "Modifier le membre"
+
+["Members.List.AddButton"]
+hash = "sha1-170ad0e32e6f664e85287ebd597594ad1bd5fae6"
+other = "Ajouter un membre"
+
+["Members.List.EditTooltip"]
+hash = "sha1-5301648dcf6b53cefc9ed52999aaa92d4603cae0"
+other = "Modifier"
+
+["Members.List.RemoveTooltip"]
+hash = "sha1-e963907dac5cd5c017869b4c96c18021c9bd058b"
+other = "Retirer"
+
+["Members.List.Title"]
+hash = "sha1-1cb449c1126609b4b41e1d87f65f0d7cd19b49b9"
+other = "Membres"
+
+["Members.New.NameLabel"]
+hash = "sha1-709a23220f2c3d64d1e1d6d18c4d5280f8d82fca"
+other = "Nom"
+
+["Members.New.Title"]
+hash = "sha1-170ad0e32e6f664e85287ebd597594ad1bd5fae6"
+other = "Ajouter un membre"
+
+["Notes.Delete.Confirmation"]
+hash = "sha1-4d38148f155723c61554fbe1e7b8c98231069cfa"
+other = "Êtes-vous sûr de vouloir supprimer cette note ? Cette action ne peut pas être annulée."
+
+["Notes.Delete.Title"]
+hash = "sha1-a8ed43571dd8dfd5fd0c6502deb500014912d212"
+other = "Supprimer la note"
+
+["Notes.Edit.ContentHelp"]
+hash = "sha1-98e61d753d87186e255a76565b3fce15d4616631"
+other = "Utilise la syntaxe %% Markdown %%."
+
+["Notes.Edit.ContentLabel"]
+hash = "sha1-4f9be057f0ea5d2ba72fd2c810e8d7b9aa98b469"
+other = "Contenu"
+
+["Notes.Edit.Title"]
+hash = "sha1-9751b2f323222b50b69e90ddb30dcf5466ef9b5d"
+other = "Modifier la note"
+
+["Notes.Edit.TitleLabel"]
+hash = "sha1-768e0c1c69573fb588f61f1308a015c11468e05f"
+other = "Titre"
+
+["Notes.List.EmptyState"]
+hash = "sha1-d24d155db7d840bd476a2d21063a8e36a82f441c"
+other = "Cet espace ne contient pas encore de notes."
+
+["Notes.List.NewNoteButton"]
+hash = "sha1-2b7b05c002d521157e8afcd92474276db36d1aa6"
+other = "Nouvelle note"
+
+["Notes.List.Title"]
+hash = "sha1-70440046a3dc2e079f23ee1c57dfa76669b732aa"
+other = "Notes"
+
+["Notes.New.ContentHelp"]
+hash = "sha1-98e61d753d87186e255a76565b3fce15d4616631"
+other = "Utilise la syntaxe %% Markdown %%."
+
+["Notes.New.ContentLabel"]
+hash = "sha1-4f9be057f0ea5d2ba72fd2c810e8d7b9aa98b469"
+other = "Contenu"
+
+["Notes.New.Title"]
+hash = "sha1-2b7b05c002d521157e8afcd92474276db36d1aa6"
+other = "Nouvelle note"
+
+["Notes.New.TitleLabel"]
+hash = "sha1-768e0c1c69573fb588f61f1308a015c11468e05f"
+other = "Titre"
+
+["Notes.Show.BackButton"]
+hash = "sha1-3c66c34706dee664abfdbb28c95b79a11dd328c7"
+other = "Retour aux notes"
+
+["Notes.Show.EditButton"]
+hash = "sha1-9751b2f323222b50b69e90ddb30dcf5466ef9b5d"
+other = "Modifier la note"
+
+["Spaces.Edit.NameLabel"]
+hash = "sha1-709a23220f2c3d64d1e1d6d18c4d5280f8d82fca"
+other = "Nom"
+
+["Spaces.Edit.Title"]
+hash = "sha1-8e946cd2790b84febc5ebdc0d04e5bece0b33a7e"
+other = "Paramètres de l'espace"
+
+["Spaces.New.CodeHelp"]
+hash = "sha1-c0e2e36da24f342e464f63fdb7ccfeec9bc9c6da"
+other = "La création d'espaces n'est possible qu'avec un code d'invitation."
+
+["Spaces.New.CodeLabel"]
+hash = "sha1-206b7166496d68511f8e656f539f0db329c6b40a"
+other = "Code d'invitation"
+
+["Spaces.New.CreateButton"]
+hash = "sha1-53c7ff75df10302be927a7804cfa518e7fdf7010"
+other = "Créer un espace"
+
+["Spaces.New.Description"]
+hash = "sha1-627e6eb70f09f772f20262b49ad179081cfeefc6"
+other = "Chaque espace dispose d'un lien d'accès unique et peut contenir un nombre illimité de notes."
+
+["Spaces.New.EmailHelp"]
+hash = "sha1-29f41bac18ce343f9d21ffc06a2b8c97e9cce921"
+other = "Votre email est uniquement utilisé pour vous envoyer le lien d'accès sécurisé à votre espace. Nous n'enverrons jamais de spam et ne partagerons jamais votre email avec des tiers."
+
+["Spaces.New.EmailLabel"]
+hash = "sha1-3fa6f5fb505ace79cfd6ad92095436ac8beb39e9"
+other = "Votre email"
+
+["Spaces.New.IdentityHelp"]
+hash = "sha1-2a11145446cd45de54663d8851e58cf8582cdea4"
+other = "Nous utiliserons ces informations pour créer le premier membre de votre nouvel espace. Vous pourrez en ajouter d'autres ultérieurement depuis la page des membres."
+
+["Spaces.New.IdentityLabel"]
+hash = "sha1-ab42293e29e1ffb306c1403dd95144d664853a60"
+other = "Votre nom"
+
+["Spaces.New.NameHelp"]
+hash = "sha1-4e946b33e4a7712f5ab75e4311d3366fbbf4f3b9"
+other = "Vous pourrez toujours modifier le nom ultérieurement dans les paramètres de l'espace."
+
+["Spaces.New.NameLabel"]
+hash = "sha1-28f9e0c55be1af7e8f02ec82f00f054904bd2f20"
+other = "Nom de l'espace"
+
+["Spaces.New.Title"]
+hash = "sha1-a47fe18ba45768f02c7270c745f95ed9df0f4f36"
+other = "Créer un nouvel espace"
+
+["Spaces.NewSuccess.DefaultMessage"]
+hash = "sha1-c5fd24c8f037ceb702804c042b309a9c4f33d881"
+other = "Votre nouvel espace a été créé ! Consultez vos emails pour obtenir le lien vers l'espace."
 
 ["Spaces.Show.Flash"]
 hash = "sha1-bd2013122d60698dcc37a0d2c7dfd1b90fb9d68e"
@@ -8,10 +520,83 @@ other = "{{.Member}}, bienvenue dans l'espace {{.Space}} !"
 
 ["Spaces.Show.NotesLinkText"]
 hash = "sha1-600a417cce6f7967e3a9d1504320c8111f5143ca"
+one = "{{.Count}} note"
 other = "{{.Count}} notes"
 
 ["Spaces.Show.Welcome"]
 hash = "sha1-bac2e0577a604a78f76e078337d83d6427d1854d"
-many = "Bienvenue dans votre espace ! Vous avez %% N notes %%."
 one = "Bienvenue dans votre espace ! Vous avez %% N notes %%."
 other = "Bienvenue dans votre espace ! Vous avez %% N notes %%."
+zero = "Bienvenue dans votre espace ! Vous n'avez pas encore de notes."
+
+["Theme.Select.CookieNotice"]
+hash = "sha1-6db7f44d5516bd1113c3e7ec524496ccf669ebf0"
+other = "Votre préférence de thème sera enregistrée dans un cookie de session sécurisé."
+
+["Theme.Select.Dark"]
+hash = "sha1-ae1ef01432946b8976b9b58575b3390ab7644db2"
+other = "Sombre"
+
+["Theme.Select.Description"]
+hash = "sha1-2cb98f37d31dee6e7cc7f43d7ed1a4f06844a9e3"
+other = "Choisissez votre thème de couleur préféré :"
+
+["Theme.Select.Light"]
+hash = "sha1-a36ef8aba22905e2d2efbf1ac1d6230d5761859d"
+other = "Clair"
+
+["Theme.Select.PageTitle"]
+hash = "sha1-b9bfabec0b746c494bd8dfffbd38482f885b4500"
+other = "Changer de thème"
+
+["Theme.Select.System"]
+hash = "sha1-bc0792d8dc81e8aa30b987246a5ce97c40cd6833"
+other = "Système"
+
+["Theme.Select.SystemHelp"]
+hash = "sha1-86f9dd810bf8c14bee0b3e4194aa04ad8b872fee"
+other = "(suit les paramètres de votre appareil)"
+
+["Theme.Select.Title"]
+hash = "sha1-b9bfabec0b746c494bd8dfffbd38482f885b4500"
+other = "Changer de thème"
+
+["Tokens.Show.AdminHelp"]
+hash = "sha1-e3908fe0ee9f61cfa87d71af9b945db02b9f5b34"
+other = "Toute personne disposant de ce lien peut tout faire dans cet espace."
+
+["Tokens.Show.AdminLabel"]
+hash = "sha1-4e7afebcfbae000b22c7c85e5560f89a2a0280b4"
+other = "Administrateur"
+
+["Tokens.Show.CopiedText"]
+hash = "sha1-b7c3ca0ee379c7b079b1d6912bf11e5167a1f591"
+other = "Copié !"
+
+["Tokens.Show.Description"]
+hash = "sha1-21794fdd97033c11bdb7f98039f5e274f219725b"
+other = "Partagez ces liens pour donner à vos amis et collaborateurs l'accès à cet espace et à toutes ses notes. Chaque lien d'accès accorde des permissions différentes pour cet espace."
+
+["Tokens.Show.EditorHelp"]
+hash = "sha1-ffca65312959d73b2143889c7ff3a20bb8149540"
+other = "Toute personne disposant de ce lien peut créer et modifier des notes, ainsi qu'ajouter ou renommer des membres."
+
+["Tokens.Show.EditorLabel"]
+hash = "sha1-c7e9fb2ea6c3b8c3ce97645eb902c348d859f36d"
+other = "Éditeur"
+
+["Tokens.Show.ErrorText"]
+hash = "sha1-7f2f6a15cf8da2b27e5a4af47b58e7ad71c0b3d9"
+other = "Erreur"
+
+["Tokens.Show.Title"]
+hash = "sha1-12cac989b878588d924208b424b49e13f874aef1"
+other = "Partager l'espace"
+
+["Tokens.Show.ViewOnlyHelp"]
+hash = "sha1-9fd4f16d1d2a9a1f9a1af80ccc4b6f08483e9b0c"
+other = "Toute personne disposant de ce lien peut uniquement consulter les notes et les membres."
+
+["Tokens.Show.ViewOnlyLabel"]
+hash = "sha1-bd0aae2579470d5e5f8f929445ef59305e61809b"
+other = "Lecture seule"

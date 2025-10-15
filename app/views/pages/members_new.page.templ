@@ -2,23 +2,39 @@ package pages
 
 import (
 	"fmt"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/forms"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
 )
 
 templ MembersNew(form *forms.CreateMember, errors forms.Errors) {
+	{{ intl := rctx.GetIntl(ctx) }}
 	{{ access := rctx.GetAccess(ctx) }}
 	@layouts.Space(nil) {
 		<div>
-			<h1 class="text-2xl font-bold mb-4">Add member</h1>
+			<h1 class="text-2xl font-bold mb-4">
+				{ intl.Localize(&i18n.LocalizeConfig{
+					DefaultMessage: &i18n.Message{
+						ID:    "Members.New.Title",
+						Other: "Add member",
+					},
+				}) }
+			</h1>
 			<form
 				method="POST"
 				action={ templ.URL(fmt.Sprintf("/s/%s/members/new", access.Token)) }
 				class="flex flex-col gap-4"
 			>
 				<fieldset class="flex flex-col gap-1.5">
-					<label for="name" class="text-sm font-semibold">Name</label>
+					<label for="name" class="text-sm font-semibold">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Members.New.NameLabel",
+								Other: "Name",
+							},
+						}) }
+					</label>
 					<input
 						type="text"
 						name="name"
@@ -33,11 +49,25 @@ templ MembersNew(form *forms.CreateMember, errors forms.Errors) {
 					}
 				</fieldset>
 				<div class="flex items-center gap-4 mt-4">
-					<button type="submit" class="btn btn-primary">Add</button>
+					<button type="submit" class="btn btn-primary">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Common.AddButton",
+								Other: "Add",
+							},
+						}) }
+					</button>
 					<a
 						href={ templ.URL(fmt.Sprintf("/s/%s/members", access.Token)) }
 						class="btn btn-soft"
-					>Cancel</a>
+					>
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Common.CancelButton",
+								Other: "Cancel",
+							},
+						}) }
+					</a>
 				</div>
 			</form>
 		</div>
