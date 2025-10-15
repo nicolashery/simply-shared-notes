@@ -75,12 +75,7 @@ templ ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notes
 									{ " " }
 								} else {
 									{ " " }
-									{ intl.Localize(&i18n.LocalizeConfig{
-										DefaultMessage: &i18n.Message{
-											ID:    "Activity.List.ActionUnknown",
-											Other: "[unknown action]",
-										},
-									}) }
+									{ "<unknown action>" }
 									{ " " }
 								}
 							</span>
@@ -107,12 +102,7 @@ templ ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notes
 										},
 									}) }
 								} else {
-									{ intl.Localize(&i18n.LocalizeConfig{
-										DefaultMessage: &i18n.Message{
-											ID:    "Activity.List.EntityUnknown",
-											Other: "unknown entity",
-										},
-									}) }
+									{ "<unknown entity>" }
 								}
 							</span>
 							if activity.Action != db.ActivityAction_Delete && activity.EntityType != db.ActivityEntity_Space {
@@ -135,12 +125,7 @@ templ ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notes
 											</a>
 										} else {
 											{ " " }
-											{ intl.Localize(&i18n.LocalizeConfig{
-												DefaultMessage: &i18n.Message{
-													ID:    "Activity.List.UnknownMember",
-													Other: "Unknown Member",
-												},
-											}) }
+											{ "<unknown member>" }
 										}
 									} else if activity.EntityType == db.ActivityEntity_Note {
 										if !activity.EntityID.Valid {
@@ -160,12 +145,7 @@ templ ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notes
 											</a>
 										} else {
 											{ " " }
-											{ intl.Localize(&i18n.LocalizeConfig{
-												DefaultMessage: &i18n.Message{
-													ID:    "Activity.List.UnknownNote",
-													Other: "Unknown Note",
-												},
-											}) }
+											{ "<unknown note>" }
 										}
 									}
 								</span>

@@ -327,14 +327,9 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var22 string
-					templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(intl.Localize(&i18n.LocalizeConfig{
-						DefaultMessage: &i18n.Message{
-							ID:    "Activity.List.ActionUnknown",
-							Other: "[unknown action]",
-						},
-					}))
+					templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs("<unknown action>")
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 83, Col: 11}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 78, Col: 29}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
 					if templ_7745c5c3_Err != nil {
@@ -347,7 +342,7 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 					var templ_7745c5c3_Var23 string
 					templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(" ")
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 84, Col: 14}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 79, Col: 14}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
 					if templ_7745c5c3_Err != nil {
@@ -367,7 +362,7 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 						},
 					}))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 94, Col: 11}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 89, Col: 11}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
 					if templ_7745c5c3_Err != nil {
@@ -382,7 +377,7 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 						},
 					}))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 101, Col: 11}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 96, Col: 11}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
 					if templ_7745c5c3_Err != nil {
@@ -397,7 +392,7 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 						},
 					}))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 108, Col: 11}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 103, Col: 11}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var26))
 					if templ_7745c5c3_Err != nil {
@@ -405,14 +400,9 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 					}
 				} else {
 					var templ_7745c5c3_Var27 string
-					templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(intl.Localize(&i18n.LocalizeConfig{
-						DefaultMessage: &i18n.Message{
-							ID:    "Activity.List.EntityUnknown",
-							Other: "unknown entity",
-						},
-					}))
+					templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs("<unknown entity>")
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 115, Col: 11}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 105, Col: 29}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
 					if templ_7745c5c3_Err != nil {
@@ -433,7 +423,7 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 							var templ_7745c5c3_Var28 string
 							templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(" ")
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 122, Col: 16}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 112, Col: 16}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
 							if templ_7745c5c3_Err != nil {
@@ -451,7 +441,7 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 								},
 							}))
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 128, Col: 13}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 118, Col: 13}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var29))
 							if templ_7745c5c3_Err != nil {
@@ -465,7 +455,7 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 							var templ_7745c5c3_Var30 templ.SafeURL
 							templ_7745c5c3_Var30, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s/members/%s/edit", access.Token, member.PublicID)))
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 132, Col: 97}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 122, Col: 97}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var30))
 							if templ_7745c5c3_Err != nil {
@@ -478,7 +468,7 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 							var templ_7745c5c3_Var31 string
 							templ_7745c5c3_Var31, templ_7745c5c3_Err = templ.JoinStringErrs(" " + member.Name)
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 134, Col: 29}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 124, Col: 29}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var31))
 							if templ_7745c5c3_Err != nil {
@@ -492,7 +482,7 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 							var templ_7745c5c3_Var32 string
 							templ_7745c5c3_Var32, templ_7745c5c3_Err = templ.JoinStringErrs(" ")
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 137, Col: 16}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 127, Col: 16}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var32))
 							if templ_7745c5c3_Err != nil {
@@ -503,14 +493,9 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 								return templ_7745c5c3_Err
 							}
 							var templ_7745c5c3_Var33 string
-							templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs(intl.Localize(&i18n.LocalizeConfig{
-								DefaultMessage: &i18n.Message{
-									ID:    "Activity.List.UnknownMember",
-									Other: "Unknown Member",
-								},
-							}))
+							templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs("<unknown member>")
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 143, Col: 13}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 128, Col: 31}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
 							if templ_7745c5c3_Err != nil {
@@ -522,7 +507,7 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 							var templ_7745c5c3_Var34 string
 							templ_7745c5c3_Var34, templ_7745c5c3_Err = templ.JoinStringErrs(" ")
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 147, Col: 16}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 132, Col: 16}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var34))
 							if templ_7745c5c3_Err != nil {
@@ -540,7 +525,7 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 								},
 							}))
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 153, Col: 13}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 138, Col: 13}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var35))
 							if templ_7745c5c3_Err != nil {
@@ -554,7 +539,7 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 							var templ_7745c5c3_Var36 templ.SafeURL
 							templ_7745c5c3_Var36, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s/notes/%s", access.Token, note.PublicID)))
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 157, Col: 88}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 142, Col: 88}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var36))
 							if templ_7745c5c3_Err != nil {
@@ -567,7 +552,7 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 							var templ_7745c5c3_Var37 string
 							templ_7745c5c3_Var37, templ_7745c5c3_Err = templ.JoinStringErrs(" " + note.Title)
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 159, Col: 28}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 144, Col: 28}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var37))
 							if templ_7745c5c3_Err != nil {
@@ -581,7 +566,7 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 							var templ_7745c5c3_Var38 string
 							templ_7745c5c3_Var38, templ_7745c5c3_Err = templ.JoinStringErrs(" ")
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 162, Col: 16}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 147, Col: 16}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var38))
 							if templ_7745c5c3_Err != nil {
@@ -592,14 +577,9 @@ func ActivityList(entries []db.Activity, membersByID map[int64]db.Member, notesB
 								return templ_7745c5c3_Err
 							}
 							var templ_7745c5c3_Var39 string
-							templ_7745c5c3_Var39, templ_7745c5c3_Err = templ.JoinStringErrs(intl.Localize(&i18n.LocalizeConfig{
-								DefaultMessage: &i18n.Message{
-									ID:    "Activity.List.UnknownNote",
-									Other: "Unknown Note",
-								},
-							}))
+							templ_7745c5c3_Var39, templ_7745c5c3_Err = templ.JoinStringErrs("<unknown note>")
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 168, Col: 13}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/activity_list.page.templ`, Line: 148, Col: 29}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var39))
 							if templ_7745c5c3_Err != nil {

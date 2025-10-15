@@ -20,12 +20,7 @@ func DisplayMemberName(intl *intl.Intl, id sql.NullInt64, membersByID map[int64]
 
 	member, ok := membersByID[id.Int64]
 	if !ok {
-		return intl.Localize(&i18n.LocalizeConfig{
-			DefaultMessage: &i18n.Message{
-				ID:    "Helpers.Member.Unknown",
-				Other: "Unknown Member",
-			},
-		})
+		return "<unknown member>"
 	}
 
 	return member.Name

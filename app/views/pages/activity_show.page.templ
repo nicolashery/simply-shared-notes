@@ -118,12 +118,7 @@ templ ActivityShow(activity db.Activity, membersByID map[int64]db.Member, notesB
 								},
 							}) }
 						} else {
-							{ intl.Localize(&i18n.LocalizeConfig{
-								DefaultMessage: &i18n.Message{
-									ID:    "Activity.Show.ActionUnknown",
-									Other: "[unknown action]",
-								},
-							}) }
+							{ "<unknown action>" }
 						}
 					</div>
 				</div>
@@ -159,12 +154,7 @@ templ ActivityShow(activity db.Activity, membersByID map[int64]db.Member, notesB
 								},
 							}) }
 						} else {
-							{ intl.Localize(&i18n.LocalizeConfig{
-								DefaultMessage: &i18n.Message{
-									ID:    "Activity.Show.EntityUnknown",
-									Other: "Unknown Entity",
-								},
-							}) }
+							{ "<unknown entity>" }
 						}
 					</div>
 				</div>
@@ -196,12 +186,7 @@ templ ActivityShow(activity db.Activity, membersByID map[int64]db.Member, notesB
 									{ member.Name }
 								</a>
 							} else {
-								{ intl.Localize(&i18n.LocalizeConfig{
-									DefaultMessage: &i18n.Message{
-										ID:    "Activity.Show.UnknownMember",
-										Other: "Unknown Member",
-									},
-								}) }
+								{ "<unknown member>" }
 							}
 						} else if activity.EntityType == db.ActivityEntity_Note {
 							if !activity.EntityID.Valid {
@@ -219,12 +204,7 @@ templ ActivityShow(activity db.Activity, membersByID map[int64]db.Member, notesB
 									{ note.Title }
 								</a>
 							} else {
-								{ intl.Localize(&i18n.LocalizeConfig{
-									DefaultMessage: &i18n.Message{
-										ID:    "Activity.Show.UnknownNote",
-										Other: "Unknown Note",
-									},
-								}) }
+								{ "<unknown note>" }
 							}
 						}
 					</div>

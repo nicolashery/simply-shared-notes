@@ -6,10 +6,6 @@ other = "a créé"
 hash = "sha1-b52a1e3689757dc2e5e9e642f4341e6b74dc9c0b"
 other = "a supprimé"
 
-["Activity.List.ActionUnknown"]
-hash = "sha1-700111f579a0d9346b5a4c70b12d9bb8b7aeeea8"
-other = "[unknown action]"
-
 ["Activity.List.ActionUpdated"]
 hash = "sha1-13a1891af75c642306a6b695377d16e4a91f0e1b"
 other = "a modifié"
@@ -38,21 +34,9 @@ other = "note"
 hash = "sha1-fe404c4ecab488755c38b95c77eb5768bdc7008a"
 other = "cet espace"
 
-["Activity.List.EntityUnknown"]
-hash = "sha1-d473460a2de97479980e0f58e90756d6ed740c59"
-other = "entité inconnue"
-
 ["Activity.List.Title"]
 hash = "sha1-81c0d915fa6d82fd30661c5e66e204cea52bb2b5"
 other = "Activité"
-
-["Activity.List.UnknownMember"]
-hash = "sha1-6bc31e4f75de98ac7b055c412d6697035b4af8f5"
-other = "Membre inconnu"
-
-["Activity.List.UnknownNote"]
-hash = "sha1-0ace0b318758866673dd0c0dc310657bda61b9fd"
-other = "Note inconnue"
 
 ["Activity.Show.ActionCreated"]
 hash = "sha1-21c50805b553b7a40e48394a5d77d442587ddee2"
@@ -65,10 +49,6 @@ other = "supprimé"
 ["Activity.Show.ActionLabel"]
 hash = "sha1-97c89a4d6630adeb18fa12ba9976a31413fe293e"
 other = "Action"
-
-["Activity.Show.ActionUnknown"]
-hash = "sha1-700111f579a0d9346b5a4c70b12d9bb8b7aeeea8"
-other = "[unknown action]"
 
 ["Activity.Show.ActionUpdated"]
 hash = "sha1-13a1891af75c642306a6b695377d16e4a91f0e1b"
@@ -102,10 +82,6 @@ other = "Note"
 hash = "sha1-6d8c9b124d521027647b4f270cb2872798f9264e"
 other = "Espace"
 
-["Activity.Show.EntityUnknown"]
-hash = "sha1-73397374934f8c982bc8af0312512a7df5a7e797"
-other = "Entité inconnue"
-
 ["Activity.Show.MemberLabel"]
 hash = "sha1-6853c98a6f4358bbfed1b3b9c81d308649299b0f"
 other = "Membre"
@@ -125,14 +101,6 @@ other = "Heure"
 ["Activity.Show.Title"]
 hash = "sha1-81c0d915fa6d82fd30661c5e66e204cea52bb2b5"
 other = "Activité"
-
-["Activity.Show.UnknownMember"]
-hash = "sha1-6bc31e4f75de98ac7b055c412d6697035b4af8f5"
-other = "Membre inconnu"
-
-["Activity.Show.UnknownNote"]
-hash = "sha1-0ace0b318758866673dd0c0dc310657bda61b9fd"
-other = "Note inconnue"
 
 ["Common.AddButton"]
 hash = "sha1-61cc55aa0453184734c3fa0b621eda6fa874bd83"
@@ -249,10 +217,6 @@ other = "Anonyme"
 ["Helpers.Member.Deleted"]
 hash = "sha1-3afeabf45f0bbe78fe1af9debed1945da8e23e52"
 other = "Membre supprimé"
-
-["Helpers.Member.Unknown"]
-hash = "sha1-6bc31e4f75de98ac7b055c412d6697035b4af8f5"
-other = "Membre inconnu"
 
 ["Helpers.Role.Admin"]
 hash = "sha1-4e7afebcfbae000b22c7c85e5560f89a2a0280b4"
