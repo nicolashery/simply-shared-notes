@@ -6,6 +6,7 @@ import (
 	acc "github.com/nicolashery/simply-shared-notes/app/access"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/identity"
+	"github.com/nicolashery/simply-shared-notes/app/intl"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/views/components"
 	"github.com/nicolashery/simply-shared-notes/app/views/helpers"
@@ -18,9 +19,10 @@ templ Space(assets []string) {
 	{{ stats := rctx.GetSpaceStats(ctx) }}
 	{{ access := rctx.GetAccess(ctx) }}
 	{{ identity := rctx.GetIdentity(ctx) }}
+	{{ intl := rctx.GetIntl(ctx) }}
 	@Base(space.Name, assets) {
 		<div>
-			@navBar(route, space, stats, access, identity)
+			@navBar(route, space, stats, access, identity, intl)
 			<div class="px-4 pb-6">
 				for _, message := range rctx.GetFlashMessages(ctx) {
 					@components.FlashMessage(&message)
@@ -31,7 +33,14 @@ templ Space(assets []string) {
 	}
 }
 
-templ navBar(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *acc.Access, identity *identity.Identity) {
+templ navBar(
+	route string,
+	space *db.Space,
+	stats *db.GetSpaceStatsRow,
+	access *acc.Access,
+	identity *identity.Identity,
+	intl *intl.Intl,
+) {
 	<div class="navbar bg-base-100 px-4 border-b-2 border-base-300 mb-2">
 		<div class="navbar-start">
 			<div>
@@ -43,7 +52,7 @@ templ navBar(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *
 		</div>
 		<div class="navbar-end">
 			<div>
-				@userMenu(access, identity)
+				@userMenu(access, identity, intl)
 			</div>
 		</div>
 	</div>
@@ -214,7 +223,7 @@ templ navMenu(route string, space *db.Space, stats *db.GetSpaceStatsRow, access 
 	</div>
 }
 
-templ userMenu(access *acc.Access, identity *identity.Identity) {
+templ userMenu(access *acc.Access, identity *identity.Identity, intl *intl.Intl) {
 	<div class="drawer drawer-end">
 		<input id="user-drawer" type="checkbox" class="drawer-toggle"/>
 		<div class="drawer-content">
@@ -307,7 +316,7 @@ templ userMenu(access *acc.Access, identity *identity.Identity) {
 								<path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
 								<path d="M2 12h20"></path>
 							</svg>
-							English (EN)
+							{ helpers.LanguageLabel(intl.CurrentLang) }
 						</a>
 					</li>
 					<li>

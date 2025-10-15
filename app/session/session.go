@@ -9,6 +9,7 @@ import (
 const (
 	CookieName  = "simplysharednotes_session"
 	ThemeKey    = "theme"
+	LangKey     = "lang"
 	IdentityKey = "identity"
 	RedirectKey = "redirect_url"
 )

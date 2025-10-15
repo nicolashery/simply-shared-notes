@@ -1,11 +1,48 @@
 package pages
 
-import "github.com/nicolashery/simply-shared-notes/app/views/layouts"
+import (
+	in "github.com/nicolashery/simply-shared-notes/app/intl"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
+	"github.com/nicolashery/simply-shared-notes/app/views/helpers"
+	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
+)
 
-templ LanguageSelect() {
-	@layouts.Landing("Select language") {
+templ LanguageSelect(redirect string) {
+	{{ intl := rctx.GetIntl(ctx) }}
+	@layouts.Landing("Change language") {
 		<div class="max-w-md mx-auto py-4">
 			<h1 class="text-2xl font-bold mb-1.5">Change language</h1>
+			<p class="mb-4 text-sm opacity-60">
+				Select your preferred language for the application interface:
+			</p>
+			<form method="POST" action="/language" class="flex flex-col gap-3">
+				<input type="hidden" name="redirect" value={ redirect }/>
+				<label class="flex items-center cursor-pointer gap-2">
+					<input
+						type="radio"
+						name="language"
+						value=""
+						class="radio radio-sm"
+						checked?={ intl.PreferredLang == nil }
+					/>
+					<span>Automatic</span>
+					<span class="text-sm opacity-60">(follows your device settings)</span>
+				</label>
+				for _, lang := range in.SupportedLangs {
+					<label class="flex items-center cursor-pointer gap-2">
+						<input
+							type="radio"
+							name="language"
+							value={ lang.String() }
+							class="radio radio-sm"
+							checked?={ intl.PreferredLang != nil && intl.CurrentLang == lang }
+						/>
+						<span>{ helpers.LanguageLabel(lang) }</span>
+					</label>
+				}
+				<button type="submit" class="btn btn-primary mt-4">Save</button>
+				<p class="text-sm opacity-60">Your language preference will be saved in a secure session cookie.</p>
+			</form>
 		</div>
 	}
 }

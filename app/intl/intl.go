@@ -26,6 +26,7 @@ const LocalizeErrorMessage string = "<failed to localize>"
 
 type Intl struct {
 	CurrentLang     language.Tag
+	PreferredLang   *language.Tag
 	CurrentTimezone *time.Location
 	localizer       *i18n.Localizer
 	logger          *slog.Logger
@@ -45,11 +46,18 @@ func NewBundle(localesFS embed.FS) (*i18n.Bundle, error) {
 	return b, nil
 }
 
-func New(logger *slog.Logger, i18nBundle *i18n.Bundle, lang language.Tag, tz *time.Location) *Intl {
+func New(
+	logger *slog.Logger,
+	i18nBundle *i18n.Bundle,
+	lang language.Tag,
+	preferredLang *language.Tag,
+	tz *time.Location,
+) *Intl {
 	localizer := i18n.NewLocalizer(i18nBundle, lang.String())
 
 	return &Intl{
 		CurrentLang:     lang,
+		PreferredLang:   preferredLang,
 		CurrentTimezone: tz,
 		localizer:       localizer,
 		logger:          logger,

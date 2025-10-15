@@ -9,16 +9,17 @@ import (
 
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"github.com/nicolashery/simply-shared-notes/app/intl"
+	"github.com/nicolashery/simply-shared-notes/app/session"
 	"golang.org/x/text/language"
 )
 
 func IntlCtxMiddleware(logger *slog.Logger, i18nBundle *i18n.Bundle) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			lang := selectLanguage(r)
+			lang, preferredLang := selectLanguage(r)
 			tz := selectTimezone(r)
 
-			intl := intl.New(logger, i18nBundle, lang, tz)
+			intl := intl.New(logger, i18nBundle, lang, preferredLang, tz)
 
 			ctx := context.WithValue(r.Context(), intlContextKey, intl)
 			next.ServeHTTP(w, r.WithContext(ctx))
@@ -26,25 +27,34 @@ func IntlCtxMiddleware(logger *slog.Logger, i18nBundle *i18n.Bundle) func(http.H
 	}
 }
 
-func selectLanguage(r *http.Request) language.Tag {
-	acceptLang := r.Header.Get("Accept-Language")
-	if acceptLang == "" {
-		return intl.DefaultLang
-	}
+func selectLanguage(r *http.Request) (language.Tag, *language.Tag) {
+	var preferredLang *language.Tag
 
-	tags, _, err := language.ParseAcceptLanguage(acceptLang)
-	if err != nil {
-		return intl.DefaultLang
-	}
-
-	// Find the first tag that matches one of our supported languages
-	for _, tag := range tags {
-		if slices.Contains(intl.SupportedLangs, tag) {
-			return tag
+	// Try session cookie first
+	sess := GetSession(r.Context())
+	if cookieLang, ok := sess.Values[session.LangKey].(string); ok {
+		if tag, err := language.Parse(cookieLang); err == nil {
+			if slices.Contains(intl.SupportedLangs, tag) {
+				preferredLang = &tag
+				return *preferredLang, preferredLang
+			}
 		}
 	}
 
-	return intl.DefaultLang
+	// Try Accept-Language header
+	if acceptLang := r.Header.Get("Accept-Language"); acceptLang != "" {
+		if tags, _, err := language.ParseAcceptLanguage(acceptLang); err == nil {
+			// Find the first tag that matches one of our supported languages
+			for _, tag := range tags {
+				if slices.Contains(intl.SupportedLangs, tag) {
+					return tag, preferredLang
+				}
+			}
+		}
+	}
+
+	// Fall back to default
+	return intl.DefaultLang, preferredLang
 }
 
 func selectTimezone(r *http.Request) *time.Location {

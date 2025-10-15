@@ -35,6 +35,7 @@ func RegisterRoutes(
 	r.With(rctx.FlashCtxMiddleware(logger)).Get("/new/success", handleSpacesNewSuccess(logger))
 
 	r.Get("/language", handleLanguageSelect(logger))
+	r.Post("/language", handleLanguageSet(logger))
 	r.Get("/theme", handleThemeSelect(logger))
 	r.Post("/theme", handleThemeSet(logger))
 

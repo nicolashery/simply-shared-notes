@@ -14,6 +14,7 @@ import (
 	acc "github.com/nicolashery/simply-shared-notes/app/access"
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/identity"
+	"github.com/nicolashery/simply-shared-notes/app/intl"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/views/components"
 	"github.com/nicolashery/simply-shared-notes/app/views/helpers"
@@ -46,6 +47,7 @@ func Space(assets []string) templ.Component {
 		stats := rctx.GetSpaceStats(ctx)
 		access := rctx.GetAccess(ctx)
 		identity := rctx.GetIdentity(ctx)
+		intl := rctx.GetIntl(ctx)
 		templ_7745c5c3_Var2 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -62,7 +64,7 @@ func Space(assets []string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = navBar(route, space, stats, access, identity).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = navBar(route, space, stats, access, identity, intl).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -94,7 +96,14 @@ func Space(assets []string) templ.Component {
 	})
 }
 
-func navBar(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *acc.Access, identity *identity.Identity) templ.Component {
+func navBar(
+	route string,
+	space *db.Space,
+	stats *db.GetSpaceStatsRow,
+	access *acc.Access,
+	identity *identity.Identity,
+	intl *intl.Intl,
+) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -127,7 +136,7 @@ func navBar(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *a
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = userMenu(access, identity).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = userMenu(access, identity, intl).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -167,7 +176,7 @@ func navMenu(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(space.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 76, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 85, Col: 39}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -189,7 +198,7 @@ func navMenu(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *
 		var templ_7745c5c3_Var7 templ.SafeURL
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s", access.Token)))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 79, Col: 58}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 88, Col: 58}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -224,7 +233,7 @@ func navMenu(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *
 		var templ_7745c5c3_Var10 templ.SafeURL
 		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s/notes", access.Token)))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 102, Col: 64}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 111, Col: 64}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {
@@ -250,7 +259,7 @@ func navMenu(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *
 		var templ_7745c5c3_Var12 string
 		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(stats.NotesCount)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 118, Col: 53}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 127, Col: 53}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 		if templ_7745c5c3_Err != nil {
@@ -272,7 +281,7 @@ func navMenu(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *
 		var templ_7745c5c3_Var14 templ.SafeURL
 		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s/members", access.Token)))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 123, Col: 66}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 132, Col: 66}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 		if templ_7745c5c3_Err != nil {
@@ -298,7 +307,7 @@ func navMenu(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *
 		var templ_7745c5c3_Var16 string
 		templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(stats.MembersCount)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 139, Col: 55}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 148, Col: 55}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 		if templ_7745c5c3_Err != nil {
@@ -320,7 +329,7 @@ func navMenu(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *
 		var templ_7745c5c3_Var18 templ.SafeURL
 		templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s/activity", access.Token)))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 144, Col: 67}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 153, Col: 67}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 		if templ_7745c5c3_Err != nil {
@@ -360,7 +369,7 @@ func navMenu(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *
 			var templ_7745c5c3_Var21 templ.SafeURL
 			templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s/share", access.Token)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 166, Col: 65}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 175, Col: 65}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
 			if templ_7745c5c3_Err != nil {
@@ -401,7 +410,7 @@ func navMenu(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *
 			var templ_7745c5c3_Var24 templ.SafeURL
 			templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s/settings", access.Token)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 190, Col: 68}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 199, Col: 68}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
 			if templ_7745c5c3_Err != nil {
@@ -433,7 +442,7 @@ func navMenu(route string, space *db.Space, stats *db.GetSpaceStatsRow, access *
 	})
 }
 
-func userMenu(access *acc.Access, identity *identity.Identity) templ.Component {
+func userMenu(access *acc.Access, identity *identity.Identity, intl *intl.Intl) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -461,7 +470,7 @@ func userMenu(access *acc.Access, identity *identity.Identity) templ.Component {
 		var templ_7745c5c3_Var27 string
 		templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.IdentityName(identity))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 243, Col: 43}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 252, Col: 43}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
 		if templ_7745c5c3_Err != nil {
@@ -474,7 +483,7 @@ func userMenu(access *acc.Access, identity *identity.Identity) templ.Component {
 		var templ_7745c5c3_Var28 string
 		templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.RoleLabel(access))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 244, Col: 66}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 253, Col: 66}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
 		if templ_7745c5c3_Err != nil {
@@ -492,7 +501,7 @@ func userMenu(access *acc.Access, identity *identity.Identity) templ.Component {
 			var templ_7745c5c3_Var29 templ.SafeURL
 			templ_7745c5c3_Var29, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s/members/%s/edit", access.Token, identity.Member.PublicID)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 249, Col: 102}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 258, Col: 102}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var29))
 			if templ_7745c5c3_Err != nil {
@@ -510,7 +519,7 @@ func userMenu(access *acc.Access, identity *identity.Identity) templ.Component {
 		var templ_7745c5c3_Var30 templ.SafeURL
 		templ_7745c5c3_Var30, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL("/new"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 271, Col: 31}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 280, Col: 31}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var30))
 		if templ_7745c5c3_Err != nil {
@@ -523,49 +532,62 @@ func userMenu(access *acc.Access, identity *identity.Identity) templ.Component {
 		var templ_7745c5c3_Var31 templ.SafeURL
 		templ_7745c5c3_Var31, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL("/language"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 293, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 302, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var31))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, "\" class=\"flex\"><svg class=\"size-5\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"></circle> <path d=\"M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20\"></path> <path d=\"M2 12h20\"></path></svg> English (EN)</a></li><li><a href=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, "\" class=\"flex\"><svg class=\"size-5\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"></circle> <path d=\"M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20\"></path> <path d=\"M2 12h20\"></path></svg> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var32 templ.SafeURL
-		templ_7745c5c3_Var32, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL("/theme"))
+		var templ_7745c5c3_Var32 string
+		templ_7745c5c3_Var32, templ_7745c5c3_Err = templ.JoinStringErrs(helpers.LanguageLabel(intl.CurrentLang))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 315, Col: 33}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 319, Col: 48}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var32))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 40, "\" class=\"flex\"><svg class=\"size-5\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-palette-icon lucide-palette\"><path d=\"M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z\"></path><circle cx=\"13.5\" cy=\"6.5\" r=\".5\" fill=\"currentColor\"></circle><circle cx=\"17.5\" cy=\"10.5\" r=\".5\" fill=\"currentColor\"></circle><circle cx=\"6.5\" cy=\"12.5\" r=\".5\" fill=\"currentColor\"></circle> <circle cx=\"8.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\"></circle></svg> Change theme</a></li></ul>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 40, "</a></li><li><a href=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var33 templ.SafeURL
+		templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL("/theme"))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 324, Col: 33}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "\" class=\"flex\"><svg class=\"size-5\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-palette-icon lucide-palette\"><path d=\"M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z\"></path><circle cx=\"13.5\" cy=\"6.5\" r=\".5\" fill=\"currentColor\"></circle><circle cx=\"17.5\" cy=\"10.5\" r=\".5\" fill=\"currentColor\"></circle><circle cx=\"6.5\" cy=\"12.5\" r=\".5\" fill=\"currentColor\"></circle> <circle cx=\"8.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\"></circle></svg> Change theme</a></li></ul>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if !access.IsView() {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "<form method=\"POST\" action=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "<form method=\"POST\" action=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var33 templ.SafeURL
-			templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s/identity/delete", access.Token)))
+			var templ_7745c5c3_Var34 templ.SafeURL
+			templ_7745c5c3_Var34, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s/identity/delete", access.Token)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 337, Col: 95}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/layouts/space.layout.templ`, Line: 346, Col: 95}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var34))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "\"><ul class=\"menu w-80 pt-0\"><li><button type=\"submit\" class=\"flex\"><svg class=\"size-5\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4\"></path> <polyline points=\"16 17 21 12 16 7\"></polyline> <line x1=\"21\" x2=\"9\" y1=\"12\" y2=\"12\"></line></svg> Switch member</button></li></ul></form>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 43, "\"><ul class=\"menu w-80 pt-0\"><li><button type=\"submit\" class=\"flex\"><svg class=\"size-5\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4\"></path> <polyline points=\"16 17 21 12 16 7\"></polyline> <line x1=\"21\" x2=\"9\" y1=\"12\" y2=\"12\"></line></svg> Switch member</button></li></ul></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 43, "</div></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 44, "</div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

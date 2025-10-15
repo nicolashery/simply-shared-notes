@@ -15,5 +15,5 @@ func RoleLabel(access *access.Access) string {
 		return "View-only"
 	}
 
-	return ""
+	return "<unknown role>"
 }
