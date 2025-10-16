@@ -478,20 +478,27 @@ other = "Créer un nouvel espace"
 hash = "sha1-c5fd24c8f037ceb702804c042b309a9c4f33d881"
 other = "Votre nouvel espace a été créé ! Consultez vos emails pour obtenir le lien vers l'espace."
 
+["Spaces.Show.EmptyNotes"]
+hash = "sha1-00c84f71077526cbc8ab54e275d977d6e8fc3ade"
+other = "Vous n'avez pas encore de notes."
+
 ["Spaces.Show.Flash"]
 hash = "sha1-bd2013122d60698dcc37a0d2c7dfd1b90fb9d68e"
 other = "{{.Member}}, bienvenue dans l'espace {{.Space}} !"
 
+["Spaces.Show.Notes"]
+hash = "sha1-793dcce1d94740972da16cd66286a1f69017b424"
+other = "Vous avez %% N notes %%."
+
 ["Spaces.Show.NotesLinkText"]
 hash = "sha1-600a417cce6f7967e3a9d1504320c8111f5143ca"
+many = "{{.Count}} notes"
 one = "{{.Count}} note"
 other = "{{.Count}} notes"
 
 ["Spaces.Show.Welcome"]
-hash = "sha1-bac2e0577a604a78f76e078337d83d6427d1854d"
-one = "Bienvenue dans votre espace ! Vous avez %% N notes %%."
-other = "Bienvenue dans votre espace ! Vous avez %% N notes %%."
-zero = "Bienvenue dans votre espace ! Vous n'avez pas encore de notes."
+hash = "sha1-4f2721363956d99583475dedffca6cc83e43c29c"
+other = "Bienvenue dans votre espace !"
 
 ["Theme.Select.CookieNotice"]
 hash = "sha1-6db7f44d5516bd1113c3e7ec524496ccf669ebf0"

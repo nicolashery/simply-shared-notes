@@ -118,7 +118,10 @@
 "Spaces.New.NameLabel" = "Space name"
 "Spaces.New.Title" = "Create a new space"
 "Spaces.NewSuccess.DefaultMessage" = "Your new space was created! Check your emails for the link to the space."
+"Spaces.Show.EmptyNotes" = "You don't have any notes yet."
 "Spaces.Show.Flash" = "{{.Member}}, welcome to the space {{.Space}}!"
+"Spaces.Show.Notes" = "You have %% N notes %%."
+"Spaces.Show.Welcome" = "Welcome to your space!"
 "Theme.Select.CookieNotice" = "Your theme preference will be saved in a secure session cookie."
 "Theme.Select.Dark" = "Dark"
 "Theme.Select.Description" = "Choose your preferred color theme:"
@@ -141,8 +144,3 @@
 ["Spaces.Show.NotesLinkText"]
 one = "{{.Count}} note"
 other = "{{.Count}} notes"
-
-["Spaces.Show.Welcome"]
-one = "Welcome to your space! You have %% N notes %%."
-other = "Welcome to your space! You have %% N notes %%."
-zero = "Welcome to your space! You don't have any notes yet."

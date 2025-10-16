@@ -106,6 +106,8 @@ tasks:
     desc: Extract messages from Go source files to the default `active.en.toml` file
     cmds:
       - goi18n extract -outdir locales app
+    deps:
+      - templ
 
   i18n-translate:
     desc: Generate updated `translate.*.toml` files to be translated

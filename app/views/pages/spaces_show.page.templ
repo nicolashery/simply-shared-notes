@@ -13,20 +13,30 @@ templ SpacesShow() {
 	{{ stats := rctx.GetSpaceStats(ctx) }}
 	@layouts.Space(nil) {
 		<div>
-			{{
-				msg := intl.Localize(&i18n.LocalizeConfig{
+			{ 
+				intl.Localize(&i18n.LocalizeConfig{
 					DefaultMessage: &i18n.Message{
 						ID:    "Spaces.Show.Welcome",
-						Zero:  "Welcome to your space! You don't have any notes yet.",
-						One:   "Welcome to your space! You have %% N notes %%.",
-						Other: "Welcome to your space! You have %% N notes %%.",
+						Other: "Welcome to your space!",
 					},
-					PluralCount: stats.NotesCount,
-				})
-			}}
+				}) }
 			if stats.NotesCount == 0 {
-				{ msg }
+				{ 
+					intl.Localize(&i18n.LocalizeConfig{
+						DefaultMessage: &i18n.Message{
+							ID:    "Spaces.Show.EmptyNotes",
+							Other: "You don't have any notes yet.",
+						},
+					}) }
 			} else {
+				{{
+					msg := intl.Localize(&i18n.LocalizeConfig{
+						DefaultMessage: &i18n.Message{
+							ID:    "Spaces.Show.Notes",
+							Other: "You have %% N notes %%.",
+						},
+					})
+				}}
 				{{ pre, post := intl.SplitOnSlot(msg, "%% N notes %%") }}
 				<span>{ pre }</span>
 				<a
