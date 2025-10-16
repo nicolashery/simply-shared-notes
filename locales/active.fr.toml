@@ -282,6 +282,14 @@ other = "Changer de langue"
 hash = "sha1-975e53527908f84f19536f2d550935c8a6f28f6d"
 other = "Simply Shared Notes"
 
+["Layout.Footer.Home"]
+hash = "sha1-70f8bb9a8a5393ef080507a89e4b98d139000d65"
+other = "Accueil"
+
+["Layout.Footer.Theme"]
+hash = "sha1-a797e30923ac1be590300ce6b08e63b4e6dc6688"
+other = "Thème"
+
 ["Layout.Nav.Activity"]
 hash = "sha1-81c0d915fa6d82fd30661c5e66e204cea52bb2b5"
 other = "Activité"

@@ -20,8 +20,8 @@ templ Base(title string, assets []string) {
 			@templ.Raw(vite.Fragment(append([]string{"assets/app.css", "assets/app.js"}, assets...)))
 		</head>
 		<body>
-			<main class="min-h-screen bg-base-200">
-				<div class="min-h-screen max-w-(--breakpoint-md) mx-auto bg-base-100 md:border-x-2 border-base-300">
+			<main class="min-h-dvh bg-base-200">
+				<div class="min-h-dvh max-w-(--breakpoint-md) mx-auto bg-base-100 md:border-x-2 border-base-300">
 					{ children... }
 				</div>
 			</main>

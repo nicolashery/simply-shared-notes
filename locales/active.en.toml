@@ -69,6 +69,8 @@
 "Language.Select.PageTitle" = "Change language"
 "Language.Select.Title" = "Change language"
 "Layout.AppName" = "Simply Shared Notes"
+"Layout.Footer.Home" = "Home"
+"Layout.Footer.Theme" = "Theme"
 "Layout.Nav.Activity" = "Activity"
 "Layout.Nav.Home" = "Home"
 "Layout.Nav.Members" = "Members"

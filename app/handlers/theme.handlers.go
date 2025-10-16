@@ -79,7 +79,7 @@ func handleThemeSet(logger *slog.Logger) http.HandlerFunc {
 		}
 
 		redirect := safeRedirect(form.Redirect)
-		if redirect == "" {
+		if redirect == "" || redirect == "language" {
 			redirect = "/"
 		}
 
