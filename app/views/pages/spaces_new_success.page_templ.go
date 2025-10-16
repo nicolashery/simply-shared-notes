@@ -63,7 +63,7 @@ func SpacesNewSuccess() templ.Component {
 				},
 			}))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/spaces_new_success.page.templ`, Line: 22, Col: 6}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/spaces_new_success.page.templ`, Line: 27, Col: 6}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -98,7 +98,12 @@ func SpacesNewSuccess() templ.Component {
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = layouts.Landing("Create space").Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layouts.Landing(intl.Localize(&i18n.LocalizeConfig{
+			DefaultMessage: &i18n.Message{
+				ID:    "Spaces.New.PageTitle",
+				Other: "Create space",
+			},
+		})).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

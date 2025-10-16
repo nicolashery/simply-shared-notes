@@ -9,7 +9,12 @@ import (
 
 templ SpacesNew(requiresCode bool, form *forms.CreateSpace, errors forms.Errors) {
 	{{ intl := rctx.GetIntl(ctx) }}
-	@layouts.Landing("Create space") {
+	@layouts.Landing(intl.Localize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Spaces.New.PageTitle",
+			Other: "Create space",
+		},
+	})) {
 		<div class="max-w-md mx-auto py-4">
 			<h1 class="text-2xl font-bold mb-1.5">
 				{ intl.Localize(&i18n.LocalizeConfig{

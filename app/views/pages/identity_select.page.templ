@@ -12,7 +12,12 @@ templ IdentitySelect(members []db.Member) {
 	{{ intl := rctx.GetIntl(ctx) }}
 	{{ space := rctx.GetSpace(ctx) }}
 	{{ access := rctx.GetAccess(ctx) }}
-	@layouts.Landing("Select identity") {
+	@layouts.Landing(intl.Localize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Identity.Select.PageTitle",
+			Other: "Select identity",
+		},
+	})) {
 		<div class="max-w-md mx-auto py-4">
 			<h1 class="text-2xl font-bold mb-1.5">{ space.Name }</h1>
 			<p class="mb-4 text-sm opacity-60">

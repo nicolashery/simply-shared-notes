@@ -242,9 +242,17 @@ other = "Commencer"
 hash = "sha1-975e53527908f84f19536f2d550935c8a6f28f6d"
 other = "Simply Shared Notes"
 
+["Home.PageTitle"]
+hash = "sha1-70f8bb9a8a5393ef080507a89e4b98d139000d65"
+other = "Accueil"
+
 ["Identity.Select.Help"]
 hash = "sha1-40ed7b01694e988bad8503d349b52d48141376ca"
 other = "Nous mémoriserons votre choix dans un cookie de session sécurisé. Vous pouvez toujours modifier votre sélection depuis le menu membre en haut à droite."
+
+["Identity.Select.PageTitle"]
+hash = "sha1-5ef0b90bc0e31c5a9713de2efba25c722b64a8d1"
+other = "Sélectionner identité"
 
 ["Identity.Select.SelectButton"]
 hash = "sha1-8598222918d3c6e513d63060cf55e2971ded729a"
@@ -477,6 +485,10 @@ other = "Vous pourrez toujours modifier le nom ultérieurement dans les paramèt
 ["Spaces.New.NameLabel"]
 hash = "sha1-28f9e0c55be1af7e8f02ec82f00f054904bd2f20"
 other = "Nom de l'espace"
+
+["Spaces.New.PageTitle"]
+hash = "sha1-53c7ff75df10302be927a7804cfa518e7fdf7010"
+other = "Créer un espace"
 
 ["Spaces.New.Title"]
 hash = "sha1-a47fe18ba45768f02c7270c745f95ed9df0f4f36"

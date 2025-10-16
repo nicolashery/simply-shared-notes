@@ -8,7 +8,12 @@ import (
 
 templ Home() {
 	{{ intl := rctx.GetIntl(ctx) }}
-	@layouts.Landing("Home") {
+	@layouts.Landing(intl.Localize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Home.PageTitle",
+			Other: "Home",
+		},
+	})) {
 		<div class="hero">
 			<div class="hero-content text-center">
 				<div class="max-w-md">
