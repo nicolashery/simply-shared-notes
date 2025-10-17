@@ -20,7 +20,11 @@ import (
 func handleNotesList(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		space := rctx.GetSpace(r.Context())
-		notes, err := queries.ListNotes(r.Context(), space.ID)
+
+		notes, err := queries.ListNotes(r.Context(), db.ListNotesParams{
+			SpaceID: space.ID,
+			Limit:   100,
+		})
 		if err != nil {
 			logger.Error(
 				"error getting notes from database",

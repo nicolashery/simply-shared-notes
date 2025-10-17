@@ -115,10 +115,16 @@ WHERE space_id = ?1
 ORDER BY
     updated_at DESC,
     id DESC
+LIMIT ?2
 `
 
-func (q *Queries) ListNotes(ctx context.Context, spaceID int64) ([]Note, error) {
-	rows, err := q.db.QueryContext(ctx, listNotes, spaceID)
+type ListNotesParams struct {
+	SpaceID int64
+	Limit   int64
+}
+
+func (q *Queries) ListNotes(ctx context.Context, arg ListNotesParams) ([]Note, error) {
+	rows, err := q.db.QueryContext(ctx, listNotes, arg.SpaceID, arg.Limit)
 	if err != nil {
 		return nil, err
 	}

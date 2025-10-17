@@ -3,58 +3,106 @@ package pages
 import (
 	"fmt"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
+	"github.com/nicolashery/simply-shared-notes/app/views/components"
 	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
 )
 
-templ SpacesShow() {
+templ SpacesShow(
+	notes []db.Note,
+	activityEntries []db.Activity,
+	membersByID map[int64]db.Member,
+	activityNotesByID map[int64]db.Note,
+) {
+	@layouts.Space(nil) {
+		<div class="flex flex-col gap-6">
+			@recentNotes(notes, membersByID)
+			@recentActivity(activityEntries, membersByID, activityNotesByID)
+		</div>
+	}
+}
+
+templ recentNotes(notes []db.Note, membersByID map[int64]db.Member) {
 	{{ intl := rctx.GetIntl(ctx) }}
 	{{ access := rctx.GetAccess(ctx) }}
-	{{ stats := rctx.GetSpaceStats(ctx) }}
-	@layouts.Space(nil) {
-		<div>
-			{ 
-				intl.Localize(&i18n.LocalizeConfig{
-					DefaultMessage: &i18n.Message{
-						ID:    "Spaces.Show.Welcome",
-						Other: "Welcome to your space!",
-					},
-				}) }
-			if stats.NotesCount == 0 {
-				{ 
-					intl.Localize(&i18n.LocalizeConfig{
-						DefaultMessage: &i18n.Message{
-							ID:    "Spaces.Show.EmptyNotes",
-							Other: "You don't have any notes yet.",
-						},
-					}) }
-			} else {
+	<div>
+		<div class="flex justify-between items-center mb-2">
+			<h1 class="text-2xl font-bold">
+				{ intl.Localize(&i18n.LocalizeConfig{
+				DefaultMessage: &i18n.Message{
+					ID:    "Spaces.Show.RecentNotesTitle",
+					Other: "Recent notes",
+				},
+			}) }
+			</h1>
+			<a
+				href={ templ.URL(fmt.Sprintf("/s/%s/notes", access.Token)) }
+				class="link text-sm"
+			>
+				{ intl.Localize(&i18n.LocalizeConfig{
+				DefaultMessage: &i18n.Message{
+					ID:    "Spaces.Show.AllNotesLink",
+					Other: "All notes",
+				},
+			}) }
+			</a>
+		</div>
+		if len(notes) == 0 {
+			<div class="py-4 text-sm">
 				{{
 					msg := intl.Localize(&i18n.LocalizeConfig{
 						DefaultMessage: &i18n.Message{
-							ID:    "Spaces.Show.Notes",
-							Other: "You have %% N notes %%.",
+							ID:    "Spaces.Show.EmptyNotes",
+							Other: "This space doesn't have any notes yet: %% create note %%.",
 						},
 					})
 				}}
-				{{ pre, post := intl.SplitOnSlot(msg, "%% N notes %%") }}
-				<span>{ pre }</span>
+				{{ pre, post := intl.SplitOnSlot(msg, "%% create note %%") }}
+				<span class="opacity-60">{ pre }</span>
 				<a
-					href={ templ.URL(fmt.Sprintf("/s/%s/notes", access.Token)) }
-					class="link link-primary"
+					href={ templ.URL(fmt.Sprintf("/s/%s/notes/new", access.Token)) }
+					class="link"
 				>
 					{ intl.Localize(&i18n.LocalizeConfig{
-						DefaultMessage: &i18n.Message{
-							ID:    "Spaces.Show.NotesLinkText",
-							One: "{{.Count}} note",
-							Other: "{{.Count}} notes",
-						},
-						TemplateData: map[string]any{
-							"Count": stats.NotesCount,
-						},
-					}) }
-				</a><span>{ post }</span>
-			}
+					DefaultMessage: &i18n.Message{
+						ID:    "Spaces.Show.CreateNoteLinkText",
+						Other: "create a note",
+					},
+				}) }
+				</a><span class="opacity-60">{ post }</span>
+			</div>
+		} else {
+			@components.NotesList(notes, membersByID)
+		}
+	</div>
+}
+
+templ recentActivity(activityEntries []db.Activity, membersByID map[int64]db.Member, notesByID map[int64]db.Note) {
+	{{ intl := rctx.GetIntl(ctx) }}
+	{{ access := rctx.GetAccess(ctx) }}
+	<div>
+		<div class="flex justify-between items-center mb-2">
+			<h1 class="text-2xl font-bold">
+				{ intl.Localize(&i18n.LocalizeConfig{
+				DefaultMessage: &i18n.Message{
+					ID:    "Spaces.Show.RecentActivityTitle",
+					Other: "Recent activity",
+				},
+			}) }
+			</h1>
+			<a
+				href={ templ.URL(fmt.Sprintf("/s/%s/activity", access.Token)) }
+				class="link text-sm"
+			>
+				{ intl.Localize(&i18n.LocalizeConfig{
+				DefaultMessage: &i18n.Message{
+					ID:    "Spaces.Show.AllActivityLink",
+					Other: "All activity",
+				},
+			}) }
+			</a>
 		</div>
-	}
+		@components.ActivityList(activityEntries, membersByID, notesByID)
+	</div>
 }

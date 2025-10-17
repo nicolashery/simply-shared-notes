@@ -1,0 +1,146 @@
+package components
+
+import (
+	"fmt"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"github.com/nicolashery/simply-shared-notes/app/db"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
+	"github.com/nicolashery/simply-shared-notes/app/views/helpers"
+	"time"
+)
+
+templ ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Member, notesByID map[int64]db.Note) {
+	{{ intl := rctx.GetIntl(ctx) }}
+	{{ access := rctx.GetAccess(ctx) }}
+	<ul class="list">
+		for _, activity := range activityEntries {
+			<li class="list-row px-0">
+				<a
+					class="text-xs opacity-50 link link-hover"
+					href={ templ.URL(fmt.Sprintf("/s/%s/activity/%s", access.Token, activity.PublicID)) }
+				>
+					<time datetime={ activity.CreatedAt.Format(time.RFC3339) }>
+						{ intl.FormatDate(activity.CreatedAt) }
+						{ " " }
+						{ intl.Localize(&i18n.LocalizeConfig{
+						DefaultMessage: &i18n.Message{
+							ID:    "Activity.List.AtConnector",
+							Other: "at",
+						},
+					}) }
+						{ " " }
+						{ intl.FormatTime(activity.CreatedAt) }
+					</time>
+				</a>
+				<div class="text-xs">
+					<span class="opacity-75">{ helpers.DisplayMemberName(intl, activity.MemberID, membersByID) }</span>
+					<span class="opacity-50">
+						if activity.Action == db.ActivityAction_Create {
+							{ " " }
+							{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Activity.List.ActionCreated",
+								Other: "created",
+							},
+						}) }
+							{ " " }
+						} else if activity.Action == db.ActivityAction_Update {
+							{ " " }
+							{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Activity.List.ActionUpdated",
+								Other: "updated",
+							},
+						}) }
+							{ " " }
+						} else if activity.Action == db.ActivityAction_Delete {
+							{ " " }
+							{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Activity.List.ActionDeleted",
+								Other: "deleted a",
+							},
+						}) }
+							{ " " }
+						} else {
+							{ " " }
+							{ "<unknown action>" }
+							{ " " }
+						}
+					</span>
+					<span class="opacity-50">
+						if activity.EntityType == db.ActivityEntity_Space {
+							{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Activity.List.EntitySpace",
+								Other: "this space",
+							},
+						}) }
+						} else if activity.EntityType == db.ActivityEntity_Member {
+							{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Activity.List.EntityMember",
+								Other: "member",
+							},
+						}) }
+						} else if activity.EntityType == db.ActivityEntity_Note {
+							{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Activity.List.EntityNote",
+								Other: "note",
+							},
+						}) }
+						} else {
+							{ "<unknown entity>" }
+						}
+					</span>
+					if activity.Action != db.ActivityAction_Delete && activity.EntityType != db.ActivityEntity_Space {
+						<span class="opacity-75">
+							if activity.EntityType == db.ActivityEntity_Member {
+								if !activity.EntityID.Valid {
+									{ " " }
+									{ intl.Localize(&i18n.LocalizeConfig{
+									DefaultMessage: &i18n.Message{
+										ID:    "Activity.List.DeletedMember",
+										Other: "Deleted Member",
+									},
+								}) }
+								} else if member, ok := membersByID[activity.EntityID.Int64]; ok {
+									<a
+										class="link"
+										href={ templ.URL(fmt.Sprintf("/s/%s/members/%s/edit", access.Token, member.PublicID)) }
+									>
+										{ " "+member.Name }
+									</a>
+								} else {
+									{ " " }
+									{ "<unknown member>" }
+								}
+							} else if activity.EntityType == db.ActivityEntity_Note {
+								if !activity.EntityID.Valid {
+									{ " " }
+									{ intl.Localize(&i18n.LocalizeConfig{
+									DefaultMessage: &i18n.Message{
+										ID:    "Activity.List.DeletedNote",
+										Other: "Deleted Note",
+									},
+								}) }
+								} else if note, ok := notesByID[activity.EntityID.Int64]; ok {
+									<a
+										class="link"
+										href={ templ.URL(fmt.Sprintf("/s/%s/notes/%s", access.Token, note.PublicID)) }
+									>
+										{ " "+note.Title }
+									</a>
+								} else {
+									{ " " }
+									{ "<unknown note>" }
+								}
+							}
+						</span>
+					}
+				</div>
+			</li>
+		}
+	</ul>
+}

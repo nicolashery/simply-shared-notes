@@ -94,25 +94,7 @@ templ NotesList(notes []db.Note, membersByID map[int64]db.Member) {
 						}) }
 					</a>
 				</div>
-				<ul class="list">
-					for _, note := range notes {
-						<li class="list-row px-0">
-							<div>
-								<a
-									class="block mb-1 link link-primary link-hover text-lg"
-									href={ templ.URL(fmt.Sprintf("/s/%s/notes/%s", access.Token, note.PublicID)) }
-								>
-									{ note.Title }
-								</a>
-								if note.UpdatedAt != note.CreatedAt {
-									@components.UpdatedAtBy(note.UpdatedAt, note.UpdatedBy, membersByID)
-								} else {
-									@components.CreatedAtBy(note.CreatedAt, note.CreatedBy, membersByID)
-								}
-							</div>
-						</li>
-					}
-				</ul>
+				@components.NotesList(notes, membersByID)
 			}
 		</div>
 	}

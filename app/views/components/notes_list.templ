@@ -1,0 +1,30 @@
+package components
+
+import (
+	"fmt"
+	"github.com/nicolashery/simply-shared-notes/app/db"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
+)
+
+templ NotesList(notes []db.Note, membersByID map[int64]db.Member) {
+	{{ access := rctx.GetAccess(ctx) }}
+	<ul class="list">
+		for _, note := range notes {
+			<li class="list-row px-0">
+				<div>
+					<a
+						class="block mb-1 link link-primary link-hover text-lg"
+						href={ templ.URL(fmt.Sprintf("/s/%s/notes/%s", access.Token, note.PublicID)) }
+					>
+						{ note.Title }
+					</a>
+					if note.UpdatedAt != note.CreatedAt {
+						@UpdatedAtBy(note.UpdatedAt, note.UpdatedBy, membersByID)
+					} else {
+						@CreatedAtBy(note.CreatedAt, note.CreatedBy, membersByID)
+					}
+				</div>
+			</li>
+		}
+	</ul>
+}

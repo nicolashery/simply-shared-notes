@@ -266,9 +266,73 @@ func createSpaceAndFirstMember(
 	return &space, &member, nil
 }
 
-func handleSpacesShow(logger *slog.Logger) http.HandlerFunc {
+func handleSpacesShow(logger *slog.Logger, queries *db.Queries) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := pages.SpacesShow().Render(r.Context(), w)
+		space := rctx.GetSpace(r.Context())
+
+		notes, err := queries.ListNotes(r.Context(), db.ListNotesParams{
+			SpaceID: space.ID,
+			Limit:   3,
+		})
+		if err != nil {
+			logger.Error(
+				"error getting notes from database",
+				slog.Any("error", err),
+				slog.Int64("space_id", space.ID),
+			)
+			http.Error(w, "internal server err", http.StatusInternalServerError)
+			return
+		}
+
+		activityEntries, err := queries.ListActivity(r.Context(), db.ListActivityParams{
+			SpaceID: space.ID,
+			Limit:   3,
+		})
+		if err != nil {
+			logger.Error(
+				"error getting activity from database",
+				slog.Any("error", err),
+				slog.Int64("space_id", space.ID),
+			)
+			http.Error(w, "internal server err", http.StatusInternalServerError)
+			return
+		}
+
+		notesMemberIDs := collectCreatedUpdatedByIDsFromNotes(notes)
+		activityMemberIDs := collectMemberIDsFromActivity(activityEntries)
+		memberIDs := append(notesMemberIDs, activityMemberIDs...)
+		members, err := queries.ListMembersByIDs(r.Context(), db.ListMembersByIDsParams{
+			SpaceID:   space.ID,
+			MemberIds: memberIDs,
+		})
+		if err != nil {
+			logger.Error(
+				"error getting members from database",
+				slog.Any("error", err),
+				slog.Int64("space_id", space.ID),
+			)
+			http.Error(w, "internal server err", http.StatusInternalServerError)
+			return
+		}
+		membersByID := memberListToMap(members)
+
+		activityNoteIDs := collectNoteIDsFromActivity(activityEntries)
+		activityNotes, err := queries.ListNotesByIDs(r.Context(), db.ListNotesByIDsParams{
+			SpaceID: space.ID,
+			NoteIds: activityNoteIDs,
+		})
+		if err != nil {
+			logger.Error(
+				"error getting notes from database",
+				slog.Any("error", err),
+				slog.Int64("space_id", space.ID),
+			)
+			http.Error(w, "internal server err", http.StatusInternalServerError)
+			return
+		}
+		activityNotesByID := noteListToMap(activityNotes)
+
+		err = pages.SpacesShow(notes, activityEntries, membersByID, activityNotesByID).Render(r.Context(), w)
 		if err != nil {
 			logger.Error(
 				"failed to render template",

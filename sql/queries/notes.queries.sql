@@ -30,7 +30,8 @@ SELECT * FROM notes
 WHERE space_id = @space_id
 ORDER BY
     updated_at DESC,
-    id DESC;
+    id DESC
+LIMIT @limit;
 
 -- name: ListNotesByIDs :many
 SELECT * FROM notes

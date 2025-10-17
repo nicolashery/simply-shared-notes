@@ -15,7 +15,7 @@ func handleActivityList(logger *slog.Logger, queries *db.Queries) http.HandlerFu
 	return func(w http.ResponseWriter, r *http.Request) {
 		space := rctx.GetSpace(r.Context())
 
-		entries, err := queries.ListActivity(r.Context(), db.ListActivityParams{
+		activityEntries, err := queries.ListActivity(r.Context(), db.ListActivityParams{
 			SpaceID: space.ID,
 			Limit:   50,
 		})
@@ -29,7 +29,7 @@ func handleActivityList(logger *slog.Logger, queries *db.Queries) http.HandlerFu
 			return
 		}
 
-		memberIDs := collectMemberIDsFromActivity(entries)
+		memberIDs := collectMemberIDsFromActivity(activityEntries)
 		members, err := queries.ListMembersByIDs(r.Context(), db.ListMembersByIDsParams{
 			SpaceID:   space.ID,
 			MemberIds: memberIDs,
@@ -45,7 +45,7 @@ func handleActivityList(logger *slog.Logger, queries *db.Queries) http.HandlerFu
 		}
 		membersByID := memberListToMap(members)
 
-		noteIDs := collectNoteIDsFromActivity(entries)
+		noteIDs := collectNoteIDsFromActivity(activityEntries)
 		notes, err := queries.ListNotesByIDs(r.Context(), db.ListNotesByIDsParams{
 			SpaceID: space.ID,
 			NoteIds: noteIDs,
@@ -61,7 +61,7 @@ func handleActivityList(logger *slog.Logger, queries *db.Queries) http.HandlerFu
 		}
 		notesByID := noteListToMap(notes)
 
-		err = pages.ActivityList(entries, membersByID, notesByID).Render(r.Context(), w)
+		err = pages.ActivityList(activityEntries, membersByID, notesByID).Render(r.Context(), w)
 		if err != nil {
 			logger.Error(
 				"failed to render template",

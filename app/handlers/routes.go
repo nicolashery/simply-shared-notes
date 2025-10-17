@@ -52,7 +52,7 @@ func RegisterRoutes(
 			r.Use(rctx.SpaceStatsCtxMiddleware(queries))
 			r.Use(rctx.FlashCtxMiddleware(logger))
 
-			r.Get("/", handleSpacesShow(logger))
+			r.Get("/", handleSpacesShow(logger, queries))
 			r.With(Authorize(access.Action_UpdateSpace)).Group(func(r chi.Router) {
 				r.Get("/settings", handleSpacesEdit(logger, queries))
 				r.Post("/settings", handleSpacesUpdate(logger, sqlDB, queries))
