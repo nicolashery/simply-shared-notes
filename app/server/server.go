@@ -15,7 +15,6 @@ import (
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/email"
 	"github.com/nicolashery/simply-shared-notes/app/handlers"
-	"github.com/nicolashery/simply-shared-notes/app/rctx"
 	"github.com/nicolashery/simply-shared-notes/app/vite"
 )
 
@@ -29,20 +28,21 @@ func New(
 	email *email.Email,
 	i18nBundle *i18n.Bundle,
 ) http.Handler {
-	router := chi.NewRouter()
+	r := chi.NewRouter()
 
-	router.Use(
+	r.Use(
 		middleware.Logger,
 		middleware.Recoverer,
-		rctx.ViteCtxMiddleware(vite),
 	)
 
-	handlers.RegisterRoutes(router, cfg, logger, sqlDB, queries, sessionStore, email, i18nBundle)
+	StaticDir(r, "/assets", vite.AssetsFS)
+	StaticFile(r, "/robots.txt", vite.PublicFS)
 
-	StaticDir(router, "/assets", vite.AssetsFS)
-	StaticFile(router, "/robots.txt", vite.PublicFS)
+	r.Group(func(r chi.Router) {
+		handlers.RegisterRoutes(r, cfg, logger, sqlDB, queries, vite, sessionStore, email, i18nBundle)
+	})
 
-	return router
+	return r
 }
 
 func Run(ctx context.Context, handler http.Handler, logger *slog.Logger, port int) error {

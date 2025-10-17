@@ -12,6 +12,7 @@ import (
 	"github.com/nicolashery/simply-shared-notes/app/db"
 	"github.com/nicolashery/simply-shared-notes/app/email"
 	"github.com/nicolashery/simply-shared-notes/app/rctx"
+	"github.com/nicolashery/simply-shared-notes/app/vite"
 )
 
 func RegisterRoutes(
@@ -20,10 +21,12 @@ func RegisterRoutes(
 	logger *slog.Logger,
 	sqlDB *sql.DB,
 	queries *db.Queries,
+	vite *vite.Vite,
 	sessionStore *sessions.CookieStore,
 	email *email.Email,
 	i18nBundle *i18n.Bundle,
 ) {
+	r.Use(rctx.ViteCtxMiddleware(vite))
 	r.Use(rctx.SessionCtxMiddleware(logger, sessionStore))
 	r.Use(rctx.ThemeCtxMiddleware())
 	r.Use(rctx.IntlCtxMiddleware(logger, i18nBundle))
