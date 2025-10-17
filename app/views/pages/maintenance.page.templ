@@ -1,0 +1,57 @@
+package pages
+
+import (
+	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"github.com/nicolashery/simply-shared-notes/app/rctx"
+	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
+)
+
+templ Maintenance() {
+	{{ intl := rctx.GetIntl(ctx) }}
+	@layouts.Base(intl.Localize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Maintenance.PageTitle",
+			Other: "Maintenance",
+		},
+	}), nil) {
+		<div class="hero">
+			<div class="hero-content">
+				<div class="max-w-md py-6 flex flex-col gap-6 items-center">
+					<svg
+						class="size-12 text-warning"
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="lucide lucide-construction-icon lucide-construction"
+					>
+						<rect x="2" y="6" width="20" height="8" rx="1"></rect>
+						<path d="M17 14v7"></path><path d="M7 14v7"></path><path d="M17 3v3"></path><path d="M7 3v3"></path><path d="M10 14 2.3 6.3"></path><path d="m14 6 7.7 7.7"></path><path d="m8 6 8 8"></path>
+					</svg>
+					<h1 class="text-4xl font-bold text-center">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Maintenance.Title",
+								Other: "Under Maintenance",
+							},
+						}) }
+					</h1>
+					<p class="text-center">
+						{ intl.Localize(&i18n.LocalizeConfig{
+							DefaultMessage: &i18n.Message{
+								ID:    "Maintenance.Message",
+								Other: "We're currently performing scheduled maintenance to improve our service. We'll be back up and running shortly. Thank you for your patience!",
+							},
+						}) }
+					</p>
+					<p class="text-center italic opacity-60">
+						- Simply Shared Notes -
+					</p>
+				</div>
+			</div>
+		</div>
+	}
+}

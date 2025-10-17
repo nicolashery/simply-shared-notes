@@ -14,7 +14,7 @@ import (
 	"github.com/nicolashery/simply-shared-notes/app/views/layouts"
 )
 
-func Home() templ.Component {
+func Maintenance() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -48,54 +48,54 @@ func Home() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"hero\"><div class=\"hero-content text-center\"><div class=\"max-w-md\"><h1 class=\"text-4xl font-bold\">Simply Shared Notes</h1><p class=\"py-6\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"hero\"><div class=\"hero-content\"><div class=\"max-w-md py-6 flex flex-col gap-6 items-center\"><svg class=\"size-12 text-warning\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-construction-icon lucide-construction\"><rect x=\"2\" y=\"6\" width=\"20\" height=\"8\" rx=\"1\"></rect> <path d=\"M17 14v7\"></path><path d=\"M7 14v7\"></path><path d=\"M17 3v3\"></path><path d=\"M7 3v3\"></path><path d=\"M10 14 2.3 6.3\"></path><path d=\"m14 6 7.7 7.7\"></path><path d=\"m8 6 8 8\"></path></svg><h1 class=\"text-4xl font-bold text-center\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(intl.Localize(&i18n.LocalizeConfig{
 				DefaultMessage: &i18n.Message{
-					ID:    "Home.Hero.Description",
-					Other: "Create and share notes with others using access links — no accounts necessary, just simple collaboration.",
+					ID:    "Maintenance.Title",
+					Other: "Under Maintenance",
 				},
 			}))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/home.page.templ`, Line: 29, Col: 8}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/maintenance.page.templ`, Line: 40, Col: 8}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</p><a href=\"/new\" class=\"mt-8 btn btn-primary btn-lg\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</h1><p class=\"text-center\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(intl.Localize(&i18n.LocalizeConfig{
 				DefaultMessage: &i18n.Message{
-					ID:    "Home.Hero.GetStartedButton",
-					Other: "Get started",
+					ID:    "Maintenance.Message",
+					Other: "We're currently performing scheduled maintenance to improve our service. We'll be back up and running shortly. Thank you for your patience!",
 				},
 			}))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/home.page.templ`, Line: 37, Col: 8}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/pages/maintenance.page.templ`, Line: 48, Col: 8}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</a></div></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</p><p class=\"text-center italic opacity-60\">- Simply Shared Notes -</p></div></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = layouts.Landing(intl.Localize(&i18n.LocalizeConfig{
+		templ_7745c5c3_Err = layouts.Base(intl.Localize(&i18n.LocalizeConfig{
 			DefaultMessage: &i18n.Message{
-				ID:    "Home.PageTitle",
-				Other: "Home",
+				ID:    "Maintenance.PageTitle",
+				Other: "Maintenance",
 			},
-		})).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		}), nil).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

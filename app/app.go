@@ -39,25 +39,31 @@ func Run(ctx context.Context, distFS embed.FS, pragmasSQL string, localesFS embe
 		return err
 	}
 
-	sqlDB, err := db.InitDB(ctx, cfg.DatabasePath(), pragmasSQL)
-	if err != nil {
-		return fmt.Errorf("failed to initialize database: %w", err)
-	}
-	queries := db.New(sqlDB)
-
 	sessionStore := session.InitStore(cfg.CookieSecret, cfg.IsDev)
-
-	email, err := email.New(cfg)
-	if err != nil {
-		return err
-	}
 
 	i18nBundle, err := intl.NewBundle(localesFS)
 	if err != nil {
 		return err
 	}
 
+	if cfg.IsMaintenanceMode {
+		s := server.NewMaintenance(cfg, logger, vite, sessionStore, i18nBundle)
+
+		return server.Run(ctx, s, logger, cfg.Port)
+	}
+
 	intl.SetupZogI18n()
+
+	sqlDB, err := db.InitDB(ctx, cfg.DatabasePath(), pragmasSQL)
+	if err != nil {
+		return fmt.Errorf("failed to initialize database: %w", err)
+	}
+	queries := db.New(sqlDB)
+
+	email, err := email.New(cfg)
+	if err != nil {
+		return err
+	}
 
 	s := server.New(cfg, logger, sqlDB, queries, vite, sessionStore, email, i18nBundle)
 

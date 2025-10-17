@@ -246,10 +246,6 @@ other = "Créez et partagez des notes avec d'autres personnes en utilisant des l
 hash = "sha1-90e40d504340834d9e79a4d800e45283591c5927"
 other = "Commencer"
 
-["Home.Hero.Title"]
-hash = "sha1-975e53527908f84f19536f2d550935c8a6f28f6d"
-other = "Simply Shared Notes"
-
 ["Home.PageTitle"]
 hash = "sha1-70f8bb9a8a5393ef080507a89e4b98d139000d65"
 other = "Accueil"
@@ -345,6 +341,18 @@ other = "Profil"
 ["Layout.UserMenu.SwitchMember"]
 hash = "sha1-76404347e870d5e2003f8a0f161a7f88c831a6dc"
 other = "Changer de membre"
+
+["Maintenance.Message"]
+hash = "sha1-30e3fe81f55428ae7b440277169df6218c4ec26f"
+other = "Nous effectuons actuellement une maintenance programmée pour améliorer notre service. Nous serons de retour sous peu. Merci pour votre patience !"
+
+["Maintenance.PageTitle"]
+hash = "sha1-94de303bbef8935622224c5db48199c807ab7d71"
+other = "Maintenance"
+
+["Maintenance.Title"]
+hash = "sha1-5ae6429df8049fefeb507deb7f62453040827ce4"
+other = "En maintenance"
 
 ["Members.Delete.Confirmation"]
 hash = "sha1-be7348d0e8b8ac20a903e465e29384aaf086eda3"
