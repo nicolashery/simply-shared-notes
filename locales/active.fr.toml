@@ -3,7 +3,7 @@ hash = "sha1-21c50805b553b7a40e48394a5d77d442587ddee2"
 other = "a créé"
 
 ["Activity.List.ActionDeleted"]
-hash = "sha1-b52a1e3689757dc2e5e9e642f4341e6b74dc9c0b"
+hash = "sha1-b639f5cc719831458c83999303237e8499c0cabe"
 other = "a supprimé"
 
 ["Activity.List.ActionUpdated"]
@@ -22,13 +22,21 @@ other = "Membre supprimé"
 hash = "sha1-9ae0948a5e9bf86598d4c8739b357f77926bb70a"
 other = "Note supprimée"
 
-["Activity.List.EntityMember"]
-hash = "sha1-6467baa3b187373e3931422e2a8ef22f3e447d77"
-other = "membre"
+["Activity.List.EntityMemberDefinite"]
+hash = "sha1-102004f7d95b14aed2586fdc0b74c807a45fc634"
+other = "le membre"
 
-["Activity.List.EntityNote"]
-hash = "sha1-c51048b7325d60e326d19a9cfbeff2577be1672e"
-other = "note"
+["Activity.List.EntityMemberIndefinite"]
+hash = "sha1-72089802402b4293ce0557c1049ad4c843d53b4d"
+other = "un membre"
+
+["Activity.List.EntityNoteDefinite"]
+hash = "sha1-1ccca9bc9156bd744bcc45c0c0c9a502dd540844"
+other = "la note"
+
+["Activity.List.EntityNoteIndefinite"]
+hash = "sha1-ed1453d11f0d0e3a28914abed576c4425c3a1b69"
+other = "une note"
 
 ["Activity.List.EntitySpace"]
 hash = "sha1-fe404c4ecab488755c38b95c77eb5768bdc7008a"

@@ -109,7 +109,7 @@ func ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Member
 				},
 			}))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 30, Col: 7}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 30, Col: 8}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -180,7 +180,7 @@ func ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Member
 					},
 				}))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 45, Col: 8}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 45, Col: 9}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 				if templ_7745c5c3_Err != nil {
@@ -221,7 +221,7 @@ func ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Member
 					},
 				}))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 54, Col: 8}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 54, Col: 9}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 				if templ_7745c5c3_Err != nil {
@@ -258,11 +258,11 @@ func ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Member
 				templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(intl.Localize(&i18n.LocalizeConfig{
 					DefaultMessage: &i18n.Message{
 						ID:    "Activity.List.ActionDeleted",
-						Other: "deleted a",
+						Other: "deleted",
 					},
 				}))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 63, Col: 8}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 63, Col: 9}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 				if templ_7745c5c3_Err != nil {
@@ -331,49 +331,83 @@ func ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Member
 					},
 				}))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 78, Col: 8}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 78, Col: 9}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 			} else if activity.EntityType == db.ActivityEntity_Member {
-				var templ_7745c5c3_Var23 string
-				templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(intl.Localize(&i18n.LocalizeConfig{
-					DefaultMessage: &i18n.Message{
-						ID:    "Activity.List.EntityMember",
-						Other: "member",
-					},
-				}))
-				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 85, Col: 8}
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
+				if activity.Action == db.ActivityAction_Delete {
+					var templ_7745c5c3_Var23 string
+					templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(intl.Localize(&i18n.LocalizeConfig{
+						DefaultMessage: &i18n.Message{
+							ID:    "Activity.List.EntityMemberIndefinite",
+							Other: "a member",
+						},
+					}))
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 86, Col: 10}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+				} else {
+					var templ_7745c5c3_Var24 string
+					templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(intl.Localize(&i18n.LocalizeConfig{
+						DefaultMessage: &i18n.Message{
+							ID:    "Activity.List.EntityMemberDefinite",
+							Other: "the member",
+						},
+					}))
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 93, Col: 10}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
 				}
 			} else if activity.EntityType == db.ActivityEntity_Note {
-				var templ_7745c5c3_Var24 string
-				templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(intl.Localize(&i18n.LocalizeConfig{
-					DefaultMessage: &i18n.Message{
-						ID:    "Activity.List.EntityNote",
-						Other: "note",
-					},
-				}))
-				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 92, Col: 8}
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
+				if activity.Action == db.ActivityAction_Delete {
+					var templ_7745c5c3_Var25 string
+					templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(intl.Localize(&i18n.LocalizeConfig{
+						DefaultMessage: &i18n.Message{
+							ID:    "Activity.List.EntityNoteIndefinite",
+							Other: "a note",
+						},
+					}))
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 102, Col: 10}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+				} else {
+					var templ_7745c5c3_Var26 string
+					templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(intl.Localize(&i18n.LocalizeConfig{
+						DefaultMessage: &i18n.Message{
+							ID:    "Activity.List.EntityNoteDefinite",
+							Other: "the note",
+						},
+					}))
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 109, Col: 10}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var26))
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
 				}
 			} else {
-				var templ_7745c5c3_Var25 string
-				templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs("<unknown entity>")
+				var templ_7745c5c3_Var27 string
+				templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs("<unknown entity>")
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 94, Col: 27}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 112, Col: 27}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -389,12 +423,12 @@ func ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Member
 				}
 				if activity.EntityType == db.ActivityEntity_Member {
 					if !activity.EntityID.Valid {
-						var templ_7745c5c3_Var26 string
-						templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(" ")
+						var templ_7745c5c3_Var28 string
+						templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(" ")
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 101, Col: 14}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 119, Col: 14}
 						}
-						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var26))
+						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
@@ -402,17 +436,17 @@ func ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Member
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
-						var templ_7745c5c3_Var27 string
-						templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(intl.Localize(&i18n.LocalizeConfig{
+						var templ_7745c5c3_Var29 string
+						templ_7745c5c3_Var29, templ_7745c5c3_Err = templ.JoinStringErrs(intl.Localize(&i18n.LocalizeConfig{
 							DefaultMessage: &i18n.Message{
 								ID:    "Activity.List.DeletedMember",
 								Other: "Deleted Member",
 							},
 						}))
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 107, Col: 10}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 125, Col: 11}
 						}
-						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
+						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var29))
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
@@ -421,12 +455,12 @@ func ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Member
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
-						var templ_7745c5c3_Var28 templ.SafeURL
-						templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s/members/%s/edit", access.Token, member.PublicID)))
+						var templ_7745c5c3_Var30 templ.SafeURL
+						templ_7745c5c3_Var30, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s/members/%s/edit", access.Token, member.PublicID)))
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 111, Col: 95}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 129, Col: 95}
 						}
-						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
+						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var30))
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
@@ -434,12 +468,12 @@ func ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Member
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
-						var templ_7745c5c3_Var29 string
-						templ_7745c5c3_Var29, templ_7745c5c3_Err = templ.JoinStringErrs(" " + member.Name)
+						var templ_7745c5c3_Var31 string
+						templ_7745c5c3_Var31, templ_7745c5c3_Err = templ.JoinStringErrs(" " + member.Name)
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 113, Col: 27}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 131, Col: 27}
 						}
-						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var29))
+						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var31))
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
@@ -448,12 +482,12 @@ func ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Member
 							return templ_7745c5c3_Err
 						}
 					} else {
-						var templ_7745c5c3_Var30 string
-						templ_7745c5c3_Var30, templ_7745c5c3_Err = templ.JoinStringErrs(" ")
+						var templ_7745c5c3_Var32 string
+						templ_7745c5c3_Var32, templ_7745c5c3_Err = templ.JoinStringErrs(" ")
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 116, Col: 14}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 134, Col: 14}
 						}
-						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var30))
+						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var32))
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
@@ -461,24 +495,24 @@ func ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Member
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
-						var templ_7745c5c3_Var31 string
-						templ_7745c5c3_Var31, templ_7745c5c3_Err = templ.JoinStringErrs("<unknown member>")
+						var templ_7745c5c3_Var33 string
+						templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs("<unknown member>")
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 117, Col: 29}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 135, Col: 29}
 						}
-						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var31))
+						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
 					}
 				} else if activity.EntityType == db.ActivityEntity_Note {
 					if !activity.EntityID.Valid {
-						var templ_7745c5c3_Var32 string
-						templ_7745c5c3_Var32, templ_7745c5c3_Err = templ.JoinStringErrs(" ")
+						var templ_7745c5c3_Var34 string
+						templ_7745c5c3_Var34, templ_7745c5c3_Err = templ.JoinStringErrs(" ")
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 121, Col: 14}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 139, Col: 14}
 						}
-						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var32))
+						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var34))
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
@@ -486,17 +520,17 @@ func ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Member
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
-						var templ_7745c5c3_Var33 string
-						templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs(intl.Localize(&i18n.LocalizeConfig{
+						var templ_7745c5c3_Var35 string
+						templ_7745c5c3_Var35, templ_7745c5c3_Err = templ.JoinStringErrs(intl.Localize(&i18n.LocalizeConfig{
 							DefaultMessage: &i18n.Message{
 								ID:    "Activity.List.DeletedNote",
 								Other: "Deleted Note",
 							},
 						}))
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 127, Col: 10}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 145, Col: 11}
 						}
-						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
+						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var35))
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
@@ -505,12 +539,12 @@ func ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Member
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
-						var templ_7745c5c3_Var34 templ.SafeURL
-						templ_7745c5c3_Var34, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s/notes/%s", access.Token, note.PublicID)))
+						var templ_7745c5c3_Var36 templ.SafeURL
+						templ_7745c5c3_Var36, templ_7745c5c3_Err = templ.JoinURLErrs(templ.URL(fmt.Sprintf("/s/%s/notes/%s", access.Token, note.PublicID)))
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 131, Col: 86}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 149, Col: 86}
 						}
-						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var34))
+						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var36))
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
@@ -518,12 +552,12 @@ func ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Member
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
-						var templ_7745c5c3_Var35 string
-						templ_7745c5c3_Var35, templ_7745c5c3_Err = templ.JoinStringErrs(" " + note.Title)
+						var templ_7745c5c3_Var37 string
+						templ_7745c5c3_Var37, templ_7745c5c3_Err = templ.JoinStringErrs(" " + note.Title)
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 133, Col: 26}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 151, Col: 26}
 						}
-						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var35))
+						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var37))
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
@@ -532,12 +566,12 @@ func ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Member
 							return templ_7745c5c3_Err
 						}
 					} else {
-						var templ_7745c5c3_Var36 string
-						templ_7745c5c3_Var36, templ_7745c5c3_Err = templ.JoinStringErrs(" ")
+						var templ_7745c5c3_Var38 string
+						templ_7745c5c3_Var38, templ_7745c5c3_Err = templ.JoinStringErrs(" ")
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 136, Col: 14}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 154, Col: 14}
 						}
-						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var36))
+						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var38))
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
@@ -545,12 +579,12 @@ func ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Member
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}
-						var templ_7745c5c3_Var37 string
-						templ_7745c5c3_Var37, templ_7745c5c3_Err = templ.JoinStringErrs("<unknown note>")
+						var templ_7745c5c3_Var39 string
+						templ_7745c5c3_Var39, templ_7745c5c3_Err = templ.JoinStringErrs("<unknown note>")
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 137, Col: 27}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/activity_list.templ`, Line: 155, Col: 27}
 						}
-						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var37))
+						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var39))
 						if templ_7745c5c3_Err != nil {
 							return templ_7745c5c3_Err
 						}

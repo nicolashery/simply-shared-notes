@@ -23,11 +23,11 @@ templ ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Membe
 						{ intl.FormatDate(activity.CreatedAt) }
 						{ " " }
 						{ intl.Localize(&i18n.LocalizeConfig{
-						DefaultMessage: &i18n.Message{
-							ID:    "Activity.List.AtConnector",
-							Other: "at",
-						},
-					}) }
+							DefaultMessage: &i18n.Message{
+								ID:    "Activity.List.AtConnector",
+								Other: "at",
+							},
+						}) }
 						{ " " }
 						{ intl.FormatTime(activity.CreatedAt) }
 					</time>
@@ -38,29 +38,29 @@ templ ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Membe
 						if activity.Action == db.ActivityAction_Create {
 							{ " " }
 							{ intl.Localize(&i18n.LocalizeConfig{
-							DefaultMessage: &i18n.Message{
-								ID:    "Activity.List.ActionCreated",
-								Other: "created",
-							},
-						}) }
+								DefaultMessage: &i18n.Message{
+									ID:    "Activity.List.ActionCreated",
+									Other: "created",
+								},
+							}) }
 							{ " " }
 						} else if activity.Action == db.ActivityAction_Update {
 							{ " " }
 							{ intl.Localize(&i18n.LocalizeConfig{
-							DefaultMessage: &i18n.Message{
-								ID:    "Activity.List.ActionUpdated",
-								Other: "updated",
-							},
-						}) }
+								DefaultMessage: &i18n.Message{
+									ID:    "Activity.List.ActionUpdated",
+									Other: "updated",
+								},
+							}) }
 							{ " " }
 						} else if activity.Action == db.ActivityAction_Delete {
 							{ " " }
 							{ intl.Localize(&i18n.LocalizeConfig{
-							DefaultMessage: &i18n.Message{
-								ID:    "Activity.List.ActionDeleted",
-								Other: "deleted a",
-							},
-						}) }
+								DefaultMessage: &i18n.Message{
+									ID:    "Activity.List.ActionDeleted",
+									Other: "deleted",
+								},
+							}) }
 							{ " " }
 						} else {
 							{ " " }
@@ -71,25 +71,43 @@ templ ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Membe
 					<span class="opacity-50">
 						if activity.EntityType == db.ActivityEntity_Space {
 							{ intl.Localize(&i18n.LocalizeConfig{
-							DefaultMessage: &i18n.Message{
-								ID:    "Activity.List.EntitySpace",
-								Other: "this space",
-							},
-						}) }
+								DefaultMessage: &i18n.Message{
+									ID:    "Activity.List.EntitySpace",
+									Other: "this space",
+								},
+							}) }
 						} else if activity.EntityType == db.ActivityEntity_Member {
-							{ intl.Localize(&i18n.LocalizeConfig{
-							DefaultMessage: &i18n.Message{
-								ID:    "Activity.List.EntityMember",
-								Other: "member",
-							},
-						}) }
+							if activity.Action == db.ActivityAction_Delete {
+								{ intl.Localize(&i18n.LocalizeConfig{
+									DefaultMessage: &i18n.Message{
+										ID:    "Activity.List.EntityMemberIndefinite",
+										Other: "a member",
+									},
+								}) }
+							} else {
+								{ intl.Localize(&i18n.LocalizeConfig{
+									DefaultMessage: &i18n.Message{
+										ID:    "Activity.List.EntityMemberDefinite",
+										Other: "the member",
+									},
+								}) }
+							}
 						} else if activity.EntityType == db.ActivityEntity_Note {
-							{ intl.Localize(&i18n.LocalizeConfig{
-							DefaultMessage: &i18n.Message{
-								ID:    "Activity.List.EntityNote",
-								Other: "note",
-							},
-						}) }
+							if activity.Action == db.ActivityAction_Delete {
+								{ intl.Localize(&i18n.LocalizeConfig{
+									DefaultMessage: &i18n.Message{
+										ID:    "Activity.List.EntityNoteIndefinite",
+										Other: "a note",
+									},
+								}) }
+							} else {
+								{ intl.Localize(&i18n.LocalizeConfig{
+									DefaultMessage: &i18n.Message{
+										ID:    "Activity.List.EntityNoteDefinite",
+										Other: "the note",
+									},
+								}) }
+							}
 						} else {
 							{ "<unknown entity>" }
 						}
@@ -100,11 +118,11 @@ templ ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Membe
 								if !activity.EntityID.Valid {
 									{ " " }
 									{ intl.Localize(&i18n.LocalizeConfig{
-									DefaultMessage: &i18n.Message{
-										ID:    "Activity.List.DeletedMember",
-										Other: "Deleted Member",
-									},
-								}) }
+										DefaultMessage: &i18n.Message{
+											ID:    "Activity.List.DeletedMember",
+											Other: "Deleted Member",
+										},
+									}) }
 								} else if member, ok := membersByID[activity.EntityID.Int64]; ok {
 									<a
 										class="link"
@@ -120,11 +138,11 @@ templ ActivityList(activityEntries []db.Activity, membersByID map[int64]db.Membe
 								if !activity.EntityID.Valid {
 									{ " " }
 									{ intl.Localize(&i18n.LocalizeConfig{
-									DefaultMessage: &i18n.Message{
-										ID:    "Activity.List.DeletedNote",
-										Other: "Deleted Note",
-									},
-								}) }
+										DefaultMessage: &i18n.Message{
+											ID:    "Activity.List.DeletedNote",
+											Other: "Deleted Note",
+										},
+									}) }
 								} else if note, ok := notesByID[activity.EntityID.Int64]; ok {
 									<a
 										class="link"
